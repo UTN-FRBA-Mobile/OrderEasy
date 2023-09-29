@@ -11,31 +11,57 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 
 @Composable
-fun MainMenu(navCont:NavHostController){
+fun MainMenu(navCont: NavController) {
     Scaffold (
         topBar = {
             TopAppBar(title = { Text(text = "BARRA SUPERIOR DE LA APP") })
         },
         content = { innerPadding ->
             Column (modifier = Modifier.fillMaxSize()){
-                Text(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(innerPadding)
-                        .wrapContentSize(),
-                    text = "/* MENU PRINCIPAL */",
-                )
                 Button(
-                    onClick = {navCont.navigate(route="login")},
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(innerPadding)
-                        .wrapContentSize()
+                    onClick = {navCont.navigate(route="scanqr")},
+                    modifier = Modifier.fillMaxWidth().padding(innerPadding).wrapContentSize()
                 ) {
-                    Text(text = "ir al login")
+                    Text(text = "Escanear QR")
+                }
+                Button(
+                    onClick = {navCont.navigate(route="readmenu")},
+                    modifier = Modifier
+                        .fillMaxWidth().padding(innerPadding).wrapContentSize()
+                ) {
+                    Text(text = "Ver carta/menu")
+                }
+                Button(
+                    onClick = {navCont.navigate(route="requestticket")},
+                    modifier = Modifier
+                        .fillMaxWidth().padding(innerPadding).wrapContentSize()
+                ) {
+                    Text(text = "Pedir la cuenta")
+                }
+                Button(
+                    onClick = {navCont.navigate(route="callmozo")},
+                    modifier = Modifier
+                        .fillMaxWidth().padding(innerPadding).wrapContentSize()
+                ) {
+                    Text(text = "Llamar mozo")
+                }
+                Button(
+                    onClick = {navCont.navigate(route="ordersstate")},
+                    modifier = Modifier
+                        .fillMaxWidth().padding(innerPadding).wrapContentSize()
+                ) {
+                    Text(text = "Ver pedidos de la mesa")
+                }
+                Button(
+                    onClick = {navCont.navigate(route="closetable")},
+                    modifier = Modifier
+                        .fillMaxWidth().padding(innerPadding).wrapContentSize()
+                ) {
+                    Text(text = "Retirarse de la mesa")
                 }
             }
         }

@@ -5,7 +5,6 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.screens.Login
-import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.screens.MainMenu
 
 @Composable
 fun InitialNavigation(){
@@ -15,6 +14,6 @@ fun InitialNavigation(){
         startDestination = "login"
         ){
         composable(route="login"){ Login(navController)}
-        composable(route="mainmenu"){ MainMenu(navController)}
+        composable(route="mainnavigation"){ MainNavigation()}
     }
 }

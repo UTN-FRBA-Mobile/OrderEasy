@@ -11,31 +11,25 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.navigation.NavHostController
+import androidx.navigation.NavController
 
 @Composable
-fun Login (navCont:NavHostController){
+fun OrdersState(navCont: NavController) {
     Scaffold (
         topBar = {
-          TopAppBar(title = { Text(text = "BARRA SUPERIOR DE LA APP")})
+            TopAppBar(title = { Text(text = "BARRA SUPERIOR DE LA APP") })
         },
         content = { innerPadding ->
             Column (modifier = Modifier.fillMaxSize()){
                 Text(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(innerPadding)
-                        .wrapContentSize(),
-                    text = "/* FORMULARIO PARA INGRESAR EL NOMBRE */",
+                    modifier = Modifier.fillMaxWidth().padding(innerPadding).wrapContentSize(),
+                    text = "/* SE CARGA UNA LISTA CON LOS ESTADOS DE LOS PEDIDOS DE LOS COMENSALES */"
                 )
                 Button(
-                    onClick = {navCont.navigate(route="mainnavigation")},
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(innerPadding)
-                        .wrapContentSize()
+                    onClick = {navCont.navigate(route="mainmenu")},
+                    modifier = Modifier.fillMaxWidth().padding(innerPadding).wrapContentSize()
                 ) {
-                    Text(text = "ingresar")
+                    Text(text = "volver al menu")
                 }
             }
         }
