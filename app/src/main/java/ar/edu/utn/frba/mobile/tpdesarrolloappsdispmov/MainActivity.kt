@@ -14,6 +14,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.navigation.InitialNavigation
 import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.ui.theme.TpDesarrolloAppsDispMovTheme
 
 class MainActivity : ComponentActivity() {
@@ -35,20 +36,13 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun Starting() {
-    Scaffold (
-        content = {innerPadding ->
-            Text(
-                modifier = Modifier.fillMaxWidth().padding(innerPadding).wrapContentSize(),
-                text = "Prueba"
-            )
-        }
-    )
+    InitialNavigation()
 }
 
 @Preview(showBackground = true)
 @Composable
 fun GreetingPreview() {
     TpDesarrolloAppsDispMovTheme {
-        Starting()
+        InitialNavigation()
     }
 }

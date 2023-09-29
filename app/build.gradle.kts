@@ -5,12 +5,12 @@ plugins {
 
 android {
     namespace = "ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov"
-    compileSdk = 33
+    compileSdk = 34
 
     defaultConfig {
         applicationId = "ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov"
         minSdk = 23
-        targetSdk = 33
+        targetSdk = 34
         versionCode = 1
         versionName = "1.0"
 
@@ -52,6 +52,9 @@ android {
 
 dependencies {
 
+    implementation("androidx.navigation:navigation-ui:2.7.3")
+    implementation("androidx.navigation:navigation-fragment:2.7.3")
+    implementation("androidx.navigation:navigation-compose:2.7.3")
     implementation("androidx.core:core-ktx:1.9.0")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.6.2")
     implementation("androidx.activity:activity-compose:1.7.2")
