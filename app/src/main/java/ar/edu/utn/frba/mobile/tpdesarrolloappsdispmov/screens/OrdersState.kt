@@ -1,10 +1,13 @@
 package ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.screens
 
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Button
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -12,9 +15,12 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
+import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.apiReqs.RetrofitHelper
+import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.stateData.EstadoPedidos
 
 @Composable
 fun OrdersState(navCont: NavController) {
+    val viewmodelo = EstadoPedidos(RetrofitHelper.getInstance())
     Scaffold (
         topBar = {
             TopAppBar(title = { Text(text = "BARRA SUPERIOR DE LA APP") })
@@ -25,6 +31,15 @@ fun OrdersState(navCont: NavController) {
                     modifier = Modifier.fillMaxWidth().padding(innerPadding).wrapContentSize(),
                     text = "/* SE CARGA UNA LISTA CON LOS ESTADOS DE LOS PEDIDOS DE LOS COMENSALES */"
                 )
+                LazyColumn(modifier = Modifier.fillMaxWidth()){
+                    items(viewmodelo.state.pedidosMesa){e ->
+                        Row {
+                            Text(text = e.Plato.nombre)
+                            Text(text = e.cantidad.toString())
+                            Text(text = e.estado)
+                        }
+                    }
+                }
                 Button(
                     onClick = {navCont.navigate(route="mainmenu")},
                     modifier = Modifier.fillMaxWidth().padding(innerPadding).wrapContentSize()
