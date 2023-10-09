@@ -10,8 +10,10 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
 import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.stateData.LoginScreen
-import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.stateData.LoginScreenPreview
 import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.ui.theme.TpDesarrolloAppsDispMovTheme
 
 class MainActivity : ComponentActivity() {
@@ -24,7 +26,7 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    Login()
+                    GreetingPreview()
                 }
             }
         }
@@ -32,7 +34,7 @@ class MainActivity : ComponentActivity() {
 }
 @Composable
 fun Login(){
-    LoginScreenPreview()
+    //LoginScreen()
 }
 
 @Composable
@@ -47,6 +49,13 @@ fun Greeting(name: String, modifier: Modifier = Modifier) {
 @Composable
 fun GreetingPreview() {
     TpDesarrolloAppsDispMovTheme {
-        LoginScreenPreview()
+        val navController = rememberNavController()
+        NavHost(
+            navController = navController,
+            startDestination = "login"
+        ){
+            composable(route="login"){ LoginScreen(navController)}
+            composable(route="greeting"){ Greeting("Holaa") }
+        }
     }
 }
