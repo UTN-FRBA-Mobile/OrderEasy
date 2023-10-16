@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">TpDesarrolloAppsDispMov</string>
+    <string name="base_url">https://restowebback-production.up.railway.app/</string>
 </resources>
