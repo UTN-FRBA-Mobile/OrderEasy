@@ -1,6 +1,7 @@
 package ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.apiReqs
 
 import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.stateData.PedidoLogin
+import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.stateData.PedidoMenu
 import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.stateData.PedidosMesa
 import retrofit2.Response
 import retrofit2.Retrofit
@@ -20,4 +21,6 @@ interface ReqsService {
     suspend fun getStateTable(@Path("id") id:Int): Response<PedidosMesa>
     @GET ("/clientes/{nomb}")
     suspend fun getLogged(@Path("nomb") id:String):Response<PedidoLogin>
+    @GET("/platos")
+    suspend fun getMenu():Response<PedidoMenu>
 }
