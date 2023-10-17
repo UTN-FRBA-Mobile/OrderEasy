@@ -11,17 +11,18 @@ import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.screens.OrdersState
 import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.screens.ReadMenu
 import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.screens.RequestTicket
 import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.screens.ScanQr
+import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.stateData.MenuViewModel
 import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.stateData.TableViewModel
 
 @Composable
-fun MainNavigation (tabStateViewModel: TableViewModel) {
+fun MainNavigation (tabStateViewModel: TableViewModel,menuStateViewModel: MenuViewModel) {
     val navCont= rememberNavController()
     NavHost(
         navController = navCont,
         startDestination = "mainmenu"
     ){
         composable(route="mainmenu"){ MainMenu(navCont) }
-        composable(route="readmenu"){ ReadMenu(navCont) }
+        composable(route="readmenu"){ ReadMenu(navCont,menuStateViewModel) }
         composable(route="callmozo"){ CallMozo(navCont) }
         composable(route="scanqr"){ ScanQr(navCont) }
         composable(route="closetable"){ CloseTable(navCont) }

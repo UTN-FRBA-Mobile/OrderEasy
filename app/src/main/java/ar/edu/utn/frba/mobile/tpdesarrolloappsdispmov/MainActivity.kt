@@ -23,6 +23,7 @@ import androidx.lifecycle.ViewModelProvider
 import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.apiReqs.ReqsService
 import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.navigation.MainNavigation
 import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.screens.Login
+import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.stateData.MenuViewModel
 import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.stateData.TableViewModel
 import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.stateData.UserViewModel
 import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.ui.theme.TpDesarrolloAppsDispMovTheme
@@ -52,7 +53,14 @@ class MainActivity : ComponentActivity() {
                             }
                         }
                     })
-                    Starting(tabStateViewModel,usuarioViewModel)
+                    val menuStateViewModel by viewModels <MenuViewModel>(factoryProducer = {
+                        object : ViewModelProvider.Factory{
+                            override fun <T: ViewModel> create (modelClass: Class<T>): T{
+                                return MenuViewModel(retrofitInst) as T
+                            }
+                        }
+                    })
+                    Starting(tabStateViewModel,usuarioViewModel,menuStateViewModel)
                 }
             }
         }
@@ -60,10 +68,10 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun Starting(tableViewModel: TableViewModel,usuarioViewModel: UserViewModel) {
+fun Starting(tableViewModel: TableViewModel,usuarioViewModel: UserViewModel,menuStateViewModel: MenuViewModel) {
     //val usuarioViewModel = UserViewModel(ReqsService.instance)
     if(usuarioViewModel.estadoUser.isLogged){
-        MainNavigation(tableViewModel)
+        MainNavigation(tableViewModel,menuStateViewModel)
     }else{
         if(usuarioViewModel.estadoUser.requestingData){
             Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
