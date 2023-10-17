@@ -4,6 +4,6 @@ data class UserData(
     val nombre:String="",
     val idCliente:Int=0,
     val inTable:Boolean=false,
-    val isLogged:Boolean=false,//true,
+    val isLogged:Boolean=true,
     val requestingData:Boolean=false
 )

@@ -20,7 +20,7 @@ class UserViewModel (private val usuarioServicio: ReqsService): ViewModel() {
             estadoUser = estadoUser.copy(
                 nombre = nomb,
                 idCliente = idCli.body()!!.idCliente,
-                isLogged = false,
+                isLogged = true,
                 requestingData = false
             )
         }
