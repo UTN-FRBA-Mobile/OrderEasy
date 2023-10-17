@@ -1,5 +1,6 @@
 package ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.stateData
 
+import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -16,10 +17,15 @@ class TableViewModel (private val servicioApi: ReqsService): ViewModel() {
     }
     fun getPedidosState (idMesa:Int){
         viewModelScope.launch {
+            state = state.copy(requestingData = true)
             val pedidos = servicioApi.getStateTable(idMesa)
             if(pedidos.isSuccessful){
                 if(pedidos.body() != null){
-                    state = state.copy(pedidosMesa = pedidos.body()!!.pedidos)
+                    Log.i("TableViewModel-->","HACIENDO--->REQUEST-API (estado de pedidos)******")
+                    state = state.copy(
+                        pedidosMesa = pedidos.body()!!.pedidos,
+                        requestingData = false
+                    )
                 }
             }
         }

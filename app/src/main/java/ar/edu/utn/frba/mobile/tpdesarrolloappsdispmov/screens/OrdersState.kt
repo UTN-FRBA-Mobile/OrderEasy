@@ -1,6 +1,7 @@
 package ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.screens
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -13,10 +14,13 @@ import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Button
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
@@ -27,7 +31,7 @@ import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.stateData.TableViewModel
 @Composable
 fun OrdersState(navCont: NavController) {
     //val viewmodelo =EstadoPedidos(RetrofitHelper.getInstance())
-    val viewmodelo = TableViewModel(ReqsService.instance)
+    val viewmodelo = remember {TableViewModel(ReqsService.instance)}
     Scaffold (
         topBar = {
             TopAppBar(title = { Text(text = "BARRA SUPERIOR DE LA APP") })
@@ -41,24 +45,30 @@ fun OrdersState(navCont: NavController) {
                         .wrapContentSize(),
                     text = "/* SE CARGA UNA LISTA CON LOS ESTADOS DE LOS PEDIDOS DE LOS COMENSALES */"
                 )
-                LazyColumn(modifier = Modifier.fillMaxWidth()){
-                    item {
-                        Row (horizontalArrangement = Arrangement.SpaceEvenly,
-                            modifier = Modifier.fillMaxWidth()
-                        ){
-                            Text(fontWeight = FontWeight.Bold, text ="Nombre")
-                            Text(fontWeight = FontWeight.Bold,text = "Cantidad")
-                            Text(fontWeight = FontWeight.Bold,text = "Estado")
-                        }
+                if(viewmodelo.state.requestingData){
+                    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center ){
+                        CircularProgressIndicator()
                     }
-                    items(viewmodelo.state.pedidosMesa){e ->
-                        Row (horizontalArrangement = Arrangement.SpaceEvenly,
-                            modifier = Modifier.fillMaxWidth()
-                        ){
-                            Spacer(modifier = Modifier.height(Dp(18F)))
-                            Text(text = e.Plato.nombre)
-                            Text(text = e.cantidad.toString())
-                            Text(text = e.estado)
+                }else{
+                    LazyColumn(modifier = Modifier.fillMaxWidth()){
+                        item {
+                            Row (horizontalArrangement = Arrangement.SpaceEvenly,
+                                modifier = Modifier.fillMaxWidth()
+                            ){
+                                Text(fontWeight = FontWeight.Bold, text ="Nombre")
+                                Text(fontWeight = FontWeight.Bold,text = "Cantidad")
+                                Text(fontWeight = FontWeight.Bold,text = "Estado")
+                            }
+                        }
+                        items(viewmodelo.state.pedidosMesa){e ->
+                            Row (horizontalArrangement = Arrangement.SpaceEvenly,
+                                modifier = Modifier.fillMaxWidth()
+                            ){
+                                Spacer(modifier = Modifier.height(Dp(18F)))
+                                Text(text = e.Plato.nombre)
+                                Text(text = e.cantidad.toString())
+                                Text(text = e.estado)
+                            }
                         }
                     }
                 }
