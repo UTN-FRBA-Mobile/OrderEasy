@@ -11,9 +11,10 @@ import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.screens.OrdersState
 import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.screens.ReadMenu
 import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.screens.RequestTicket
 import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.screens.ScanQr
+import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.stateData.TableViewModel
 
 @Composable
-fun MainNavigation () {
+fun MainNavigation (tabStateViewModel: TableViewModel) {
     val navCont= rememberNavController()
     NavHost(
         navController = navCont,
@@ -25,6 +26,6 @@ fun MainNavigation () {
         composable(route="scanqr"){ ScanQr(navCont) }
         composable(route="closetable"){ CloseTable(navCont) }
         composable(route="requestticket"){ RequestTicket(navCont) }
-        composable(route="ordersstate"){ OrdersState(navCont) }
+        composable(route="ordersstate"){ OrdersState(navCont,tabStateViewModel) }
     }
 }

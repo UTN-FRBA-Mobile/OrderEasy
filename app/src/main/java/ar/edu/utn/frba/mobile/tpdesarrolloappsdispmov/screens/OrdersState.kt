@@ -29,9 +29,9 @@ import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.apiReqs.ReqsService
 import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.stateData.TableViewModel
 
 @Composable
-fun OrdersState(navCont: NavController) {
+fun OrdersState(navCont: NavController, viewmodelo: TableViewModel) {
     //val viewmodelo =EstadoPedidos(RetrofitHelper.getInstance())
-    val viewmodelo = remember {TableViewModel(ReqsService.instance)}
+    //val viewmodelo = remember {TableViewModel(ReqsService.instance)}
     Scaffold (
         topBar = {
             TopAppBar(title = { Text(text = "BARRA SUPERIOR DE LA APP") })
