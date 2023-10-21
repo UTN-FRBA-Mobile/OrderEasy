@@ -30,4 +30,26 @@ class MenuViewModel (private val servicioApi: ReqsService): ViewModel() {
             }
         }
     }
+    fun addItem(idPlato:Int){
+       var ped = estadoMenu.pedidos.singleOrNull { e->e.idPlato==idPlato }
+       var peds:MutableList<PlatoPedido> = mutableListOf()
+       peds.addAll(estadoMenu.pedidos)
+       if(ped == null){
+           peds.add(PlatoPedido(idPlato,1))
+       }else{
+           val indi = peds.indexOf(ped)
+           peds.set(indi,PlatoPedido(idPlato,ped.cantidad+1))
+       }
+        estadoMenu = estadoMenu.copy(pedidos = peds)
+    }
+    fun delItem(idPlato:Int){
+        var ped = estadoMenu.pedidos.singleOrNull { e->e.idPlato==idPlato }
+        var peds:MutableList<PlatoPedido> = mutableListOf()
+        peds.addAll(estadoMenu.pedidos)
+        if(ped != null){
+            val ind = peds.indexOf(ped)
+            peds.set(ind, PlatoPedido(idPlato,ped.cantidad-1))
+            estadoMenu = estadoMenu.copy(pedidos = peds)
+        }
+    }
 }
