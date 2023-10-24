@@ -86,7 +86,7 @@ fun ReadMenu(navCont: NavController,menu: MenuViewModel) {
                                             contentColor = MaterialTheme.colorScheme.secondary) {
                                             Icon(Icons.Filled.Clear,"small button")
                                         }
-                                        Text(text = menu.estadoMenu.pedidos.find{p -> p.idPlato == e.idPlato}?.cantidad.toString())
+                                        Text(text = menu.estadoMenu.pedidos.find{p -> (p.idPlato==e.idPlato && p.estado=="selected")}?.cantidad.toString())
                                     }
                                 }
                             }

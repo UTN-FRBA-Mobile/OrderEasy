@@ -36,6 +36,13 @@ fun MainMenu(navCont: NavController) {
                     Text(text = "Ver carta/menu")
                 }
                 Button(
+                    onClick = {navCont.navigate(route="makeorder")},
+                    modifier = Modifier
+                        .fillMaxWidth().padding(innerPadding).wrapContentSize()
+                ) {
+                    Text(text = "Hacer el pedido")
+                }
+                Button(
                     onClick = {navCont.navigate(route="requestticket")},
                     modifier = Modifier
                         .fillMaxWidth().padding(innerPadding).wrapContentSize()

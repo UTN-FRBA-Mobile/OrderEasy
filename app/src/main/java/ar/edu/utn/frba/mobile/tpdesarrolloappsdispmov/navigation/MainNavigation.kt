@@ -7,6 +7,7 @@ import androidx.navigation.compose.rememberNavController
 import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.screens.CallMozo
 import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.screens.CloseTable
 import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.screens.MainMenu
+import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.screens.MakeOrder
 import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.screens.OrdersState
 import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.screens.ReadMenu
 import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.screens.RequestTicket
@@ -23,6 +24,7 @@ fun MainNavigation (tabStateViewModel: TableViewModel,menuStateViewModel: MenuVi
     ){
         composable(route="mainmenu"){ MainMenu(navCont) }
         composable(route="readmenu"){ ReadMenu(navCont,menuStateViewModel) }
+        composable(route="makeorder"){ MakeOrder(navCont = navCont,menuStateViewModel) }
         composable(route="callmozo"){ CallMozo(navCont) }
         composable(route="scanqr"){ ScanQr(navCont) }
         composable(route="closetable"){ CloseTable(navCont) }
