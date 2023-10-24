@@ -16,7 +16,7 @@ class EstadoPedidos(private val servicioApi:EstadoMesaService): ViewModel() {
             val pedidos = servicioApi.getStateTable("12")
             if(pedidos.isSuccessful){
                 if(pedidos.body() != null){
-                    state = state.copy(pedidosMesa = pedidos.body()!!.rta)
+                    state = state.copy(platosData = pedidos.body()!!.rta)
                 }
             }
         }

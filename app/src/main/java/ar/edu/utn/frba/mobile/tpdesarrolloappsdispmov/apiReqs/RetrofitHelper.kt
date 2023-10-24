@@ -8,7 +8,7 @@ object RetrofitHelper {
         .baseUrl("https://restowebback-production.up.railway.app/")
         .addConverterFactory(GsonConverterFactory.create())
         .build()
-    fun getInstance():EstadoMesaService{
-        return retrofit.create(EstadoMesaService::class.java)
+    fun <T> getInstance(serviceClass: Class<T>): T {
+        return retrofit.create(serviceClass)
     }
 }

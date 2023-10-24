@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
@@ -21,12 +20,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
 import androidx.navigation.NavController
+import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.apiReqs.EstadoMesaService
 import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.apiReqs.RetrofitHelper
 import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.stateData.EstadoPedidos
 
 @Composable
 fun OrdersState(navCont: NavController) {
-    val viewmodelo = EstadoPedidos(RetrofitHelper.getInstance())
+    val viewmodelo = EstadoPedidos(RetrofitHelper.getInstance(EstadoMesaService::class.java))
     Scaffold (
         topBar = {
             TopAppBar(title = { Text(text = "BARRA SUPERIOR DE LA APP") })
@@ -50,7 +50,7 @@ fun OrdersState(navCont: NavController) {
                             Text(fontWeight = FontWeight.Bold,text = "Estado")
                         }
                     }
-                    items(viewmodelo.state.pedidosMesa){e ->
+                    items(viewmodelo.state.platosData){ e ->
                         Row (horizontalArrangement = Arrangement.SpaceEvenly,
                             modifier = Modifier.fillMaxWidth()
                         ){

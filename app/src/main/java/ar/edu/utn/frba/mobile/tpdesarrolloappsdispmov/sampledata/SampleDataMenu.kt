@@ -1,5 +1,5 @@
 package ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.sampledata
-
+/*
 import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.R
 import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.screens.Food
 
@@ -62,4 +62,4 @@ object SampleDataMenu {
             description = "Variedad de sushi sin pescado, con aguacate, pepino, zanahoria y otros vegetales. Una opción fresca y sabrosa para los amantes de la comida vegetariana."
         )
     )
-}
+}*/
