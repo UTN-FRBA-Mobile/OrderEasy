@@ -7,6 +7,7 @@ import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
@@ -15,9 +16,7 @@ import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
-import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.ImeAction
@@ -25,20 +24,24 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.R
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun LoginScreen(navCont: NavHostController) {
     var username by remember { mutableStateOf("") }
-
+    var showWelcomeDialog by remember { mutableStateOf(false) }
     val keyboardController = LocalSoftwareKeyboardController.current
-    val view = LocalView.current
-    val density = LocalDensity.current.density
+
+    val coroutineScope = rememberCoroutineScope()
+
 
     Box(
         modifier = Modifier.fillMaxSize()
     ) {
         Image(
+            // TODO: Tomar la imagen del fondo de pantalla
             painter = painterResource(id = R.drawable.ic_launcher_background),
             contentDescription = null,
             modifier = Modifier.fillMaxSize(),
@@ -53,7 +56,7 @@ fun LoginScreen(navCont: NavHostController) {
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(
-                text = "Bienvenido al Restaurante",
+                text = "Bienvenido a OrderEasy",
                 color = Color.White,
                 fontSize = 24.sp,
                 modifier = Modifier.padding(bottom = 16.dp)
@@ -67,12 +70,11 @@ fun LoginScreen(navCont: NavHostController) {
                 ),
                 keyboardActions = KeyboardActions(
                     onDone = {
-                        // Agregar la lógica para verificar el nombre de usuario.
-                        // Por ejemplo, mostrar un mensaje de bienvenida o iniciar sesión.
+                        // Podria ir una logica para chequear este campo?
                         keyboardController?.hide()
                     }
                 ),
-                textStyle = TextStyle(color = Color.White, fontSize = 18.sp),
+                textStyle = TextStyle(color = Color.Black, fontSize = 18.sp),
                 modifier = Modifier
                     .fillMaxWidth()
                     .background(Color.White.copy(alpha = 0.7f))
@@ -84,10 +86,13 @@ fun LoginScreen(navCont: NavHostController) {
 
             Button(
                 onClick = {
-                    // Aquí puedes agregar la lógica para verificar el nombre de usuario.
-                    // Por ejemplo, puedes mostrar un mensaje de bienvenida o iniciar sesión.
                     keyboardController?.hide()
-                    navCont.navigate("mainnavigation")
+                    showWelcomeDialog = true
+                    coroutineScope.launch {
+                        delay(3000)
+                        showWelcomeDialog = false
+                        navCont.navigate("greeting") // TODO: Modificar la ruta al meun
+                    }
                 },
                 modifier = Modifier
                     .fillMaxWidth()
@@ -96,5 +101,16 @@ fun LoginScreen(navCont: NavHostController) {
                 Text("Ingresar", fontSize = 18.sp)
             }
         }
+    }
+
+    if (showWelcomeDialog) {
+        AlertDialog(
+            onDismissRequest = {  },
+            title = { Text("Bienvenido $username") },
+            text = { Text("¡Esperamos que comas rico!") },
+            confirmButton = {
+                // Sin boton
+            }
+        )
     }
 }

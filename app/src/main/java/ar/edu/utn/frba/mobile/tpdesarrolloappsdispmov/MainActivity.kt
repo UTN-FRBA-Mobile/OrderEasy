@@ -32,10 +32,6 @@ class MainActivity : ComponentActivity() {
         }
     }
 }
-@Composable
-fun Login(){
-    //LoginScreen()
-}
 
 @Composable
 fun Greeting(name: String, modifier: Modifier = Modifier) {
@@ -54,6 +50,7 @@ fun GreetingPreview() {
             navController = navController,
             startDestination = "login"
         ){
+            // Ir sumando las rutas de las pantallas
             composable(route="login"){ LoginScreen(navController)}
             composable(route="greeting"){ Greeting("Holaa") }
         }
