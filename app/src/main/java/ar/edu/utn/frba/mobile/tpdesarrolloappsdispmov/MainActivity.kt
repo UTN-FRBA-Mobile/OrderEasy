@@ -1,6 +1,14 @@
 package ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov
 
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.app.PendingIntent
+import android.app.TaskStackBuilder
+import android.content.Context
+import android.content.Intent
+import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
@@ -18,6 +26,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.core.app.ActivityCompat
+import androidx.core.app.NotificationCompat
+import androidx.core.app.NotificationManagerCompat
+import androidx.datastore.core.DataStore
+import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.preferencesDataStore
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.apiReqs.ReqsService
@@ -27,7 +41,10 @@ import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.stateData.MenuViewModel
 import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.stateData.TableViewModel
 import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.stateData.UserViewModel
 import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.ui.theme.TpDesarrolloAppsDispMovTheme
+import com.google.firebase.Firebase
+import com.google.firebase.messaging.messaging
 
+val Context.dataStore by preferencesDataStore(name="USER_DATA")
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -65,11 +82,25 @@ class MainActivity : ComponentActivity() {
             }
         }
     }
+    private suspend fun almacenar(){
+        dataStore
+    }
 }
 
 @Composable
 fun Starting(tableViewModel: TableViewModel,usuarioViewModel: UserViewModel,menuStateViewModel: MenuViewModel) {
     //val usuarioViewModel = UserViewModel(ReqsService.instance)
+    Firebase.messaging.token.addOnCompleteListener {
+        if(!it.isSuccessful){
+            println("error en obtencion de token")
+            return@addOnCompleteListener
+        }
+        val token = it.result
+        //println("token->$token")
+        Log.i("MainActivity-Token--->",token)
+        usuarioViewModel.setIdDevice(token)
+    }
+
     if(usuarioViewModel.estadoUser.isLogged){
         MainNavigation(tableViewModel,menuStateViewModel)
     }else{

@@ -27,8 +27,8 @@ interface ReqsService {
     }
     @GET("mesas/estado/{id}")
     suspend fun getStateTable(@Path("id") id:Int): Response<PedidosMesa>
-    @GET ("/clientes/{nomb}")
-    suspend fun getLogged(@Path("nomb") id:String):Response<PedidoLogin>
+    @GET ("/clientes/{nomb}/{idDevice}")
+    suspend fun getLogged(@Path("nomb") id:String,@Path("idDevice") idDevice:String):Response<PedidoLogin>
     @GET("/platos")
     suspend fun getMenu():Response<PedidoMenu>
     @POST("/mesas/ordenar/{idMesa}/{idCliente}")
