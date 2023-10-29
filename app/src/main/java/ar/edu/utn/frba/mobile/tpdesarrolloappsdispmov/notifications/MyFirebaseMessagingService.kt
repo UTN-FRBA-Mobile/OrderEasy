@@ -10,8 +10,6 @@ import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.InitNotifications
-import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.MainActivity
-import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.Manifest
 import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.R
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
