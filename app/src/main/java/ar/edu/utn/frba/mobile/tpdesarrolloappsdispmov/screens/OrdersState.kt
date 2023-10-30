@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
@@ -27,11 +26,13 @@ import androidx.compose.ui.unit.Dp
 import androidx.navigation.NavController
 import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.apiReqs.ReqsService
 import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.stateData.TableViewModel
+import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.apiReqs.EstadoMesaService
+import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.apiReqs.RetrofitHelper
+import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.stateData.EstadoPedidos
 
 @Composable
 fun OrdersState(navCont: NavController, viewmodelo: TableViewModel) {
-    //val viewmodelo =EstadoPedidos(RetrofitHelper.getInstance())
-    //val viewmodelo = remember {TableViewModel(ReqsService.instance)}
+    val viewmodelo = EstadoPedidos(RetrofitHelper.getInstance(EstadoMesaService::class.java))
     Scaffold (
         topBar = {
             TopAppBar(title = { Text(text = "BARRA SUPERIOR DE LA APP") })
@@ -60,7 +61,7 @@ fun OrdersState(navCont: NavController, viewmodelo: TableViewModel) {
                                 Text(fontWeight = FontWeight.Bold,text = "Estado")
                             }
                         }
-                        items(viewmodelo.state.pedidosMesa){e ->
+                        items(viewmodelo.state.platosData){ e ->
                             Row (horizontalArrangement = Arrangement.SpaceEvenly,
                                 modifier = Modifier.fillMaxWidth()
                             ){
@@ -71,15 +72,15 @@ fun OrdersState(navCont: NavController, viewmodelo: TableViewModel) {
                             }
                         }
                     }
-                }
-                Button(
-                    onClick = {navCont.navigate(route="mainmenu")},
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(innerPadding)
-                        .wrapContentSize()
-                ) {
-                    Text(text = "volver al menu")
+                    Button(
+                        onClick = {navCont.navigate(route="mainmenu")},
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(innerPadding)
+                            .wrapContentSize()
+                    ) {
+                        Text(text = "volver al menu")
+                    }
                 }
             }
         }
