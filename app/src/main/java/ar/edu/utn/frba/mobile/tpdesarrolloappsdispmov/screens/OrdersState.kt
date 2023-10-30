@@ -13,8 +13,12 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.ExtendedFloatingActionButton
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
@@ -24,32 +28,30 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.apiReqs.ReqsService
+import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.components.TopBar
 import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.stateData.TableViewModel
+import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.stateData.UserViewModel
 
 @Composable
-fun OrdersState(navCont: NavController, viewmodelo: TableViewModel) {
+fun OrdersState(navCont: NavController, viewmodelo: TableViewModel,userViewModel: UserViewModel) {
     //val viewmodelo =EstadoPedidos(RetrofitHelper.getInstance())
     //val viewmodelo = remember {TableViewModel(ReqsService.instance)}
     Scaffold (
-        topBar = {
-            TopAppBar(title = { Text(text = "BARRA SUPERIOR DE LA APP") })
-        },
+        topBar = { TopBar(userViewModel)},
         content = { innerPadding ->
-            Column (modifier = Modifier.fillMaxSize()){
+            Column (modifier = Modifier.fillMaxSize().padding(innerPadding)){
                 Text(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(innerPadding)
-                        .wrapContentSize(),
-                    text = "/* SE CARGA UNA LISTA CON LOS ESTADOS DE LOS PEDIDOS DE LOS COMENSALES */"
+                    modifier = Modifier.fillMaxWidth(),
+                    text = "Lista de estados de los pedidos de la mesa"
                 )
-                if(viewmodelo.state.requestingData){
+                /*if(viewmodelo.state.requestingData){
                     Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center ){
                         CircularProgressIndicator()
                     }
-                }else{
+                }else{*/
                     LazyColumn(modifier = Modifier.fillMaxWidth()){
                         item {
                             Row (horizontalArrangement = Arrangement.SpaceEvenly,
@@ -71,16 +73,15 @@ fun OrdersState(navCont: NavController, viewmodelo: TableViewModel) {
                             }
                         }
                     }
-                }
-                Button(
-                    onClick = {navCont.navigate(route="mainmenu")},
+                //}
+                ExtendedFloatingActionButton(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(innerPadding)
-                        .wrapContentSize()
-                ) {
-                    Text(text = "volver al menu")
-                }
+                        .padding(14.dp),
+                    onClick = { navCont.navigate(route="mainmenu")},
+                    icon = { Icon(Icons.Filled.ArrowBack,  contentDescription ="volver") },
+                    text = { Text(text = "Volver al menu") },
+                )
             }
         }
     )

@@ -12,14 +12,18 @@ import kotlinx.coroutines.launch
 class TableViewModel (private val servicioApi: ReqsService): ViewModel() {
     var state by mutableStateOf(EstadoPedidosMesa())
         private set
-    init {
+    /*init {
         getPedidosState(12)
-    }
+    }*/
     fun getPedidosState (idMesa:Int){
+        Log.i("TableviewModel-->",idMesa.toString())
         viewModelScope.launch {
             state = state.copy(requestingData = true)
             val pedidos = servicioApi.getStateTable(idMesa)
+            Log.i("getPedidosState--->",pedidos.body()!!.toString())
+            Log.i("getPedidosState-SUCCESSFULL-->",pedidos.isSuccessful.toString())
             if(pedidos.isSuccessful){
+                Log.i("getPedidosState--->","ES SUCCESSFUL!!")
                 if(pedidos.body() != null){
                     Log.i("TableViewModel-->","HACIENDO--->REQUEST-API (estado de pedidos)******")
                     state = state.copy(

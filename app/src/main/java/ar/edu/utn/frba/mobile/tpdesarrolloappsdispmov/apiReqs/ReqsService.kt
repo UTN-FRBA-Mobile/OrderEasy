@@ -4,6 +4,7 @@ import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.stateData.Ordenes
 import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.stateData.PedidoLogin
 import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.stateData.PedidoMenu
 import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.stateData.PedidoOrdenar
+import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.stateData.PedidoScanQr
 import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.stateData.PedidosMesa
 import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.stateData.PlatoOrdenado
 import okhttp3.OkHttpClient
@@ -33,4 +34,6 @@ interface ReqsService {
     suspend fun getMenu():Response<PedidoMenu>
     @POST("/mesas/ordenar/{idMesa}/{idCliente}")
     suspend fun makeOrder(@Path("idMesa") idMesa:Int, @Path("idCliente") idCliente:Int,@Body body:Ordenes): Response<PedidoOrdenar>
+    @GET("/mesas/registrarse/{idMesa}/{idCliente}/{hash}")
+    suspend fun takeTable(@Path("idMesa") idMesa:Int, @Path("idCliente") idCliente:Int, @Path("hash") hash:String): Response<PedidoScanQr>
 }

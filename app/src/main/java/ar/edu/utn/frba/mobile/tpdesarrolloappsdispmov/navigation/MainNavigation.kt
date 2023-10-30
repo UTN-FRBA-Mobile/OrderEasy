@@ -23,13 +23,18 @@ fun MainNavigation (tabStateViewModel: TableViewModel,menuStateViewModel: MenuVi
         navController = navCont,
         startDestination = "mainmenu"
     ){
-        composable(route="mainmenu"){ MainMenu(navCont) }
-        composable(route="readmenu"){ ReadMenu(navCont,menuStateViewModel) }
-        composable(route="makeorder"){ MakeOrder(navCont = navCont,menuStateViewModel) }
-        composable(route="callmozo"){ CallMozo(navCont) }
+        composable(route="mainmenu"){ MainMenu(navCont,usuarioViewModel,tabStateViewModel) }
+        composable(route="readmenu"){ ReadMenu(navCont,menuStateViewModel,usuarioViewModel) }
+        composable(route="makeorder"){ MakeOrder(navCont,menuStateViewModel,usuarioViewModel) }
+        composable(route="callmozo"){ CallMozo(navCont,usuarioViewModel) }
         composable(route="scanqr"){ ScanQr(navCont,usuarioViewModel) }
-        composable(route="closetable"){ CloseTable(navCont) }
-        composable(route="requestticket"){ RequestTicket(navCont) }
-        composable(route="ordersstate"){ OrdersState(navCont,tabStateViewModel) }
+        composable(route="closetable"){ CloseTable(navCont,usuarioViewModel) }
+        //composable(route="requestticket"){ ReqTicketNavigation(tabStateViewModel,usuarioViewModel) }
+        composable(route="ordersstate"){OrdersState(navCont,tabStateViewModel,usuarioViewModel) }
+        composable(route="requestTicket"){ RequestTicket(navCont,usuarioViewModel) }
+        composable(route="individualTicket"){ }
+        composable(route="divideTicket"){ }
+        composable(route="inviteTicket"){ }
+        composable(route="challengeTicket"){  }
     }
 }

@@ -8,5 +8,6 @@ data class UserData(
     //val inTable:Boolean=false,
     val isLogged:Boolean=false,
     val requestingData:Boolean=false,
-    val initializatingApp:Boolean=true
+    val initializatingApp:Boolean=true,
+    val jwt:String=""
 )

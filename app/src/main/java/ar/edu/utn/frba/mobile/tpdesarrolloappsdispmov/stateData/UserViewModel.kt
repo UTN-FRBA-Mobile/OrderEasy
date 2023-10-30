@@ -69,9 +69,14 @@ class UserViewModel (private val usuarioServicio: ReqsService,private val dataSt
             estadoUser = estadoUser.copy(idDevice = id)
         }
     }
-    fun takeTable(idMesa:Int){
+    fun takeTable(idMesa:Int,hash:String){
         viewModelScope.launch {
-            estadoUser = estadoUser.copy(idMesa=idMesa)
+            Log.i("takeTable-hash->",hash)
+            Log.i("takeTable-mesa->",idMesa.toString())
+            Log.i("takeTable-cliente->",estadoUser.idCliente.toString())
+            val rta= usuarioServicio.takeTable(idMesa,estadoUser.idCliente,hash)
+            Log.i("takeTable-rta>",rta.body()!!.token)
+            estadoUser = estadoUser.copy(idMesa=idMesa, jwt =rta.body()!!.token )
             dataStore.edit { preferences -> preferences[intPreferencesKey("idMesa")]=idMesa }
         }
     }
@@ -86,23 +91,25 @@ class UserViewModel (private val usuarioServicio: ReqsService,private val dataSt
                 idDevice=user.idDevice,
                 initializatingApp = false,
                 isLogged = if(user.idCliente==0)false else true)
-
-                    /*Log.i("initializating-->","coso")
-                    estadoUser = estadoUser.copy(
-                        idCliente = preferences[intPreferencesKey("idCliente")]?:0,
-                        nombre=preferences[stringPreferencesKey("nombre")]!!,
-                        idMesa = preferences[intPreferencesKey("idMesa")]?:0,
-                        idDevice=preferences[stringPreferencesKey("idDevice")]!!,
-                        initializatingApp = false
-                    )*/
             }
-            /*val userDataSaved: Flow<T> = dataStore.data.map {
-                    preferences ->
-                estadoUser = estadoUser.copy(
-                    nombre = preferences[stringPreferencesKey("nom")]
-                )
-            }*/
         }
+    fun clearSavedData(){
+        viewModelScope.launch {
+            estadoUser = estadoUser.copy(
+                idCliente = 0,
+                nombre = "",
+                idMesa = 0,
+                isLogged = false
+            )
+            dataStore.edit {  preferences -> preferences.clear() }
+        }
+    }
+    fun exitTable(){
+        viewModelScope.launch {
+            estadoUser = estadoUser.copy(idMesa = 0)
+            dataStore.edit { preferences -> preferences[intPreferencesKey("idMesa")]=0 }
+        }
+    }
     fun mapUser(preferences: Preferences):UserSavedData {
         val idCli = preferences[intPreferencesKey("idCliente")]?:0
         val idMesa = preferences[intPreferencesKey("idMesa")]?:0

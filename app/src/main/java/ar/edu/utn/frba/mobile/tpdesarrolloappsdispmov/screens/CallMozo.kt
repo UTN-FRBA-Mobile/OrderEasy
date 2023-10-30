@@ -12,21 +12,28 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
+import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.components.TopBar
+import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.stateData.UserViewModel
+
 @Composable
-fun CallMozo(navCont: NavController) {
+fun CallMozo(navCont: NavController,userViewModel: UserViewModel) {
     Scaffold (
-        topBar = {
-            TopAppBar(title = { Text(text = "BARRA SUPERIOR DE LA APP")})
-        },
+        topBar = { TopBar(userViewModel)},
         content = { innerPadding ->
             Column (modifier = Modifier.fillMaxSize()){
                 Text(
-                    modifier = Modifier.fillMaxWidth().padding(innerPadding).wrapContentSize(),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(innerPadding)
+                        .wrapContentSize(),
                     text = "/* SE CARGA ALGUN BOTON/SIMIL PARA PEDIR LA ATENCIÓN DEL MOZO */"
                 )
                 Button(
                     onClick = {navCont.navigate(route="mainmenu")},
-                    modifier = Modifier.fillMaxWidth().padding(innerPadding).wrapContentSize()
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(innerPadding)
+                        .wrapContentSize()
                 ) {
                     Text(text = "volver al menu")
                 }

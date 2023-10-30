@@ -19,14 +19,13 @@ import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.stateData.UserViewModel
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.unit.dp
+import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.components.TopBar
 
 @Composable
 fun Login (usuarioViewModel:UserViewModel){
     var nombre by remember { mutableStateOf("") }
     Scaffold (
-        topBar = {
-          TopAppBar(title = { Text(text = "BARRA SUPERIOR DE LA APP")})
-        },
+        topBar = { TopBar(userViewModel = usuarioViewModel)},
         content = { innerPadding ->
             Column (modifier = Modifier.fillMaxSize()){
                 Text(
@@ -37,7 +36,9 @@ fun Login (usuarioViewModel:UserViewModel){
                     text = "/* FORMULARIO PARA INGRESAR EL NOMBRE */",
                 )
                 OutlinedTextField(
-                    modifier = Modifier.fillMaxWidth().padding(14.dp) ,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(14.dp) ,
                     value = nombre,
                     onValueChange ={nombre=it},
                     label={Text("Ingresa tu nombre")} )

@@ -14,8 +14,10 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material3.Button
+import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -29,11 +31,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.components.TopBar
 import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.stateData.MenuViewModel
+import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.stateData.UserViewModel
 import coil.compose.AsyncImage
 
 @Composable
-fun MakeOrder (navCont: NavController, menu: MenuViewModel) {
+fun MakeOrder (navCont: NavController, menu: MenuViewModel,userViewModel: UserViewModel) {
     var total:Float = remember { 0.0f }
     menu.estadoMenu.pedidos.forEach {
         var t = menu.estadoMenu.platos.find { s -> (s.idPlato==it.idPlato && it.estado=="selected")}
@@ -43,17 +47,12 @@ fun MakeOrder (navCont: NavController, menu: MenuViewModel) {
     }
     Log.i("MakeOrder----->",menu.estadoMenu.pedidos.toString())
     Scaffold (
-    topBar = {
-        TopAppBar(title = { Text(text = "BARRA SUPERIOR DE LA APP") })
-    },
+    topBar = { TopBar(userViewModel)},
     content = { innerPadding ->
-        Column (modifier = Modifier.fillMaxSize()){
+        Column (modifier = Modifier.fillMaxSize().padding(innerPadding)){
             Text(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(innerPadding)
-                    .wrapContentSize(),
-                text = "/* SE CARGA UNA LISTA CON EL DETALLE DE LO PEDIDO */"
+                modifier = Modifier.fillMaxWidth(),
+                text = "Pedidos"
             )
             LazyColumn(modifier = Modifier.fillMaxWidth()){
                 items(menu.estadoMenu.pedidos){p ->
@@ -76,7 +75,7 @@ fun MakeOrder (navCont: NavController, menu: MenuViewModel) {
             Text(text =total.toString() )
             Button(
                 onClick = {
-                    menu.orderItem(12,1)
+                    menu.orderItem(userViewModel.estadoUser.idMesa,userViewModel.estadoUser.idCliente)
                     navCont.navigate(route="mainmenu")
                 },
                 modifier = Modifier
@@ -86,15 +85,14 @@ fun MakeOrder (navCont: NavController, menu: MenuViewModel) {
             ) {
                 Text(text = "ORDENAR")
             }
-            Button(
-                    onClick = {navCont.navigate(route="mainmenu")},
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(innerPadding)
-                .wrapContentSize()
-            ) {
-            Text(text = "volver al menu")
-        }
+            ExtendedFloatingActionButton(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(14.dp),
+                onClick = { navCont.navigate(route="mainmenu")},
+                icon = { Icon(Icons.Filled.ArrowBack,  contentDescription ="volver") },
+                text = { Text(text = "Volver al menu") },
+            )
         }
     }
     )
