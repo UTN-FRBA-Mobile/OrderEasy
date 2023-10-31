@@ -5,18 +5,18 @@ import androidx.compose.runtime.setValue
 import androidx.compose.runtime.getValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.apiReqs.EstadoMesaService
+import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.apiReqs.ReqsService
 import kotlinx.coroutines.launch
 
-class EstadoPedidos(private val servicioApi:EstadoMesaService): ViewModel() {
+class EstadoPedidos(private val servicioApi:ReqsService): ViewModel() {
     var state by mutableStateOf(EstadoPedidosMesa())
         private set
     init{
         viewModelScope.launch {
-            val pedidos = servicioApi.getStateTable("12")
+            val pedidos = servicioApi.getStateTable(12)
             if(pedidos.isSuccessful){
                 if(pedidos.body() != null){
-                    state = state.copy(platosData = pedidos.body()!!.rta)
+                    state = state.copy(platosData = pedidos.body()!!.pedidos)
                 }
             }
         }

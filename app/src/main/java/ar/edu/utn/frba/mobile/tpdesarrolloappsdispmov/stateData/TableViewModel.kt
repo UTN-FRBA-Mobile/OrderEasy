@@ -23,7 +23,7 @@ class TableViewModel (private val servicioApi: ReqsService): ViewModel() {
                 if(pedidos.body() != null){
                     Log.i("TableViewModel-->","HACIENDO--->REQUEST-API (estado de pedidos)******")
                     state = state.copy(
-                        pedidosMesa = pedidos.body()!!.pedidos,
+                        platosData = pedidos.body()!!.pedidos,
                         requestingData = false
                     )
                 }

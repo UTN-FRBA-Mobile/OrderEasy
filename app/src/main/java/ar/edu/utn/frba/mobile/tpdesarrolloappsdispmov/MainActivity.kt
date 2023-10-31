@@ -145,11 +145,12 @@ fun GreetingPreview() {
         NavHost(
             navController = navController,
             startDestination = "login"
-        ){
+        ) {
             // Ir sumando las rutas de las pantallas
-            composable(route="login"){ LoginScreen(navController)}
-            composable(route="greeting"){ Greeting("Holaa") }
+            composable(route = "login") { LoginScreen(navController) }
+            composable(route = "greeting") { Greeting("Holaa") }
         }
+    }
 }
 
 private fun mapUser(preferences: Preferences):UserSavedData {

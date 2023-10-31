@@ -18,21 +18,19 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
 import androidx.navigation.NavController
 import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.apiReqs.ReqsService
-import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.stateData.TableViewModel
-import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.apiReqs.EstadoMesaService
 import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.apiReqs.RetrofitHelper
 import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.stateData.EstadoPedidos
+import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.stateData.TableViewModel
 
 @Composable
 fun OrdersState(navCont: NavController, viewmodelo: TableViewModel) {
-    val viewmodelo = EstadoPedidos(RetrofitHelper.getInstance(EstadoMesaService::class.java))
+    val viewmodelo = EstadoPedidos(RetrofitHelper.getInstance(ReqsService::class.java))
     Scaffold (
         topBar = {
             TopAppBar(title = { Text(text = "BARRA SUPERIOR DE LA APP") })
