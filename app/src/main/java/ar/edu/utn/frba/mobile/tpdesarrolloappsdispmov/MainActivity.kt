@@ -127,6 +127,23 @@ class MainActivity : ComponentActivity() {
             }
         }
     }
+
+    private fun mapUser(preferences: Preferences):UserSavedData {
+        val idCli = preferences[intPreferencesKey("idCliente")]?:0
+        val idMesa = preferences[intPreferencesKey("idMesa")]?:0
+        val nomb=preferences[stringPreferencesKey("nombre")]!!
+        return UserSavedData("",nomb,idCli,idMesa)
+    }
+    /*private fun getUserSavedData() =dataStore.data.map {
+                preferences ->
+            //Log.i("getUserSavedData->",preferences[stringPreferencesKey("nombre")].orEmpty())
+            UserSavedData(
+                idCliente=preferences[intPreferencesKey("idCliente")]?:0,
+                idMesa=preferences[intPreferencesKey("idMesa")]?:0,
+                nombre=preferences[stringPreferencesKey("nombre")]!!
+            )
+        }
+    }*/
 }
 
 @Composable
@@ -145,29 +162,13 @@ fun GreetingPreview() {
         NavHost(
             navController = navController,
             startDestination = "login"
-        ){
+        ) {
             // Ir sumando las rutas de las pantallas
-            composable(route="login"){ LoginScreen(navController)}
-            composable(route="greeting"){ Greeting("Holaa") }
+            composable(route = "login") { LoginScreen(navController) }
+            composable(route = "greeting") { Greeting("Holaa") }
         }
-}
-
-private fun mapUser(preferences: Preferences):UserSavedData {
-    val idCli = preferences[intPreferencesKey("idCliente")]?:0
-    val idMesa = preferences[intPreferencesKey("idMesa")]?:0
-    val nomb=preferences[stringPreferencesKey("nombre")]!!
-    return UserSavedData("",nomb,idCli,idMesa)
-}
-/*private fun getUserSavedData() =dataStore.data.map {
-            preferences ->
-        //Log.i("getUserSavedData->",preferences[stringPreferencesKey("nombre")].orEmpty())
-        UserSavedData(
-            idCliente=preferences[intPreferencesKey("idCliente")]?:0,
-            idMesa=preferences[intPreferencesKey("idMesa")]?:0,
-            nombre=preferences[stringPreferencesKey("nombre")]!!
-        )
     }
-}*/
+}
 
 @Composable
 fun Starting(tableViewModel: TableViewModel,usuarioViewModel: UserViewModel,menuStateViewModel: MenuViewModel) {
@@ -198,6 +199,5 @@ fun Starting(tableViewModel: TableViewModel,usuarioViewModel: UserViewModel,menu
             }else{
                 Login(usuarioViewModel)
             }
-        //}
     }
 }
