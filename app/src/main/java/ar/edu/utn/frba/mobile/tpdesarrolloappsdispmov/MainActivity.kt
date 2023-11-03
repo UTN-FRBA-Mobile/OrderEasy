@@ -125,7 +125,7 @@ class MainActivity : ComponentActivity() {
     private fun mapUser(preferences: Preferences):UserSavedData {
         val idCli = preferences[intPreferencesKey("idCliente")]?:0
         val idMesa = preferences[intPreferencesKey("idMesa")]?:0
-        val nomb=preferences[stringPreferencesKey("nombre")]!!
+        val nomb = preferences[stringPreferencesKey("nombre")]!!
         return UserSavedData("",nomb,idCli,idMesa)
     }
     /*private fun getUserSavedData() =dataStore.data.map {

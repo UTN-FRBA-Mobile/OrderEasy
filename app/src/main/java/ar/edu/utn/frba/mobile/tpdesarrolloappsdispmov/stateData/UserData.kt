@@ -9,5 +9,7 @@ data class UserData(
     val isLogged:Boolean=false,
     val requestingData:Boolean=false,
     val initializatingApp:Boolean=true,
-    val jwt:String=""
+    val jwt:String="",
+    val consumos: List <ItemConsumidoData> = emptyList(),
+    val loadingConsumo: Boolean = true
 )

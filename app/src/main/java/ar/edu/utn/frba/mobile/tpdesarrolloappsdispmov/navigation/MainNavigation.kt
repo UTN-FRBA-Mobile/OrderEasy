@@ -5,7 +5,11 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.screens.CallMozo
+import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.screens.ChallengeTicket
 import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.screens.CloseTable
+import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.screens.DivideTicket
+import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.screens.IndividualTicket
+import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.screens.InviteTicket
 import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.screens.MainMenu
 import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.screens.MakeOrder
 import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.screens.OrdersState
@@ -31,10 +35,10 @@ fun MainNavigation (tabStateViewModel: TableViewModel,menuStateViewModel: MenuVi
         composable(route="closetable"){ CloseTable(navCont,usuarioViewModel) }
         //composable(route="requestticket"){ ReqTicketNavigation(tabStateViewModel,usuarioViewModel) }
         composable(route="ordersstate"){OrdersState(navCont,tabStateViewModel,usuarioViewModel) }
-        composable(route="requestTicket"){ RequestTicket(navCont,usuarioViewModel) }
-        composable(route="individualTicket"){ }
-        composable(route="divideTicket"){ }
-        composable(route="inviteTicket"){ }
-        composable(route="challengeTicket"){  }
+        composable(route="requestTicket"){ RequestTicket(navCont,usuarioViewModel,tabStateViewModel) }
+        composable(route="individualTicket"){ IndividualTicket(navCont,usuarioViewModel) }
+        composable(route="divideTicket"){ DivideTicket(navCont,usuarioViewModel, tabStateViewModel) }
+        composable(route="inviteTicket"){ InviteTicket(navCont,usuarioViewModel,tabStateViewModel)}
+        composable(route="challengeTicket"){ ChallengeTicket(navCont,usuarioViewModel,tabStateViewModel) }
     }
 }

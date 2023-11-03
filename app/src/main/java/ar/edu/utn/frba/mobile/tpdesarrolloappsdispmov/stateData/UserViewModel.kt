@@ -117,6 +117,27 @@ class UserViewModel (private val usuarioServicio: ReqsService,private val dataSt
         val idDevice=preferences[stringPreferencesKey("idDevice")]?:"vacio"
         return UserSavedData(idDevice,nomb,idCli,idMesa)
     }
+    fun getConsumo (){
+        Log.i("getConsumo----->","OUTSIDE")
+        viewModelScope.launch {
+            Log.i("getConsumo----->","inside")
+            val consumidos = usuarioServicio.getConsumo(estadoUser.idCliente)
+            Log.i("getConsumo----->","llame a usuarioServicio otra vez?")
+            if(consumidos.isSuccessful){
+                if(consumidos.body() != null){
+                    estadoUser = estadoUser.copy(
+                        consumos = consumidos.body()!!.consumo,
+                        loadingConsumo = false
+                    )
+                }
+            }
+        }
+    }
+    fun pagar(){
+        viewModelScope.launch {
+            usuarioServicio.pay(estadoUser.idCliente)
+        }
+    }
 
     /*suspend fun setDataStore(nombre:String,estado:String,idDevice:String,idMesa:Int,idCliente:Int){
         dataStore.edit { preferences ->

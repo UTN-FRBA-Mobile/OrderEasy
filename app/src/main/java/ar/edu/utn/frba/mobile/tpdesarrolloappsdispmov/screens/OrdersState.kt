@@ -10,10 +10,12 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.AccountBox
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
@@ -42,7 +44,9 @@ fun OrdersState(navCont: NavController, viewmodelo: TableViewModel,userViewModel
     Scaffold (
         topBar = { TopBar(userViewModel)},
         content = { innerPadding ->
-            Column (modifier = Modifier.fillMaxSize().padding(innerPadding)){
+            Column (modifier = Modifier
+                .fillMaxSize()
+                .padding(innerPadding)){
                 Text(
                     modifier = Modifier.fillMaxWidth(),
                     text = "Lista de estados de los pedidos de la mesa"
@@ -53,23 +57,23 @@ fun OrdersState(navCont: NavController, viewmodelo: TableViewModel,userViewModel
                     }
                 }else{*/
                     LazyColumn(modifier = Modifier.fillMaxWidth()){
-                        item {
-                            Row (horizontalArrangement = Arrangement.SpaceEvenly,
-                                modifier = Modifier.fillMaxWidth()
-                            ){
-                                Text(fontWeight = FontWeight.Bold, text ="Nombre")
-                                Text(fontWeight = FontWeight.Bold,text = "Cantidad")
-                                Text(fontWeight = FontWeight.Bold,text = "Estado")
-                            }
-                        }
-                        items(viewmodelo.state.pedidosMesa){e ->
-                            Row (horizontalArrangement = Arrangement.SpaceEvenly,
-                                modifier = Modifier.fillMaxWidth()
-                            ){
-                                Spacer(modifier = Modifier.height(Dp(18F)))
-                                Text(text = e.Plato.nombre)
-                                Text(text = e.cantidad.toString())
-                                Text(text = e.estado)
+                        viewmodelo.estadoMesa.pedidosMesa.forEach { cli->
+                            item {
+                                Row(modifier = Modifier.fillMaxWidth()) {
+                                    Row (){
+                                        Icon(imageVector = Icons.Filled.AccountBox, contentDescription = "user")
+                                        Text(text = cli.nombre)
+                                    }
+                                    Spacer(modifier = Modifier.size(8.dp))
+                                    cli.Pedidos.forEach {  ped ->
+                                            Row (horizontalArrangement = Arrangement.SpaceEvenly
+                                            ){
+                                                Text(text = ped.Plato.nombre)
+                                                Text(text = ped.cantidad.toString())
+                                                Text(text = (ped.cantidad*ped.Plato.precio).toString())
+                                            }
+                                        }
+                                }
                             }
                         }
                     }

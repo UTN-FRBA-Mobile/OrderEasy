@@ -1,5 +1,5 @@
 package ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.stateData
 
-data class PedidoLogin(
-    val idCliente:Int,
+data class PedidoScanQrData(
+    val token:String=""
 )

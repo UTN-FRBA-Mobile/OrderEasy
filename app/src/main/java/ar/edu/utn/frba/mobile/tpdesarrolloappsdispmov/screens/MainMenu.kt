@@ -9,11 +9,14 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.KeyboardArrowRight
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SmallFloatingActionButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
@@ -80,12 +83,12 @@ fun MainMenu(navCont: NavController,usuarioViewModel: UserViewModel,tabStateView
                     icon = { Icon(imageVector = Icons.Filled.KeyboardArrowRight, contentDescription ="carta" )},
                     text = {Text(text = "Retirarse de la mesa")}
                 )
-                ExtendedFloatingActionButton(
+                /*ExtendedFloatingActionButton(
                     onClick = { usuarioViewModel.clearSavedData()},
                     modifier = Modifier.fillMaxWidth().padding(10.dp),
                     icon = { Icon(imageVector = Icons.Filled.KeyboardArrowRight, contentDescription ="carta" )},
                     text = {Text(text = "LogOut")}
-                )
+                )*/
             }
         }
     )

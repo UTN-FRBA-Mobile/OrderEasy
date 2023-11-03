@@ -12,6 +12,6 @@ val ingredientes:String,
 val infoNutri:String,
 val disponible:Boolean
 )
-data class PedidoMenu(
+data class PedidoMenuData(
     val platos: List<Plato> = emptyList(),
 )
