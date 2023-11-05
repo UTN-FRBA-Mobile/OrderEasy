@@ -41,9 +41,14 @@ class MyFirebaseMessagingService: FirebaseMessagingService() {
                 .build()
             notificationManager.notify(1,notification1)
         } else {
-            val notifyIntent = Intent(this, TakeInviteActivity::class.java)
-            val resultPendingIntent = TaskStackBuilder.create(this).run {
-                addNextIntentWithParentStack(notifyIntent)
+            val notifyIntentOk = Intent(this, TakeInviteActivity::class.java)
+            val notifyIntentNot = Intent(this, RefuseInviteActivity::class.java)
+            val resultPendingIntentOk = TaskStackBuilder.create(this).run {
+                addNextIntentWithParentStack(notifyIntentOk)
+                getPendingIntent(0,PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
+            }
+            val resultPendingIntentNot = TaskStackBuilder.create(this).run {
+                addNextIntentWithParentStack(notifyIntentNot)
                 getPendingIntent(0,PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
             }
             val notification2 = NotificationCompat.Builder(this,InitNotifications.NOTIFICATION_ID_CHANNEL)
@@ -51,8 +56,8 @@ class MyFirebaseMessagingService: FirebaseMessagingService() {
                 .setContentText(msj.notification?.body)
                 .setSmallIcon(R.drawable.icon_notification_pay)
                 //.setContentIntent(resultPendingIntent)
-                .addAction(R.drawable.pagodesafio_24dp,"Aceptar",resultPendingIntent)//PendingIntent de aceptar)
-                //.addAction(icono,"Rechazar", PendingINTENT de rechazar)
+                .addAction(R.drawable.pagodesafio_24dp,"Aceptar",resultPendingIntentOk)//PendingIntent de aceptar)
+                .addAction(R.drawable.pagodesafio_24dp,"Rechazar",resultPendingIntentNot )
                 .setAutoCancel(true)
                 .build()
             notificationManager.notify(1,notification2)

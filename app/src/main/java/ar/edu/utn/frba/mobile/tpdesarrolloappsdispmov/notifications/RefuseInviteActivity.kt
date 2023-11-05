@@ -22,9 +22,11 @@ class RefuseInviteActivity: ComponentActivity() {
                 }
             }
         })
-        usuarioViewModel.initializating()
-        usuarioViewModel.rechazarDividirConsumo()
         val manager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         manager.cancel(1)
+        usuarioViewModel.initializating()
+        usuarioViewModel.rechazarDividirConsumo()
+        finish()
+        System.exit(0)
     }
 }

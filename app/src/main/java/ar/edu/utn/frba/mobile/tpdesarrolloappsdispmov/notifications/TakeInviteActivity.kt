@@ -48,25 +48,20 @@ class TakeInviteActivity  : ComponentActivity() {
                 }
             }
         })
+        val manager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        manager.cancel(1)
         usuarioViewModel.initializating()
         usuarioViewModel.aceptarDividirConsumo()
-       /* setContent {
+        finish()
+        System.exit(0)
+        /*setContent {
             TpDesarrolloAppsDispMovTheme {
-                Surface(
+                Surface (
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
-                ) {
-                    val retrofitInst: ReqsService = ReqsService.instance
-                    val usuarioViewModel by viewModels<UserViewModel>(factoryProducer = {
-                        object : ViewModelProvider.Factory {
-                            override fun <T : ViewModel> create(modelClass: Class<T>): T {
-                                return UserViewModel(retrofitInst, dataStore) as T
-                            }
-                        }
-                    })
-                    usuarioViewModel.initializating()
+                ){
                     Column {
-                        Text(text = usuarioViewModel.estadoUser.toString())
+                        Text(text = "Has aceptado dividir la cuenta total de la mesa entre los comensales")
                         ExtendedFloatingActionButton(
                             modifier = Modifier
                                 .fillMaxWidth()
@@ -74,15 +69,13 @@ class TakeInviteActivity  : ComponentActivity() {
                             onClick = {
                                 finish()
                                 System.exit(0)
-                                      },
+                            },
                             icon = { Icon(Icons.Filled.ArrowBack,  contentDescription ="volver") },
-                            text = { Text(text = "TERMINAR") },
+                            text = { Text(text = "ACEPTAR") },
                         )
                     }
                 }
             }
         }*/
-        val manager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-        manager.cancel(1)
     }
 }
