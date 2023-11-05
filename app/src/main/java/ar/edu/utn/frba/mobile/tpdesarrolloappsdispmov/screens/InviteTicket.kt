@@ -53,7 +53,6 @@ import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.stateData.UserInvitedData
 
 @Composable
 fun InviteTicket(navCont: NavController, userViewModel: UserViewModel, tableViewModel: TableViewModel){
-
     Scaffold (
         topBar = { TopBar(userViewModel) },
         content = { innerPadding ->
@@ -68,21 +67,17 @@ fun InviteTicket(navCont: NavController, userViewModel: UserViewModel, tableView
                     item {
                         FilterChip(
                             selected = true,
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(10.dp),
+                            modifier = Modifier.fillMaxWidth().padding(10.dp),
                             onClick = { /*TODO*/ },
                             label = {
                                 Row (
-                                    modifier = Modifier
-                                        .fillMaxWidth()
-                                        .padding(16.dp),
+                                    modifier = Modifier.fillMaxWidth().padding(16.dp),
                                     horizontalArrangement = Arrangement.End
                                 ){
-                                    val indice:Int =tableViewModel.estadoMesa.invitados.indexOfFirst{ it.idCliente == userViewModel.estadoUser.idCliente}
+                                    val indice:Int =tableViewModel.estadoMesa.invitados.indexOfFirst{ e -> e.idCliente == userViewModel.estadoUser.idCliente}
                                     val yo = if(indice !=-1) tableViewModel.estadoMesa.invitados[indice] else null
-                                    if (yo != null) {
-                                        tableViewModel.selectInvited(yo.idCliente)
+                                   if (yo != null) {
+                                        //tableViewModel.selectInvited(yo.idCliente)
                                         Text(text ="Gasto: $"+yo.total.toString())
                                     }
                                 }

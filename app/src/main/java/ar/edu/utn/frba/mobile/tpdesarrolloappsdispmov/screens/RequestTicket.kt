@@ -68,7 +68,7 @@ fun RequestTicket(navCont: NavController,userViewModel: UserViewModel,tableViewM
                             .fillMaxWidth()
                             .padding(14.dp),
                         onClick = {
-                            tableViewModel.getConsumosState(userViewModel.estadoUser.idMesa)
+                            tableViewModel.getConsumosState(userViewModel.estadoUser.idMesa,userViewModel.estadoUser.idCliente)
                             navCont.navigate(route="DivideTicket")
                         },
                         icon = { Icon(painter = painterResource(id = R.drawable.pagodividido_24dp),
@@ -82,7 +82,7 @@ fun RequestTicket(navCont: NavController,userViewModel: UserViewModel,tableViewM
                             .fillMaxWidth()
                             .padding(14.dp),
                         onClick = {
-                            tableViewModel.getConsumosState(userViewModel.estadoUser.idMesa)
+                            tableViewModel.getConsumosState(userViewModel.estadoUser.idMesa,userViewModel.estadoUser.idCliente)
                             navCont.navigate(route = "InviteTicket")
                         },
                         icon = { Icon(painter = painterResource(id = R.drawable.pagoinvitado_24dp) ,

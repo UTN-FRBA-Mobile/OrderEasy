@@ -1,5 +1,6 @@
 package ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.apiReqs
 
+import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.stateData.Invitados
 import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.stateData.Ordenes
 import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.stateData.PedidoConsumoData
 import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.stateData.PedidoLoginData
@@ -8,6 +9,7 @@ import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.stateData.PedidoOrdenarDat
 import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.stateData.PedidoScanQrData
 import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.stateData.PedidosMesaData
 import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.stateData.PlatoOrdenado
+import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.stateData.ResponseApiStandardData
 import okhttp3.OkHttpClient
 import retrofit2.Response
 import retrofit2.Retrofit
@@ -21,7 +23,6 @@ interface ReqsService {
     companion object{
         val instance = Retrofit.Builder()
             .baseUrl("https://restowebback-production.up.railway.app/")
-            //.baseUrl("http://10.0.2.2:5000/")
             .addConverterFactory(GsonConverterFactory.create())
             //.client(OkHttpClient.Builder().build())
             .build()
@@ -38,11 +39,13 @@ interface ReqsService {
     @POST("/mesas/ordenar/{idMesa}/{idCliente}")
     suspend fun makeOrder(@Path("idMesa") idMesa:Int, @Path("idCliente") idCliente:Int,@Body body:Ordenes): Response<PedidoOrdenarData>
     @POST("/mesas/pagar/invitados/{idCliente}")
-    suspend fun pagarInvitados(@Path("idCliente") idCliente: Int,@Body body: ArrayList<Int>)
+    suspend fun pagarInvitados(@Path("idCliente") idCliente: Int,@Body body: Invitados): Response<ResponseApiStandardData>
+    @GET("/mesas/pagar/dividido/{idMesa}/{idCliente}/{accion}")
+    suspend fun pagarDivididos(@Path("idMesa") idMesa: Int,@Path("idCliente") idCliente: Int, @Path("accion") accion:String): Response<ResponseApiStandardData>
     @GET("/mesas/registrarse/{idMesa}/{idCliente}/{hash}")
     suspend fun takeTable(@Path("idMesa") idMesa:Int, @Path("idCliente") idCliente:Int, @Path("hash") hash:String): Response<PedidoScanQrData>
     @GET("/mesas/consumos/{idCliente}")
     suspend fun getConsumo(@Path("idCliente") idCliente:Int): Response<PedidoConsumoData>
     @GET("/mesas/pagar/individual/{idCliente}")
-    suspend fun pay(@Path("idCliente") idCliente: Int)
+    suspend fun pay(@Path("idCliente") idCliente: Int): Response<ResponseApiStandardData>
 }

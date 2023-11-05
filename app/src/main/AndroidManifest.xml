@@ -40,6 +40,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".notifications.TakeInviteActivity"
+            android:parentActivityName=".MainActivity"/>
+        <activity
+            android:name=".notifications.RefuseInviteActivity"
+            android:parentActivityName=".MainActivity"/>
         <service
             android:name=".notifications.MyFirebaseMessagingService"
             android:exported="false">

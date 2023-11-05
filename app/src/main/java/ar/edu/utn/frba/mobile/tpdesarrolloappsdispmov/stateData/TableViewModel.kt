@@ -36,7 +36,7 @@ class TableViewModel (private val servicioApi: ReqsService): ViewModel() {
             }
         }
     }
-    fun getConsumosState (idMesa:Int){
+    fun getConsumosState (idMesa:Int,idCliente: Int){
         Log.i("GETCONSUMOSSTATES----->","X AQUI mesa :"+idMesa.toString())
         viewModelScope.launch {
             estadoMesa = estadoMesa.copy(requestingData = true)
@@ -51,7 +51,7 @@ class TableViewModel (private val servicioApi: ReqsService): ViewModel() {
                                 c.idCliente,
                                 c.nombre,
                                 c.Pedidos.fold(0.0f ) {acc, i -> acc + i.Plato.precio * i.cantidad.toFloat()},
-                                false
+                                selected= c.idCliente==idCliente
                             )}.toMutableList(),
                         requestingData = false
                     )
@@ -94,7 +94,8 @@ class TableViewModel (private val servicioApi: ReqsService): ViewModel() {
                 if (it.selected && it.idCliente!=idCliente) param.add(it.idCliente)
             }
             //var gson = GsonBuilder().setPrettyPrinting().create()
-            val reqOrd = servicioApi.pagarInvitados(idCliente, param)
+            val reqOrd = servicioApi.pagarInvitados(idCliente, Invitados(pagoscli = param))
+            //val reqOrd = servicioApi.makeOrder(idMesa,idCliente,Ordenes(ordenes = param))
             /*if (reqOrd.isSuccessful){
                 val msj = reqOrd.body()?.msg
             }*/

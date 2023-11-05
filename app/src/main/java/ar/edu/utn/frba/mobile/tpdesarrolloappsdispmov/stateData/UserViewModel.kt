@@ -138,6 +138,21 @@ class UserViewModel (private val usuarioServicio: ReqsService,private val dataSt
             usuarioServicio.pay(estadoUser.idCliente)
         }
     }
+    fun rechazarDividirConsumo(){
+        viewModelScope.launch {
+            usuarioServicio.pagarDivididos(estadoUser.idMesa,estadoUser.idCliente,"no")
+        }
+    }
+    fun aceptarDividirConsumo(){
+        viewModelScope.launch {
+            usuarioServicio.pagarDivididos(estadoUser.idMesa,estadoUser.idCliente,"si")
+        }
+    }
+    fun iniciarDividirConsumo(){
+        viewModelScope.launch {
+            usuarioServicio.pagarDivididos(estadoUser.idMesa,estadoUser.idCliente,"start")
+        }
+    }
 
     /*suspend fun setDataStore(nombre:String,estado:String,idDevice:String,idMesa:Int,idCliente:Int){
         dataStore.edit { preferences ->

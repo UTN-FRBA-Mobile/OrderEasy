@@ -75,7 +75,7 @@ fun DivideTicket(navCont: NavController, userViewModel: UserViewModel, tableView
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(14.dp),
-                        onClick = { /*TODO*/ },
+                        onClick = { userViewModel.iniciarDividirConsumo() },
                         icon = { Icon(Icons.Filled.ArrowBack, contentDescription = "volver") },
                         text = { Text(text = "Enviar invitación a los demás comensales") },
                     )
