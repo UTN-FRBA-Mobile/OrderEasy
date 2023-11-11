@@ -1,5 +1,6 @@
 package ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.screens
 
+import android.graphics.drawable.VectorDrawable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -8,9 +9,13 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.ExitToApp
 import androidx.compose.material.icons.filled.KeyboardArrowRight
+import androidx.compose.material.icons.filled.List
+import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.Icon
@@ -21,11 +26,21 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.graphics.vector.VectorPainter
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontStyle
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.R
+import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.components.ItemMenu
 import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.components.TopBar
 import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.stateData.TableViewModel
 import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.stateData.UserViewModel
@@ -36,59 +51,64 @@ fun MainMenu(navCont: NavController,usuarioViewModel: UserViewModel,tabStateView
         topBar = {TopBar(usuarioViewModel)},
         content = { innerPadding ->
             Column (
-                modifier = Modifier.fillMaxSize().padding(innerPadding),
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(innerPadding),
                 verticalArrangement = Arrangement.Top
             ){
-                ExtendedFloatingActionButton(
-                    modifier = Modifier.fillMaxWidth().padding(10.dp),
-                    onClick = {navCont.navigate(route="scanqr")},
-                    icon = { Icon(imageVector = Icons.Filled.KeyboardArrowRight, contentDescription ="scan" )},
-                    text = {Text(text="Escanear QR")}
-                )
-                ExtendedFloatingActionButton(
-                    modifier = Modifier.fillMaxWidth().padding(10.dp),
-                    onClick = {navCont.navigate(route="readmenu")},
-                    icon = { Icon(imageVector = Icons.Filled.KeyboardArrowRight, contentDescription ="carta" )},
-                    text = {Text(text="Ver el menu")}
-                )
-                ExtendedFloatingActionButton(
-                    onClick = {navCont.navigate(route="makeorder")},
-                    modifier = Modifier.fillMaxWidth().padding(10.dp),
-                    icon = { Icon(imageVector = Icons.Filled.KeyboardArrowRight, contentDescription ="carta" )},
-                    text ={Text(text = "Hacer el pedido")}
-                )
-                ExtendedFloatingActionButton(
-                    onClick = {navCont.navigate(route="requestticket")},
-                    modifier = Modifier.fillMaxWidth().padding(10.dp),
-                    icon = { Icon(imageVector = Icons.Filled.KeyboardArrowRight, contentDescription ="carta" )},
-                    text={Text(text = "Pedir la cuenta")}
-                )
-                ExtendedFloatingActionButton(
-                    onClick = {navCont.navigate(route="callmozo")},
-                    modifier = Modifier.fillMaxWidth().padding(10.dp),
-                    icon = { Icon(imageVector = Icons.Filled.KeyboardArrowRight, contentDescription ="carta" )},
-                    text = {Text(text = "Llamar mozo")}
-                )
-                ExtendedFloatingActionButton(
-                    onClick = {
-                        tabStateViewModel.getPedidosState(usuarioViewModel.estadoUser.idMesa)
-                        navCont.navigate(route="ordersstate")},
-                    modifier = Modifier.fillMaxWidth().padding(10.dp),
-                    icon = { Icon(imageVector = Icons.Filled.KeyboardArrowRight, contentDescription ="carta" )},
-                    text = {Text(text = "Ver pedidos de la mesa")}
-                )
-                ExtendedFloatingActionButton(
-                    onClick = {navCont.navigate(route="closetable")},
-                    modifier = Modifier.fillMaxWidth().padding(10.dp),
-                    icon = { Icon(imageVector = Icons.Filled.KeyboardArrowRight, contentDescription ="carta" )},
-                    text = {Text(text = "Retirarse de la mesa")}
-                )
-                /*ExtendedFloatingActionButton(
-                    onClick = { usuarioViewModel.clearSavedData()},
-                    modifier = Modifier.fillMaxWidth().padding(10.dp),
-                    icon = { Icon(imageVector = Icons.Filled.KeyboardArrowRight, contentDescription ="carta" )},
-                    text = {Text(text = "LogOut")}
-                )*/
+                LazyColumn{
+                    item {
+                        ItemMenu(titulo = "Escanear QR",ImageVector.vectorResource(id = R.drawable.baseline_qr_code_24),
+                            navCont, "scanqr")
+                    }
+                    item {
+                        ItemMenu(titulo = "Ver el menu de platos",ImageVector.vectorResource(id = R.drawable.baseline_menu_book_24),
+                            navCont, "readmenu")
+                    }
+                    item {
+                        ItemMenu(titulo = "Ordenar platos elegidos",ImageVector.vectorResource(id = R.drawable.baseline_room_service_24),
+                            navCont,"makeorder")
+                    }
+                    item {
+                        ItemMenu(titulo = "Pedir la cuenta", ImageVector.vectorResource(id = R.drawable.baseline_receipt_24),
+                            navCont,ruta="requestticket")
+                    }
+                    item {
+                        ItemMenu(titulo = "Llamar al mozo",Icons.Filled.Notifications,navCont,"callmozo")
+                    }
+                    item {
+                        ExtendedFloatingActionButton(
+                            modifier = Modifier.fillMaxWidth().padding(14.dp),
+                            onClick = {
+                                navCont.navigate(route="ordersstate")
+                                tabStateViewModel.getPedidosState(usuarioViewModel.estadoUser.idMesa)
+                            },
+                            icon = { Icon(imageVector = ImageVector.vectorResource(id = R.drawable.baseline_playlist_add_check_circle_24), contentDescription ="carta",modifier=Modifier.size(40.dp) )},
+                            text = {
+                                Text(
+                                    text = "Ver pedidos de mesa",
+                                    textAlign = TextAlign.Justify,
+                                    modifier = Modifier.fillMaxWidth().padding(vertical = 6.dp),
+                                    fontFamily = FontFamily.SansSerif,
+                                    fontWeight = FontWeight.Normal,
+                                    style = TextStyle(
+                                        fontSize = 16.sp,
+                                        fontStyle = FontStyle.Normal
+                                    )
+                                )
+                            },
+                        )
+                    }
+                    item {
+                        ItemMenu(titulo = "Retirarse de la mesa",Icons.Filled.ExitToApp,navCont,"closetable")
+                    }
+                    /*ExtendedFloatingActionButton(
+                        onClick = { usuarioViewModel.clearSavedData()},
+                        modifier = Modifier.fillMaxWidth().padding(10.dp),
+                        icon = { Icon(imageVector = Icons.Filled.KeyboardArrowRight, contentDescription ="carta" )},
+                        text = {Text(text = "LogOut")}
+                    )*/
+                }
             }
         }
     )

@@ -1,5 +1,7 @@
 package ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.screens
 
+import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -16,8 +18,10 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountBox
+import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.Button
+import androidx.compose.material3.Card
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.Icon
@@ -28,15 +32,27 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.R
 import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.apiReqs.ReqsService
 import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.components.TopBar
+import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.components.VolverBtn
 import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.stateData.TableViewModel
 import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.stateData.UserViewModel
+import com.google.android.gms.common.util.Hex
+import com.google.android.material.color.MaterialColors
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun OrdersState(navCont: NavController, viewmodelo: TableViewModel,userViewModel: UserViewModel) {
     //val viewmodelo =EstadoPedidos(RetrofitHelper.getInstance())
@@ -44,12 +60,11 @@ fun OrdersState(navCont: NavController, viewmodelo: TableViewModel,userViewModel
     Scaffold (
         topBar = { TopBar(userViewModel)},
         content = { innerPadding ->
-            Column (modifier = Modifier
-                .fillMaxSize()
-                .padding(innerPadding)){
+            Column (modifier = Modifier.fillMaxSize().padding(innerPadding)){
                 Text(
                     modifier = Modifier.fillMaxWidth(),
-                    text = "Lista de estados de los pedidos de la mesa"
+                    text = "Lista de estados de los pedidos de la mesa",
+                    textAlign = TextAlign.Center
                 )
                 /*if(viewmodelo.state.requestingData){
                     Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center ){
@@ -58,34 +73,50 @@ fun OrdersState(navCont: NavController, viewmodelo: TableViewModel,userViewModel
                 }else{*/
                     LazyColumn(modifier = Modifier.fillMaxWidth()){
                         viewmodelo.estadoMesa.pedidosMesa.forEach { cli->
+                            stickyHeader {
+                                Row (
+                                    modifier = Modifier.padding(vertical = 10.dp).height(38.dp).fillMaxWidth().background(Color(0xABD1E8FF)),
+                                    verticalAlignment = Alignment.CenterVertically
+                                ){
+                                    Icon(imageVector = Icons.Filled.AccountCircle, contentDescription ="user" )
+                                    Text(text = cli.nombre)
+                                }
+                            }
                             item {
-                                Row(modifier = Modifier.fillMaxWidth()) {
-                                    Row (){
-                                        Icon(imageVector = Icons.Filled.AccountBox, contentDescription = "user")
-                                        Text(text = cli.nombre)
-                                    }
-                                    Spacer(modifier = Modifier.size(8.dp))
-                                    cli.Pedidos.forEach {  ped ->
-                                            Row (horizontalArrangement = Arrangement.SpaceEvenly
-                                            ){
-                                                Text(text = ped.Plato.nombre)
-                                                Text(text = ped.cantidad.toString())
-                                                Text(text = (ped.cantidad*ped.Plato.precio).toString())
-                                            }
-                                        }
+                                cli.Pedidos.forEach {  ped ->
+                                    ExtendedFloatingActionButton(
+                                        modifier = Modifier.fillMaxWidth(),//.padding(14.dp),
+                                        onClick = {},
+                                        //Icon(painter = painterResource(id = icono)
+                                        //icon = { Icon(painter = painterResource(id = R.drawable.baseline_flatware_24 ), contentDescription ="carta",modifier=Modifier.size(18.dp) ) },
+                                        content = {
+                                                Row ( verticalAlignment = Alignment.CenterVertically) {
+                                                    Icon(painter = painterResource(id = R.drawable.baseline_flatware_24 ), contentDescription ="carta",modifier=Modifier.size(20.dp).weight(1f) )
+                                                    Text(text=ped.Plato.nombre+" (x"+ped.cantidad.toString()+")", modifier = Modifier.weight(8f))
+                                                    Text(text = ped.estado, modifier = Modifier.weight(4f))
+                                                }
+                                                /*Text(
+                                                    text = ped.Plato.nombre,
+                                                    //textAlign = TextAlign.Justify,
+                                                    modifier = Modifier
+                                                        .fillMaxWidth()
+                                                        .padding(vertical = 6.dp),
+                                                    fontFamily = FontFamily.SansSerif,
+                                                    fontWeight = FontWeight.Normal,
+                                                    style = TextStyle(
+                                                        fontSize = 16.sp,
+                                                        fontStyle = FontStyle.Normal
+                                                    )
+                                                )*/
+                                        },
+                                    )
                                 }
                             }
                         }
+                        item {
+                            VolverBtn(navCont)
+                        }
                     }
-                //}
-                ExtendedFloatingActionButton(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(14.dp),
-                    onClick = { navCont.navigate(route="mainmenu")},
-                    icon = { Icon(Icons.Filled.ArrowBack,  contentDescription ="volver") },
-                    text = { Text(text = "Volver al menu") },
-                )
             }
         }
     )

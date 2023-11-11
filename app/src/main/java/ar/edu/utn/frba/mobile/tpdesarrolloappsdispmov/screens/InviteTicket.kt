@@ -48,6 +48,14 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontStyle
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.sp
+import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.R
 import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.stateData.UserInvitedData
 
 
@@ -63,31 +71,61 @@ fun InviteTicket(navCont: NavController, userViewModel: UserViewModel, tableView
                     modifier = Modifier.fillMaxWidth(),
                     verticalArrangement = Arrangement.SpaceBetween//.spacedBy(4.dp)
                 ){
-                    item {Text(text = "Elige a quien queres invitar y pagar su cuenta") }
+                    item {
+                        Text(
+                            modifier = Modifier.fillMaxWidth(),
+                            text = "Elige a quien queres invitar y pagar su cuenta",
+                            textAlign = TextAlign.Center,
+                            fontFamily = FontFamily.Default,
+                            fontWeight = FontWeight.Normal,
+                            style = TextStyle(
+                                fontSize = 18.sp,
+                                fontStyle = FontStyle.Normal
+                            )
+                        )
+                    }
+
                     item {
                         FilterChip(
                             selected = true,
-                            modifier = Modifier.fillMaxWidth().padding(10.dp),
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(5.dp),
                             onClick = { /*TODO*/ },
-                            label = {
+                            label= {
                                 Row (
-                                    modifier = Modifier.fillMaxWidth().padding(16.dp),
-                                    horizontalArrangement = Arrangement.End
-                                ){
-                                    val indice:Int =tableViewModel.estadoMesa.invitados.indexOfFirst{ e -> e.idCliente == userViewModel.estadoUser.idCliente}
-                                    val yo = if(indice !=-1) tableViewModel.estadoMesa.invitados[indice] else null
-                                   if (yo != null) {
-                                        //tableViewModel.selectInvited(yo.idCliente)
-                                        Text(text ="Gasto: $"+yo.total.toString())
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .padding(10.dp),
+                                    horizontalArrangement = Arrangement.End,
+                                    verticalAlignment = Alignment.CenterVertically
+                                ) {
+                                    Column {
+                                        Icon(painter = painterResource(id = R.drawable.baseline_sentiment_very_satisfied_24),
+                                            contentDescription = "userOut",
+                                            modifier = Modifier.size(30.dp))
+                                        Text(text ="Yo")
+                                    }
+                                    Row (
+                                        modifier = Modifier.fillMaxWidth(),
+                                        horizontalArrangement = Arrangement.End
+                                    ) {
+                                        val indice:Int =tableViewModel.estadoMesa.invitados.indexOfFirst{ e -> e.idCliente == userViewModel.estadoUser.idCliente}
+                                        val yo = if(indice !=-1) tableViewModel.estadoMesa.invitados[indice] else null
+                                        if (yo != null) {
+                                            //tableViewModel.selectInvited(yo.idCliente)
+                                            Text(text ="Consumido: $"+yo.total.toString())
+                                        }
                                     }
                                 }
                             },
                             leadingIcon = {
-                                    Column (horizontalAlignment = Alignment.CenterHorizontally){
-                                        Icon(Icons.Filled.AccountCircle, contentDescription = "userIn")
-                                        Text(text = "Yo")
-                                    }
-                            },
+                                Column (horizontalAlignment = Alignment.CenterHorizontally){
+                                    Icon(painter = painterResource(id = R.drawable.baseline_check_box_24),
+                                        contentDescription = "userIn",
+                                        modifier = Modifier.size(30.dp) )
+                                }
+                            }
                         )                        
                     }
 
@@ -97,18 +135,26 @@ fun InviteTicket(navCont: NavController, userViewModel: UserViewModel, tableView
                                 selected = cons.selected,
                                 modifier = Modifier
                                     .fillMaxWidth()
-                                    .padding(20.dp),
-                                onClick = {tableViewModel.selectInvited(cons.idCliente)},//cons.selected = !cons.selected },
+                                    .padding(5.dp),
+                                onClick = {tableViewModel.selectInvited(cons.idCliente)},
                                 label = {
                                     Row (
                                         modifier = Modifier
                                             .fillMaxWidth()
-                                            .padding(20.dp),
-                                        horizontalArrangement = Arrangement.End,
+                                            .padding(10.dp),
+                                        horizontalArrangement = Arrangement.SpaceBetween,
                                         verticalAlignment = Alignment.CenterVertically
                                     ) {
                                         Column {
-                                            Icon(Icons.Filled.AccountCircle, contentDescription = "userOut")
+                                            if(cons.selected) {
+                                                Icon(painter = painterResource(id = R.drawable.baseline_sentiment_very_satisfied_24),
+                                                    contentDescription = "userIn",
+                                                    modifier = Modifier.size(30.dp) )
+                                            }else{
+                                                Icon(painter = painterResource(id = R.drawable.baseline_sentiment_dissatisfied_24),
+                                                    contentDescription = "userOut",
+                                                    modifier = Modifier.size(30.dp) )
+                                            }
                                             Text(text = cons.nombre)
                                         }
                                         Row (
@@ -120,24 +166,32 @@ fun InviteTicket(navCont: NavController, userViewModel: UserViewModel, tableView
                                     }
                                 },
                                 leadingIcon = {
-                                    if(cons.selected) {
-                                        Icon(Icons.Filled.CheckCircle, contentDescription = "userIn")
+                                    if (cons.selected) {
+                                        Icon(
+                                            painter = painterResource(id = R.drawable.baseline_check_box_24),
+                                            contentDescription = "userIn",
+                                            modifier = Modifier.size(30.dp)
+                                        )
                                     }else{
-                                        Icon(Icons.Filled.ArrowForward, contentDescription = "userOut")
+                                        Icon(
+                                            painter = painterResource(id = R.drawable.baseline_check_box_outline_blank_24),
+                                            contentDescription = "userIn",
+                                            modifier = Modifier.size(30.dp))
                                     }
-                                },
-                                /*trailingIcon ={
-                                    if(cons.selected) {
-                                        Icon(Icons.Outlined.Close, contentDescription = "userIn")
-                                    }else{
-                                        Icon(Icons.Filled.Add, contentDescription = "userOut",
-                                            modifier = Modifier.
-                                    }
-                                }*/
+                                }
                             )                            
                         }
                     }
-                    item {Text(text = "Total a Pagar: $"+tableViewModel.estadoMesa.invitados.filter { e ->e.selected }.fold(0.0f ) {acc, i -> acc + i.total}.toString() )}
+                    item {Text(
+                        text = "Total a Pagar: $"+tableViewModel.estadoMesa.invitados.filter { e ->e.selected }.fold(0.0f ) {acc, i -> acc + i.total}.toString(),
+                        textAlign = TextAlign.Center,
+                        fontFamily = FontFamily.SansSerif,
+                        fontWeight = FontWeight.SemiBold,
+                        style = TextStyle(
+                                fontSize = 17.sp,
+                                fontStyle = FontStyle.Normal
+                        )
+                    )}
 
 
                     item{
@@ -148,8 +202,10 @@ fun InviteTicket(navCont: NavController, userViewModel: UserViewModel, tableView
                             onClick = {
                                 tableViewModel.pagarInvitado(userViewModel.estadoUser.idCliente)
                                 navCont.navigate(route="mainmenu")},
-                            icon = { Icon(Icons.Filled.ArrowBack,  contentDescription ="volver") },
                             text = { Text(text = "Pedir la cuenta") },
+                            icon = { Icon(painter = painterResource(id = R.drawable.baseline_monetization_on_24),
+                                contentDescription ="volver",
+                                modifier = Modifier.size(30.dp)) }
                         )
                         ExtendedFloatingActionButton(
                             modifier = Modifier

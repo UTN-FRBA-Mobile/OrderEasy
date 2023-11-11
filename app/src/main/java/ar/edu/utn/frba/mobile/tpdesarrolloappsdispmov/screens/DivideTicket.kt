@@ -14,6 +14,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.outlined.AccountBox
 import androidx.compose.material3.Card
 import androidx.compose.material3.ExtendedFloatingActionButton
@@ -53,7 +54,7 @@ fun DivideTicket(navCont: NavController, userViewModel: UserViewModel, tableView
                         item {
                             Card(modifier = Modifier.fillMaxWidth()) {
                                 Row (modifier = Modifier.padding(8.dp)){
-                                        Icon(imageVector = Icons.Outlined.AccountBox,contentDescription = "user")
+                                        Icon(imageVector = Icons.Filled.Person,contentDescription = "user")
                                         Text(text = consm.nombre)
                                 }
                                 Spacer(modifier = Modifier.size(16.dp))

@@ -4,10 +4,12 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+//import androidx.compose.foundation.layout.RowScopeInstance.weight
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -24,14 +26,14 @@ import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.stateData.PedidoData
 @Composable
 fun Consumer(ped:PedidoData){
     Row (
-        horizontalArrangement = Arrangement.SpaceBetween,
+        //horizontalArrangement = Arrangement.SpaceBetween,
         modifier = Modifier
             .fillMaxWidth()
-            .padding(2.dp),
+            .padding(1.dp),
         verticalAlignment = Alignment.Top,
     ){
         Icon(painter = painterResource(id = R.drawable.baseline_restaurant_24),contentDescription = "resto", modifier = Modifier.weight(1f))
-        Text(text = ped.Plato.nombre+" ($"+ped.Plato.precio+" x"+ped.cantidad.toString()+")", modifier = Modifier.weight(9f))
+        Text(text = ped.Plato.nombre+" ($"+ped.Plato.precio+" x"+ped.cantidad.toString()+")", modifier = Modifier.weight(5f))
         Text(text = "$"+(ped.cantidad * ped.Plato.precio).toString(), modifier = Modifier.weight(2f), textAlign = TextAlign.End)
     }
 }

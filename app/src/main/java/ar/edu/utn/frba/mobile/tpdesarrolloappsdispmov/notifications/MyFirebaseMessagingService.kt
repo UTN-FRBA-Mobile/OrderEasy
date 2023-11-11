@@ -6,7 +6,10 @@ import android.app.TaskStackBuilder
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.util.Log
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.KeyboardArrowRight
 import androidx.compose.material.icons.materialIcon
+import androidx.compose.material3.Icon
 import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
@@ -33,12 +36,13 @@ class MyFirebaseMessagingService: FirebaseMessagingService() {
     private fun showNotification(msj:RemoteMessage,action:String){
         val notificationManager = getSystemService(NotificationManager::class.java)
         if(action=="invite") {
-            val notification1 = NotificationCompat.Builder(this,InitNotifications.NOTIFICATION_ID_CHANNEL)
-                .setContentTitle(msj.notification?.title)
-                .setContentText(msj.notification?.body)
-                .setSmallIcon(R.drawable.icon_notification_pay)
-                .setAutoCancel(true)
-                .build()
+            val notification1 = NotificationCompat.Builder(this,InitNotifications.NOTIFICATION_ID_CHANNEL).also {
+                it.setContentTitle(msj.notification?.title)
+                it.setContentText(msj.notification?.body)
+                it.setPriority(NotificationCompat.PRIORITY_HIGH)
+                it.setSmallIcon(R.drawable.baseline_restaurant_24)
+                it.setAutoCancel(true)
+            }.build()
             notificationManager.notify(1,notification1)
         } else {
             val notifyIntentOk = Intent(this, TakeInviteActivity::class.java)
@@ -54,30 +58,14 @@ class MyFirebaseMessagingService: FirebaseMessagingService() {
             val notification2 = NotificationCompat.Builder(this,InitNotifications.NOTIFICATION_ID_CHANNEL)
                 .setContentTitle(msj.notification?.title)
                 .setContentText(msj.notification?.body)
-                .setSmallIcon(R.drawable.icon_notification_pay)
+                .setSmallIcon(R.drawable.baseline_restaurant_24)
+                .setStyle(NotificationCompat.BigTextStyle().bigText(msj.notification?.body))
                 //.setContentIntent(resultPendingIntent)
-                .addAction(R.drawable.pagodesafio_24dp,"Aceptar",resultPendingIntentOk)//PendingIntent de aceptar)
-                .addAction(R.drawable.pagodesafio_24dp,"Rechazar",resultPendingIntentNot )
+                .addAction(R.drawable.baseline_navigate_next_24,"Aceptar",resultPendingIntentOk)//PendingIntent de aceptar
+                .addAction(R.drawable.baseline_navigate_next_24,"Rechazar",resultPendingIntentNot )
                 .setAutoCancel(true)
                 .build()
             notificationManager.notify(1,notification2)
         }
     }
-    /*private fun notificar(notifTitle:String,notifBody:String,){
-        val intentRtaNotif = Intent(applicationContext,MainActivity::class.java)
-        val resultPendingIntent = TaskStackBuilder.create(applicationContext).run {
-            addNextIntentWithParentStack(intentRtaNotif)
-            getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT)
-        }
-        val notificacion = NotificationCompat.Builder(this,idCanal).also{
-            it.setContentTitle(notifTitle)
-            it.setContentText(notifBody)
-            it.setSmallIcon(R.drawable.icon_notification_pay)
-            it.priority=NotificationCompat.PRIORITY_HIGH
-            it.setContentIntent(resultPendingIntent)
-            it.setAutoCancel(true)
-        }.build()
-        val notificationManager = NotificationManagerCompat.from(this)
-        //if(ActivityCompat.checkSelfPermission(this,Manifest.permission.))
-    }*/
 }

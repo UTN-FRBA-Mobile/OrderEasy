@@ -25,9 +25,10 @@ class InitNotifications : Application() {
 
     private fun createChannel(){
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
-            var canal = NotificationChannel(NOTIFICATION_ID_CHANNEL,"notificaciones FCM share",NotificationManager.IMPORTANCE_HIGH)
-            val manager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-            canal.description = "Notificaciones Comparticion"
+            var canal = NotificationChannel(NOTIFICATION_ID_CHANNEL,"notificaciones FCM share",NotificationManager.IMPORTANCE_HIGH).apply {
+                description = "Notificaciones FCM"
+            }
+            val manager:NotificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
             manager.createNotificationChannel(canal)
         }
     }

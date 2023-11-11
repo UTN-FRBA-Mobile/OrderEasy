@@ -9,6 +9,9 @@ import androidx.compose.runtime.Composable
 import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.stateData.UserViewModel
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material3.CenterAlignedTopAppBar
@@ -21,15 +24,22 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.R
 
 @Composable
 fun TopBar (userViewModel: UserViewModel){
    TopAppBar(
+       modifier = Modifier.height(40.dp),
         colors = TopAppBarDefaults.largeTopAppBarColors(
-            containerColor = MaterialTheme.colorScheme.secondary,
-            titleContentColor = MaterialTheme.colorScheme.onPrimary
+        containerColor = MaterialTheme.colorScheme.secondary,
+        titleContentColor = MaterialTheme.colorScheme.onPrimary
         ),
         title = {
         Row (
@@ -39,14 +49,27 @@ fun TopBar (userViewModel: UserViewModel){
         ){
             Box {
                 Row (verticalAlignment = Alignment.CenterVertically){
-                    Icon(Icons.Filled.AccountCircle, contentDescription = "usuario")
-                    Text(text = userViewModel.estadoUser.nombre)
+                    Icon(Icons.Filled.AccountCircle, contentDescription = "usuario", modifier = Modifier.size(20.dp))
+                    Text(
+                        text = userViewModel.estadoUser.nombre,
+                        fontWeight = FontWeight.W400,
+                        style = TextStyle(
+                            fontSize = 18.sp,
+                            fontStyle = FontStyle.Normal
+                        )
+                    )
                 }
             }
             Box {
                 Row (verticalAlignment = Alignment.CenterVertically){
-                    Icon(painter = painterResource(id = R.drawable.baseline_restaurant_24),"resto")
-                    Text(text = "OrderEasy")
+                    Icon(painter = painterResource(id = R.drawable.baseline_restaurant_24),"resto",modifier = Modifier.size(24.dp))
+                    Text(text = "OrderEasy",
+                        fontWeight = FontWeight.W400,
+                        style = TextStyle(
+                            fontSize = 20.sp,
+                            fontStyle = FontStyle.Normal
+                        )
+                    )
                 }
             }
         }
