@@ -28,7 +28,7 @@ import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.R
 fun MainMenu(navCont: NavController) {
     Scaffold(
         topBar = {
-            OderEasyTopAppBar()
+            OderEasyTopAppBar(navCont)
         },
         content = { innerPadding ->
             LazyColumn(

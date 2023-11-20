@@ -19,7 +19,7 @@ import androidx.navigation.NavController
 fun CallMozo(navCont: NavController) {
     Scaffold (
         topBar = {
-            OderEasyTopAppBar()
+            OderEasyTopAppBar(navCont)
         },
         content = { innerPadding ->
             Column(
