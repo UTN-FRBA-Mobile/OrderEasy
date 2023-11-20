@@ -22,9 +22,11 @@ import retrofit2.http.Path
 interface ReqsService {
     companion object{
         val instance = Retrofit.Builder()
-            .baseUrl("https://restowebback-production.up.railway.app/")
+            //.baseUrl("http://10.0.2.2:5000/")
+            .baseUrl("http://192.168.0.41:5000/")
+            //.baseUrl("https://restowebback-production.up.railway.app/")
             .addConverterFactory(GsonConverterFactory.create())
-            //.client(OkHttpClient.Builder().build())
+            .client(OkHttpClient.Builder().build())
             .build()
             .create(ReqsService::class.java)
     }

@@ -43,7 +43,7 @@ fun TopBar (userViewModel: UserViewModel){
         ),
         title = {
         Row (
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier.fillMaxWidth().padding(vertical = 4.dp),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween
         ){
@@ -52,11 +52,7 @@ fun TopBar (userViewModel: UserViewModel){
                     Icon(Icons.Filled.AccountCircle, contentDescription = "usuario", modifier = Modifier.size(20.dp))
                     Text(
                         text = userViewModel.estadoUser.nombre,
-                        fontWeight = FontWeight.W400,
-                        style = TextStyle(
-                            fontSize = 18.sp,
-                            fontStyle = FontStyle.Normal
-                        )
+                        style = MaterialTheme.typography.titleSmall
                     )
                 }
             }
@@ -64,11 +60,7 @@ fun TopBar (userViewModel: UserViewModel){
                 Row (verticalAlignment = Alignment.CenterVertically){
                     Icon(painter = painterResource(id = R.drawable.baseline_restaurant_24),"resto",modifier = Modifier.size(24.dp))
                     Text(text = "OrderEasy",
-                        fontWeight = FontWeight.W400,
-                        style = TextStyle(
-                            fontSize = 20.sp,
-                            fontStyle = FontStyle.Normal
-                        )
+                        style = MaterialTheme.typography.titleSmall
                     )
                 }
             }

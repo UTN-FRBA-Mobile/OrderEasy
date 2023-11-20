@@ -8,6 +8,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.apiReqs.ReqsService
 import com.google.gson.GsonBuilder
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 class TableViewModel (private val servicioApi: ReqsService): ViewModel() {
@@ -20,7 +21,7 @@ class TableViewModel (private val servicioApi: ReqsService): ViewModel() {
     fun getPedidosState (idMesa:Int){
         Log.i("TableviewModel-->",idMesa.toString())
         viewModelScope.launch {
-            estadoMesa = estadoMesa.copy(requestingData = true)
+            //estadoMesa = estadoMesa.copy(requestingData = true)
             val pedidos = servicioApi.getStateTable(idMesa)
             Log.i("getPedidosState--->",pedidos.body()!!.toString())
             Log.i("getPedidosState-SUCCESSFULL-->",pedidos.isSuccessful.toString())
@@ -39,9 +40,9 @@ class TableViewModel (private val servicioApi: ReqsService): ViewModel() {
     fun getConsumosState (idMesa:Int,idCliente: Int){
         Log.i("GETCONSUMOSSTATES----->","X AQUI mesa :"+idMesa.toString())
         viewModelScope.launch {
-            estadoMesa = estadoMesa.copy(requestingData = true)
+            //estadoMesa = estadoMesa.copy(requestingData = true)
             val pedidos = servicioApi.getConsumoTable(idMesa)
-            Log.i("GETCONSUMOSSTATES----->","INTO")
+            delay(1600)
             if(pedidos.isSuccessful){
                 if(pedidos.body() != null){
                     estadoMesa = estadoMesa.copy(
@@ -58,6 +59,11 @@ class TableViewModel (private val servicioApi: ReqsService): ViewModel() {
                 }
             }
         }
+    }
+    fun setRequestingDataOn(){
+        estadoMesa = estadoMesa.copy(
+            requestingData = true
+        )
     }
     fun selectInvited (idCliente:Int){
         viewModelScope.launch {

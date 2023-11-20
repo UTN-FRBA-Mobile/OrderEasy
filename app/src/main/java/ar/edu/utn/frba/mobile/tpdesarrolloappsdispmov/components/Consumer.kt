@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -32,8 +33,14 @@ fun Consumer(ped:PedidoData){
             .padding(1.dp),
         verticalAlignment = Alignment.Top,
     ){
-        Icon(painter = painterResource(id = R.drawable.baseline_restaurant_24),contentDescription = "resto", modifier = Modifier.weight(1f))
-        Text(text = ped.Plato.nombre+" ($"+ped.Plato.precio+" x"+ped.cantidad.toString()+")", modifier = Modifier.weight(5f))
-        Text(text = "$"+(ped.cantidad * ped.Plato.precio).toString(), modifier = Modifier.weight(2f), textAlign = TextAlign.End)
+        Icon(painter = painterResource(id = R.drawable.baseline_restaurant_24),contentDescription = "resto",
+            modifier = Modifier.weight(1f))
+        Text(text = ped.Plato.nombre+" ($"+ped.Plato.precio+" x"+ped.cantidad.toString()+")",
+            modifier = Modifier.weight(5f),
+            style = MaterialTheme.typography.displaySmall)
+        Text(text = "$"+(ped.cantidad * ped.Plato.precio).toString(),
+            modifier = Modifier.weight(2f),
+            textAlign = TextAlign.End,
+            style = MaterialTheme.typography.labelSmall)
     }
 }

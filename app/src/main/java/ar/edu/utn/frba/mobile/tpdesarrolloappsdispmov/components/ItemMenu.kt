@@ -23,24 +23,20 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.R
 
 @Composable
 fun ItemMenu(titulo:String,icono:ImageVector,navCont:NavController,ruta:String){
     ExtendedFloatingActionButton(
-        modifier = Modifier.fillMaxWidth().padding(14.dp),
+        modifier = Modifier.fillMaxWidth().padding(horizontal=40.dp, vertical = 14.dp),//.padding(14.dp),
         onClick = { navCont.navigate(route=ruta)},
         icon = { Icon(imageVector = icono, contentDescription ="carta",modifier=Modifier.size(40.dp) )},
         text = {
             Text(
                 text = titulo,
-                textAlign = TextAlign.Justify,
+                textAlign = TextAlign.Center,
                 modifier = Modifier.fillMaxWidth().padding(vertical = 6.dp),
-                fontFamily = FontFamily.SansSerif,
-                fontWeight = FontWeight.Normal,
-                style = TextStyle(
-                    fontSize = 16.sp,
-                    fontStyle = FontStyle.Normal
-                )
+                style = MaterialTheme.typography.titleLarge
             )
         },
     )

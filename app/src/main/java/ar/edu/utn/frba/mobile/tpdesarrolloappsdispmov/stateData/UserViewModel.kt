@@ -17,8 +17,10 @@ import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.compose.viewModel
 import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.InitNotifications
 import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.apiReqs.ReqsService
+import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.socket.SocketManager
 import com.google.firebase.Firebase
 import com.google.firebase.messaging.messaging
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
@@ -121,6 +123,7 @@ class UserViewModel (private val usuarioServicio: ReqsService,private val dataSt
         Log.i("getConsumo----->","OUTSIDE")
         viewModelScope.launch {
             Log.i("getConsumo----->","inside")
+            delay(1400)
             val consumidos = usuarioServicio.getConsumo(estadoUser.idCliente)
             Log.i("getConsumo----->","llame a usuarioServicio otra vez?")
             if(consumidos.isSuccessful){
@@ -152,6 +155,11 @@ class UserViewModel (private val usuarioServicio: ReqsService,private val dataSt
         viewModelScope.launch {
             usuarioServicio.pagarDivididos(estadoUser.idMesa,estadoUser.idCliente,"start")
         }
+    }
+    fun socketear(){
+        SocketManager.connect()
+        SocketManager.sendMsj("hola soy order easy")
+        //SocketManager.disconnect()
     }
 
     /*suspend fun setDataStore(nombre:String,estado:String,idDevice:String,idMesa:Int,idCliente:Int){

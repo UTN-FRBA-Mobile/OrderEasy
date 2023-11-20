@@ -7,6 +7,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -25,11 +26,7 @@ fun VolverBtn(navCont: NavController){
         icon = { Icon(Icons.Filled.ArrowBack,  contentDescription ="volver") },
         text = { Text(
             text = "Volver al menu",
-            fontWeight = FontWeight.W600,
-            style = TextStyle(
-                fontSize = 16.sp,
-                fontStyle = FontStyle.Normal
-            )
+            style = MaterialTheme.typography.titleSmall
         ) },
     )
 }

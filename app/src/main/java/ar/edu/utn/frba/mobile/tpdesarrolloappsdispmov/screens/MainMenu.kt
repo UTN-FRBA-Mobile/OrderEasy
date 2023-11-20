@@ -54,7 +54,7 @@ fun MainMenu(navCont: NavController,usuarioViewModel: UserViewModel,tabStateView
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(innerPadding),
-                verticalArrangement = Arrangement.Top
+                verticalArrangement = Arrangement.SpaceBetween
             ){
                 LazyColumn{
                     item {
@@ -78,23 +78,19 @@ fun MainMenu(navCont: NavController,usuarioViewModel: UserViewModel,tabStateView
                     }
                     item {
                         ExtendedFloatingActionButton(
-                            modifier = Modifier.fillMaxWidth().padding(14.dp),
+                            modifier = Modifier.fillMaxWidth().padding(horizontal = 40.dp,vertical=14.dp),
                             onClick = {
+                                tabStateViewModel.setRequestingDataOn()
                                 navCont.navigate(route="ordersstate")
                                 tabStateViewModel.getPedidosState(usuarioViewModel.estadoUser.idMesa)
                             },
                             icon = { Icon(imageVector = ImageVector.vectorResource(id = R.drawable.baseline_playlist_add_check_circle_24), contentDescription ="carta",modifier=Modifier.size(40.dp) )},
                             text = {
                                 Text(
-                                    text = "Ver pedidos de mesa",
-                                    textAlign = TextAlign.Justify,
+                                    text = "Ver el estado de los pedidos de la mesa",
+                                    textAlign = TextAlign.Center,
                                     modifier = Modifier.fillMaxWidth().padding(vertical = 6.dp),
-                                    fontFamily = FontFamily.SansSerif,
-                                    fontWeight = FontWeight.Normal,
-                                    style = TextStyle(
-                                        fontSize = 16.sp,
-                                        fontStyle = FontStyle.Normal
-                                    )
+                                    style = MaterialTheme.typography.titleLarge
                                 )
                             },
                         )
