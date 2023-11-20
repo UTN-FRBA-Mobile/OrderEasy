@@ -8,7 +8,6 @@ import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.stateData.PedidoMenuData
 import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.stateData.PedidoOrdenarData
 import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.stateData.PedidoScanQrData
 import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.stateData.PedidosMesaData
-import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.stateData.PlatoOrdenado
 import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.stateData.ResponseApiStandardData
 import okhttp3.OkHttpClient
 import retrofit2.Response
