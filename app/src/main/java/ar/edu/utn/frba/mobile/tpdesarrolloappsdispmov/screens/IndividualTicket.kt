@@ -35,6 +35,7 @@ import androidx.navigation.NavController
 import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.R
 import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.components.TopBar
 import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.stateData.UserViewModel
+import java.util.Locale
 
 @Composable
 fun IndividualTicket(navCont:NavController,userViewModel: UserViewModel){
@@ -76,17 +77,17 @@ fun IndividualTicket(navCont:NavController,userViewModel: UserViewModel){
                                     modifier = Modifier.weight(4f),
                                     //lineHeight=1.sp,
                                     style= MaterialTheme.typography.displaySmall)
-                                Text(text = "("+e.cantidad.toString()+"x $"+e.Plato.precio.toString()+")",
+                                Text(text = "("+e.cantidad.toString()+"x $"+"%,.1f".format(Locale.GERMAN,e.Plato.precio)+")",
                                     style= MaterialTheme.typography.labelSmall,
                                     modifier=Modifier.weight(4f))
-                                Text(text = "$"+(e.Plato.precio * e.cantidad).toString(),
+                                Text(text = "$"+"%,.1f".format(Locale.GERMAN,e.Plato.precio * e.cantidad),
                                     style= MaterialTheme.typography.labelSmall,
                                     modifier = Modifier.weight(2f))
                             }
                         }
                         item{
                             Row {
-                                Text(text = "Total $"+total.toString(),
+                                Text(text = "Total $"+"%,.1f".format(Locale.GERMAN,total),
                                     modifier = Modifier.fillMaxWidth().padding(2.dp),
                                     style= MaterialTheme.typography.displayLarge,
                                     textAlign = TextAlign.End)
@@ -123,17 +124,3 @@ fun IndividualTicket(navCont:NavController,userViewModel: UserViewModel){
         }
     )
 }
-/*
-fun Consumer(ped: PedidoData){
-    Row (
-        horizontalArrangement = Arrangement.SpaceBetween,
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(2.dp),
-        verticalAlignment = Alignment.Top,
-    ){
-        Icon(painter = painterResource(id = R.drawable.baseline_restaurant_24),contentDescription = "resto", modifier = Modifier.weight(1f))
-        Text(text = ped.Plato.nombre+" ($"+ped.Plato.precio+" x"+ped.cantidad.toString()+")", modifier = Modifier.weight(9f))
-        Text(text = "$"+(ped.cantidad * ped.Plato.precio).toString(), modifier = Modifier.weight(2f), textAlign = TextAlign.End)
-    }
-}*/

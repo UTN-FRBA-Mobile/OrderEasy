@@ -1,13 +1,13 @@
 package ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.navigation
 
+//import android.util.Log
 import androidx.compose.runtime.Composable
-import androidx.navigation.NavController
-import androidx.navigation.NavDeepLink
+//import androidx.navigation.NavDeepLink
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import androidx.navigation.navArgument
+//import androidx.navigation.navArgument
 //import androidx.navigation.navDeepLink
 import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.screens.CallMozo
 import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.screens.ChallengeTicket
@@ -50,21 +50,21 @@ fun MainNavigation (tabStateViewModel: TableViewModel,menuStateViewModel: MenuVi
         composable(route="desafio"){ Desafio(navController,usuarioViewModel) }
         composable(route="game"){ Game(navController,usuarioViewModel) }
         composable(route="notificacion",
-            deepLinks= listOf(NavDeepLink("$uri/notif/{total}/{cantidad}/{pago}")),
+            /*deepLinks= listOf(NavDeepLink("$uri/notif/{total}/{cantidad}/{pago}")),
             arguments = listOf(
                 navArgument("total"){type= NavType.StringType
                     defaultValue=""},
                 navArgument("pago"){type= NavType.StringType
                     defaultValue=""},
                 navArgument("cantidad"){type = NavType.StringType
-                    defaultValue=""})
+                    defaultValue=""})*/
         ){
             //entry ->
-            Notificacion(navController,usuarioViewModel
+            Notificacion(navController,usuarioViewModel)
                 /*entry.arguments?.getString("total")?:"",
                 entry.arguments?.getString("pago")?:"",
                 entry.arguments?.getString("cantidad")?:""*/
-                )
+
         }
     }
 }

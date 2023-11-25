@@ -79,6 +79,7 @@ class MyFirebaseMessagingService: FirebaseMessagingService() {
         val intent=Intent(this, MainActivity::class.java)
         if (action == "share") {
             intent
+                .putExtra("action",action)
                 .putExtra("total", total)
                 .putExtra("cantidad", cantidad)
                 .putExtra("pago", pago)

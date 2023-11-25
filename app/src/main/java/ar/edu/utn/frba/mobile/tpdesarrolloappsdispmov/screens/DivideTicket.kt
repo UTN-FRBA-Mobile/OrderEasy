@@ -29,10 +29,13 @@ import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.components.Consumer
 import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.components.TopBar
 import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.stateData.TableViewModel
 import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.stateData.UserViewModel
+import java.util.Locale
 
 
 @Composable
 fun DivideTicket(navCont: NavController, userViewModel: UserViewModel, tableViewModel: TableViewModel){
+    val totGastoMesa = tableViewModel.estadoMesa.consumosMesa.fold(0.0f){ac,e -> ac+e.Pedidos.fold(0.0f){ acc, i -> acc+i.cantidad*i.Plato.precio} }
+    val gastoIndividual = totGastoMesa/tableViewModel.estadoMesa.consumosMesa.size
     Scaffold (
         topBar = { TopBar(userViewModel) },
         content = { innerPadding ->
@@ -41,15 +44,37 @@ fun DivideTicket(navCont: NavController, userViewModel: UserViewModel, tableView
                     CircularProgressIndicator()
                 }
             }else {
-                LazyColumn(modifier = Modifier.fillMaxWidth().fillMaxSize()
+                LazyColumn(modifier = Modifier
+                    .fillMaxWidth()
+                    .fillMaxSize()
                     .padding(innerPadding)){
                     item {
-                        Text(
-                            modifier = Modifier.fillMaxWidth().padding(vertical = 4.dp),
-                            text = "Consumido",
-                            textAlign = TextAlign.Center,
-                            style = MaterialTheme.typography.titleLarge
-                        )
+                        Column {
+                            Text(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(vertical = 4.dp),
+                                text = "Gasto total de la mesa $"+"%,.1f".format(Locale.GERMAN,totGastoMesa),
+                                textAlign = TextAlign.Center,
+                                style = MaterialTheme.typography.titleLarge
+                            )
+                            Text(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(vertical = 4.dp),
+                                text = "Pago por integrante de la mesa $"+"%,.1f".format(Locale.GERMAN,gastoIndividual),
+                                textAlign = TextAlign.Center,
+                                style = MaterialTheme.typography.titleMedium
+                            )
+                            Text(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(vertical = 4.dp),
+                                text = "Detalle",
+                                textAlign = TextAlign.Center,
+                                style = MaterialTheme.typography.displayMedium
+                            )
+                        }
                     }
                     tableViewModel.estadoMesa.consumosMesa.forEach { consm ->
                         item {
@@ -65,8 +90,10 @@ fun DivideTicket(navCont: NavController, userViewModel: UserViewModel, tableView
                                         Consumer(ped)
                                         tot = tot + ped.cantidad * ped.Plato.precio
                                     }
-                                    Text(text = "Total  $"+tot.toString(),
-                                        modifier = Modifier.fillMaxWidth().padding(2.dp),
+                                    Text(text = "Total  $"+"%,.1f".format(Locale.GERMAN,tot),
+                                        modifier = Modifier
+                                            .fillMaxWidth()
+                                            .padding(2.dp),
                                         textAlign = TextAlign.End,
                                         style = MaterialTheme.typography.titleMedium)
                                 }

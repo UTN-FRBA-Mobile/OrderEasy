@@ -1,6 +1,5 @@
 package ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.screens
 
-//import android.graphics.Paint.Align
 //import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -34,6 +33,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.R
+import java.util.Locale
 
 
 @Composable
@@ -92,7 +92,7 @@ fun InviteTicket(navCont: NavController, userViewModel: UserViewModel, tableView
                                             val indice:Int =tableViewModel.estadoMesa.invitados.indexOfFirst{ e -> e.idCliente == userViewModel.estadoUser.idCliente}
                                             val yo = if(indice !=-1) tableViewModel.estadoMesa.invitados[indice] else null
                                             if (yo != null) {
-                                                Text(text ="Consumido: $"+yo.total.toString(),
+                                                Text(text ="Consumido: $"+"%,.1f".format(Locale.GERMAN,yo.total),
                                                     style=MaterialTheme.typography.labelSmall)
                                             }
                                         }
@@ -145,7 +145,7 @@ fun InviteTicket(navCont: NavController, userViewModel: UserViewModel, tableView
                                                 modifier = Modifier.fillMaxWidth(),
                                                 horizontalArrangement = Arrangement.End
                                             ) {
-                                                Text(text = "Consumido: $"+cons.total.toString(),
+                                                Text(text = "Consumido: $"+"%,.1f".format(Locale.GERMAN,cons.total),
                                                     style=MaterialTheme.typography.labelSmall)
                                             }
                                         }
@@ -168,7 +168,7 @@ fun InviteTicket(navCont: NavController, userViewModel: UserViewModel, tableView
                             }
                         }
                         item {Text(
-                            text = "Total a Pagar: $"+tableViewModel.estadoMesa.invitados.filter { e ->e.selected }.fold(0.0f ) {acc, i -> acc + i.total}.toString(),
+                            text = "Total a Pagar: $"+"%,.1f".format(Locale.GERMAN,tableViewModel.estadoMesa.invitados.filter { e ->e.selected }.fold(0.0f ) {acc, i -> acc + i.total}),
                             textAlign = TextAlign.Center,
                             style = MaterialTheme.typography.titleLarge
                         )}

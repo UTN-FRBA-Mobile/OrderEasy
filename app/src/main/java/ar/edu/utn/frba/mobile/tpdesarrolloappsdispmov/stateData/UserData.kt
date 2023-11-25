@@ -15,5 +15,5 @@ data class UserData(
     val gastoTotDivide:String = "",
     val gastoIndDivide:String = "",
     val cantDivide:String = "",
-    val game:ChallengeData= ChallengeData(0,"",0,0,0.0f)
+    val game:ChallengeData= ChallengeData(0,"",0,0,0.0f,"vacio",0)
 )

@@ -14,6 +14,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.R
 import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.stateData.PedidoData
+import java.util.Locale
 
 @Composable
 fun Consumer(ped:PedidoData){
@@ -26,10 +27,10 @@ fun Consumer(ped:PedidoData){
     ){
         Icon(painter = painterResource(id = R.drawable.baseline_restaurant_24),contentDescription = "resto",
             modifier = Modifier.weight(1f))
-        Text(text = ped.Plato.nombre+" ($"+ped.Plato.precio+" x"+ped.cantidad.toString()+")",
+        Text(text = ped.Plato.nombre+" ($"+"%,.1f".format(Locale.GERMAN,ped.Plato.precio)+" x"+ped.cantidad.toString()+")",
             modifier = Modifier.weight(5f),
             style = MaterialTheme.typography.displaySmall)
-        Text(text = "$"+(ped.cantidad * ped.Plato.precio).toString(),
+        Text(text = "$"+"%,.1f".format(Locale.GERMAN,ped.cantidad * ped.Plato.precio),
             modifier = Modifier.weight(2f),
             textAlign = TextAlign.End,
             style = MaterialTheme.typography.labelSmall)

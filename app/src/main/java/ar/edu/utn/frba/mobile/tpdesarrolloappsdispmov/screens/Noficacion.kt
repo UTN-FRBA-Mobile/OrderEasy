@@ -52,8 +52,8 @@ fun Notificacion(navController: NavController,userViewModel: UserViewModel){//,t
                         modifier = Modifier
                             .padding(10.dp),
                         onClick = {
-                            //userViewModel.aceptarDividirConsumo()
                             userViewModel.unsetInviteDivide()
+                            userViewModel.aceptarDividirConsumo()
                             navController.navigate(route="mainmenu")
                         },
                         icon = { Icon(Icons.Filled.Check,  contentDescription ="volver") },
@@ -63,8 +63,8 @@ fun Notificacion(navController: NavController,userViewModel: UserViewModel){//,t
                         modifier = Modifier
                             .padding(10.dp),
                         onClick = {
-                            //usuarioViewModel.rechazarDividirConsumo()
                             userViewModel.unsetInviteDivide()
+                            userViewModel.rechazarDividirConsumo()
                             navController.navigate(route="mainmenu")
                         },
                         icon = { Icon(Icons.Filled.Close,  contentDescription ="volver") },

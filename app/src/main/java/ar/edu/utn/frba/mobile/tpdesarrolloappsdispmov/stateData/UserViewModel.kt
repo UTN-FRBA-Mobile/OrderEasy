@@ -20,11 +20,12 @@ import kotlinx.coroutines.launch
 class UserViewModel (private val usuarioServicio: ReqsService,private val dataStore: DataStore<Preferences>): ViewModel() {
     var estadoUser by mutableStateOf(UserData())
         private set
-    init {
+    /*init {
         estadoUser = estadoUser.copy(requestingData=true)
         initializating()
-    }
+    }*/
     fun setInviteDivide(tot:String,cant:String,indiv:String){
+        Log.i("UserViewModel--invite-->","tot->$tot cant->$cant indiv->$indiv")
         viewModelScope.launch {
             estadoUser = estadoUser.copy(
                 gastoIndDivide = indiv,
@@ -32,6 +33,7 @@ class UserViewModel (private val usuarioServicio: ReqsService,private val dataSt
                 cantDivide = cant,
                 requestingData = false
             )
+            Log.i("UserViewModel--stat-->","estado.gastoInd->${estadoUser.gastoIndDivide} .gastoTot->${estadoUser.gastoIndDivide}")
         }
     }
     fun unsetInviteDivide(){
@@ -85,11 +87,11 @@ class UserViewModel (private val usuarioServicio: ReqsService,private val dataSt
         }
     }
     fun initializating(){
-        Log.i("UserViewModel--->","initializating")
+        Log.i("UserViewModel--->","INITIALIZATING")
         viewModelScope.launch {
-            Log.i("UserViewModel--launch1-->","launching")
+            //Log.i("UserViewModel--launch1-->","launching")
             val user = mapUser(dataStore.data.first().toPreferences())
-            Log.i("UserViewModel--launch2-->",user.toString())
+            //Log.i("UserViewModel--launch2-->",user.toString())
             estadoUser = estadoUser.copy(
                 idCliente = user.idCliente,
                 nombre=user.nombre,
@@ -98,7 +100,7 @@ class UserViewModel (private val usuarioServicio: ReqsService,private val dataSt
                 initializatingApp = false,
                 isLogged = if(user.idCliente==0)false else true)
             }
-        Log.i("UserViewModel--launch3-->",estadoUser.toString())
+        Log.i("UserViewModel-->","POST-INITIALIZATING->${estadoUser.toString()}")
         }
     fun clearSavedData(){
         viewModelScope.launch {

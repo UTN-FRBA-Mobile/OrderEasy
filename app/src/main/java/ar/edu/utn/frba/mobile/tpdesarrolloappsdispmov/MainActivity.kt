@@ -2,7 +2,7 @@ package ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov
 
 import android.content.Context
 import android.os.Bundle
-import android.util.Log
+//import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
@@ -33,91 +33,79 @@ val Context.dataStore by preferencesDataStore(name="USER_DATA")
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        Log.i("MainActivity0->extras",intent.extras?.getString("total").toString())
-        Log.i("MainActivity1->extras",intent.extras?.getString("action").toString())
-
-        val bundle = intent.extras
+        /*val bundle = intent.extras
         if (bundle != null) {
             for (key in bundle.keySet()) {
                 Log.i("param(${key})--->",bundle[key].toString())
             }
-        }
+        }*/
         setContent {
             TpDesarrolloAppsDispMovTheme {
-                // A surface container using the 'background' color from the theme
+                val navController= rememberNavController()
+                val retrofitInst:ReqsService = ReqsService.instance
+                val usuarioViewModel by viewModels <UserViewModel>(factoryProducer = {
+                    object : ViewModelProvider.Factory{
+                        override fun <T:ViewModel> create (modelClass: Class<T>): T{
+                            return UserViewModel(retrofitInst,dataStore) as T
+                        }
+                    }
+                })
+                val tabStateViewModel by viewModels <TableViewModel>(factoryProducer = {
+                    object : ViewModelProvider.Factory{
+                        override fun <T: ViewModel> create (modelClass: Class<T>): T{
+                            return TableViewModel(retrofitInst) as T
+                        }
+                    }
+                })
+                val menuStateViewModel by viewModels <MenuViewModel>(factoryProducer = {
+                    object : ViewModelProvider.Factory{
+                        override fun <T: ViewModel> create (modelClass: Class<T>): T{
+                            return MenuViewModel(retrofitInst) as T
+                        }
+                    }
+                })
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    val navController= rememberNavController()
-                    val retrofitInst:ReqsService = ReqsService.instance
-                    val usuarioViewModel by viewModels <UserViewModel>(factoryProducer = {
-                        object : ViewModelProvider.Factory{
-                            override fun <T:ViewModel> create (modelClass: Class<T>): T{
-                                return UserViewModel(retrofitInst,dataStore) as T
+                    if(usuarioViewModel.estadoUser.initializatingApp){
+                        Firebase.messaging.token.addOnCompleteListener {
+                            if(!it.isSuccessful){
+                                println("error en obtencion de token")
+                                return@addOnCompleteListener
                             }
+                            val token = it.result
+                            usuarioViewModel.setIdDevice(token)
                         }
-                    })
-                    val tabStateViewModel by viewModels <TableViewModel>(factoryProducer = {
-                        object : ViewModelProvider.Factory{
-                            override fun <T: ViewModel> create (modelClass: Class<T>): T{
-                                return TableViewModel(retrofitInst) as T
-                            }
-                        }
-                    })
-                    val menuStateViewModel by viewModels <MenuViewModel>(factoryProducer = {
-                        object : ViewModelProvider.Factory{
-                            override fun <T: ViewModel> create (modelClass: Class<T>): T{
-                                return MenuViewModel(retrofitInst) as T
-                            }
-                        }
-                    })
-                    //Log.i("MainActivity->extras2",intent.extras?.getString("inviteDivide").toString())
-
-                    if(intent.extras?.getString("action")=="desafio"){
-                        val accion = intent.extras?.getString("action")?:""
-                        val idRival = intent.extras?.getInt("idRival")?:0
-                        val nombRival = intent.extras?.getString("nombRival")?:""
-                        Log.i("MainActivity->defy",accion)
-                        Log.i("MainActivity->defy",idRival.toString())
-                        Log.i("MainActivity->defy",nombRival)
-                        usuarioViewModel.setRival(idRival,nombRival,"desafiado")
-                    }
-                    if(intent.extras?.getString("action")=="jugar"){
-                        val accion = intent.extras?.getString("action")?:""
-                        val idPartida = intent.extras?.getInt("idPartida")?:0
-                        Log.i("MainActivity->defy",accion)
+                        /*if(intent.extras?.getString("action")=="desafio"){
+                            Log.i("MAINACTIVITY--->","DESAFIO")
+                            val accion = intent.extras?.getString("action")?:""
+                            val idRival = intent.extras?.getInt("idRival")?:0
+                            val nombRival = intent.extras?.getString("nombRival")?:""
+                            usuarioViewModel.setRival(idRival,nombRival,"desafiado")
+                        }else if(intent.extras?.getString("action")=="jugar"){
+                            Log.i("MAINACTIVITY--->","JUGAR")
+                            val accion = intent.extras?.getString("action")?:""
+                            val idPartida = intent.extras?.getInt("idPartida")?:0
+                            Log.i("MainActivity->defy",accion)
                         usuarioViewModel.setGame(idPartida,"jugando")
+                    }*/
+                        if(intent.extras?.getString("action")=="share"){
+                            usuarioViewModel.setInviteDivide(
+                                intent.extras?.getString("total")?:"",
+                                intent.extras?.getString("cantidad")?:"",
+                                intent.extras?.getString("pago")?:""
+                            )
+                        }
+                        usuarioViewModel.initializating()
+                        menuStateViewModel.getMenu()
                     }
-                    if(intent.extras?.getString("total")!=null){
-                        Log.i("MainActivity->pago",intent.extras?.getString("pago").toString())
-                        Log.i("MainActivity->total",intent.extras?.getString("total").toString())
-                        Log.i("MainActivity->cantidad",intent.extras?.getString("cantidad").toString())
-                        /*Notificacion(
-                            userViewModel = usuarioViewModel,
-                            navController = navController,
-                            total = intent.extras?.getString("total")!!,
-                            individual = intent.extras?.getString("pago")!!,
-                            cantidad = intent.extras?.getString("cantidad")!!
-                        )*/
-                        val total = intent.extras?.getString("total")?:""
-                        val cant = intent.extras?.getString("cantidad")?:""
-                        val pago = intent.extras?.getString("pago")?:""
-                        getIntent().removeExtra("total")
-                        getIntent().removeExtra("cantidad")
-                        getIntent().removeExtra("pago")
-                        Log.i("MainActivity2->pago",intent.extras?.getString("pago").toString())
-                        Log.i("MainActivity2->total",intent.extras?.getString("total").toString())
-                        Log.i("MainActivity2->cantidad",intent.extras?.getString("cantidad").toString())
-                        usuarioViewModel.setInviteDivide(total,cant,pago)
-                    }//else {
-                        Starting(
-                            tabStateViewModel,
-                            usuarioViewModel,
-                            menuStateViewModel,
-                            navController
-                        )
-                   // }
+                    Starting(
+                        tabStateViewModel,
+                        usuarioViewModel,
+                        menuStateViewModel,
+                        navController
+                    )
                 }
             }
         }
@@ -126,25 +114,13 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun Starting(tableViewModel: TableViewModel,usuarioViewModel: UserViewModel,menuStateViewModel: MenuViewModel,navController: NavHostController) {
-    Log.i("MAINACTIVITY--->","Starting")
-    if(usuarioViewModel.estadoUser.isLogged){
+    if(usuarioViewModel.estadoUser.initializatingApp){
+        Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+            CircularProgressIndicator()
+        }
+    }else if(usuarioViewModel.estadoUser.isLogged){
         MainNavigation(tableViewModel,menuStateViewModel,usuarioViewModel, navController)
     }else{
-        Log.i("usuarioLogged->","NO")
-            if(usuarioViewModel.estadoUser.requestingData){
-                Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                    CircularProgressIndicator()
-                }
-            }else{
-                Login(usuarioViewModel)
-            }
-    }
-    Firebase.messaging.token.addOnCompleteListener {
-        if(!it.isSuccessful){
-            println("error en obtencion de token")
-            return@addOnCompleteListener
-        }
-        val token = it.result
-        usuarioViewModel.setIdDevice(token)
+        Login(usuarioViewModel)
     }
 }

@@ -35,6 +35,7 @@ import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.R
 import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.components.TopBar
 import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.stateData.TableViewModel
 import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.stateData.UserViewModel
+import java.util.Locale
 
 
 @Composable
@@ -97,7 +98,7 @@ fun ChallengeTicket(navCont: NavController, userViewModel: UserViewModel, tableV
                                             val indice:Int =tableViewModel.estadoMesa.invitados.indexOfFirst{ e -> e.idCliente == userViewModel.estadoUser.idCliente}
                                             val yo = if(indice !=-1) tableViewModel.estadoMesa.invitados[indice] else null
                                             if (yo != null) {
-                                                Text(text ="Consumido: $"+yo.total.toString(),
+                                                Text(text ="Consumido: $"+"%,.1f".format(Locale.GERMAN,yo.total),
                                                     style=MaterialTheme.typography.labelSmall)
                                             }
                                         }
@@ -183,7 +184,7 @@ fun ChallengeTicket(navCont: NavController, userViewModel: UserViewModel, tableV
                                                 modifier = Modifier.fillMaxWidth(),
                                                 horizontalArrangement = Arrangement.End
                                             ) {
-                                                Text(text = "Consumido: $"+cons.total.toString(),
+                                                Text(text = "Consumido: $"+"%,.1f".format(Locale.GERMAN,cons.total),
                                                     style= MaterialTheme.typography.labelSmall)
                                             }
                                         }

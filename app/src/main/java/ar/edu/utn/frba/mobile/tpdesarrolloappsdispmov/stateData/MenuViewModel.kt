@@ -13,9 +13,6 @@ import kotlinx.coroutines.launch
 class MenuViewModel (private val servicioApi: ReqsService): ViewModel() {
     var estadoMenu by mutableStateOf(MenuData())
         private set
-    init {
-        getMenu()
-    }
     fun getMenu (){
         viewModelScope.launch {
             estadoMenu = estadoMenu.copy(loadingMenu = true)
