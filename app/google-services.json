@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "829089549518",
+    "project_id": "notificacionesordereasy",
+    "storage_bucket": "notificacionesordereasy.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:829089549518:android:003bb59566877798e6949f",
+        "android_client_info": {
+          "package_name": "ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAXK0uw6jXhNrCt8B7HDNnDWeCFTIbdH2s"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
