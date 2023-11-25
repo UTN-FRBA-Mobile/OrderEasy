@@ -1,18 +1,25 @@
 package ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.navigation
 
 import androidx.compose.runtime.Composable
+import androidx.navigation.NavController
+import androidx.navigation.NavDeepLink
+import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 //import androidx.navigation.navDeepLink
 import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.screens.CallMozo
 import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.screens.ChallengeTicket
 import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.screens.CloseTable
+import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.screens.Desafio
 import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.screens.DivideTicket
+import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.screens.Game
 import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.screens.IndividualTicket
 import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.screens.InviteTicket
 import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.screens.MainMenu
 import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.screens.MakeOrder
+import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.screens.Notificacion
 import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.screens.OrdersState
 import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.screens.ReadMenu
 import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.screens.RequestTicket
@@ -22,25 +29,42 @@ import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.stateData.TableViewModel
 import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.stateData.UserViewModel
 
 @Composable
-fun MainNavigation (tabStateViewModel: TableViewModel,menuStateViewModel: MenuViewModel,usuarioViewModel:UserViewModel) {
-    val navCont= rememberNavController()
-    //val uri ="order://easy.com"
+fun MainNavigation (tabStateViewModel: TableViewModel,menuStateViewModel: MenuViewModel,usuarioViewModel:UserViewModel,navController:NavHostController) {
+    val uri ="order://easy"
     NavHost(
-        navController = navCont,
+        navController = navController,
         startDestination = "mainmenu"
     ){
-        composable(route="mainmenu"){ MainMenu(navCont,usuarioViewModel,tabStateViewModel) }
-        composable(route="readmenu"){ ReadMenu(navCont,menuStateViewModel,usuarioViewModel) }
-        composable(route="makeorder"){ MakeOrder(navCont,menuStateViewModel,usuarioViewModel) }
-        composable(route="callmozo"){ CallMozo(navCont,usuarioViewModel) }
-        composable(route="scanqr"){ ScanQr(navCont,usuarioViewModel) }
-        composable(route="closetable"){ CloseTable(navCont,usuarioViewModel) }
-        composable(route="ordersstate"){OrdersState(navCont,tabStateViewModel,usuarioViewModel) }
-        //composable(route="requestTicket",deepLinks= listOf(navDeepLink{uriPattern= "$uri/reqTicket"}) ){ RequestTicket(navCont,usuarioViewModel,tabStateViewModel) }
-        composable(route="requestTicket" ){ RequestTicket(navCont,usuarioViewModel,tabStateViewModel) }
-        composable(route="individualTicket"){ IndividualTicket(navCont,usuarioViewModel) }
-        composable(route="divideTicket"){ DivideTicket(navCont,usuarioViewModel, tabStateViewModel) }
-        composable(route="inviteTicket"){ InviteTicket(navCont,usuarioViewModel,tabStateViewModel)}
-        composable(route="challengeTicket"){ ChallengeTicket(navCont,usuarioViewModel,tabStateViewModel) }
+        composable(route="mainmenu"){ MainMenu(navController,usuarioViewModel,tabStateViewModel) }
+        composable(route="readmenu"){ ReadMenu(navController,menuStateViewModel,usuarioViewModel) }
+        composable(route="makeorder"){ MakeOrder(navController,menuStateViewModel,usuarioViewModel) }
+        composable(route="callmozo"){ CallMozo(navController,usuarioViewModel) }
+        composable(route="scanqr"){ ScanQr(navController,usuarioViewModel) }
+        composable(route="closetable"){ CloseTable(navController,usuarioViewModel) }
+        composable(route="ordersstate"){OrdersState(navController,tabStateViewModel,usuarioViewModel) }
+        composable(route="requestticket"){ RequestTicket(navController,usuarioViewModel,tabStateViewModel) }
+        composable(route="individualTicket"){ IndividualTicket(navController,usuarioViewModel) }
+        composable(route="divideTicket"){ DivideTicket(navController,usuarioViewModel, tabStateViewModel) }
+        composable(route="inviteTicket"){ InviteTicket(navController,usuarioViewModel,tabStateViewModel)}
+        composable(route="challengeTicket"){ ChallengeTicket(navController,usuarioViewModel,tabStateViewModel) }
+        composable(route="desafio"){ Desafio(navController,usuarioViewModel) }
+        composable(route="game"){ Game(navController,usuarioViewModel) }
+        composable(route="notificacion",
+            deepLinks= listOf(NavDeepLink("$uri/notif/{total}/{cantidad}/{pago}")),
+            arguments = listOf(
+                navArgument("total"){type= NavType.StringType
+                    defaultValue=""},
+                navArgument("pago"){type= NavType.StringType
+                    defaultValue=""},
+                navArgument("cantidad"){type = NavType.StringType
+                    defaultValue=""})
+        ){
+            //entry ->
+            Notificacion(navController,usuarioViewModel
+                /*entry.arguments?.getString("total")?:"",
+                entry.arguments?.getString("pago")?:"",
+                entry.arguments?.getString("cantidad")?:""*/
+                )
+        }
     }
 }

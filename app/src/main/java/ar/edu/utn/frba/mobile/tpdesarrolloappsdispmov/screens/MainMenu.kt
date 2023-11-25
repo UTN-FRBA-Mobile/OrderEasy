@@ -70,7 +70,7 @@ fun MainMenu(navCont: NavController,usuarioViewModel: UserViewModel,tabStateView
                             icon = { Icon(imageVector = ImageVector.vectorResource(id = R.drawable.baseline_playlist_add_check_circle_24), contentDescription ="carta",modifier=Modifier.size(40.dp) )},
                             text = {
                                 Text(
-                                    text = "Ver el estado de los pedidos de la mesa",
+                                    text = "Ver el estado de los pedidos de la mesa" ,
                                     textAlign = TextAlign.Center,
                                     modifier = Modifier.fillMaxWidth().padding(vertical = 6.dp),
                                     style = MaterialTheme.typography.titleLarge

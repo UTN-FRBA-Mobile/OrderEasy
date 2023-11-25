@@ -1,7 +1,9 @@
-package ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.notifications
+/*package ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.notifications
 
 //import android.app.NotificationManager
+import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
@@ -24,16 +26,20 @@ import androidx.compose.material3.Text
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.datastore.preferences.preferencesDataStore
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.apiReqs.ReqsService
 import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.dataStore
 import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.stateData.UserViewModel
 import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.ui.theme.TpDesarrolloAppsDispMovTheme
+import kotlin.system.exitProcess
 
+val Context.dataStore by preferencesDataStore(name="USER_DATA")
 class ReqTicketActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        Log.i("ReqTicketActivity","INICIALIZANDO")
         val retrofitInst: ReqsService = ReqsService.instance
         val usuarioViewModel by viewModels<UserViewModel>(factoryProducer = {
             object : ViewModelProvider.Factory {
@@ -55,9 +61,10 @@ class ReqTicketActivity : ComponentActivity() {
                         )
                         {
                             Text(
-                                text = "Se dividirá el total gastado en la mesa de $${intent.extras?.getString("total")} entre los ${intent.extras?.getString("cantidad")} comensales," +
+                                *//*text = "Se dividirá el total gastado en la mesa de $${intent.extras?.getString("total")} entre los ${intent.extras?.getString("cantidad")} comensales," +
                                     " pagando cada uno $${intent.extras?.getString("pago")} Si alguno de los integrantes de la mesa no acepta la propuesta, entonces se cancelará ésta" +
-                                    " forma de pago",
+                                    " forma de pago",*//*
+                                text = "Se dividirá el total gastado en la mesa de  entre los  comensales,pagando cada uno Si alguno de los integrante pago",
                                 modifier = Modifier.padding(16.dp),
                                 textAlign = TextAlign.Justify,
                                 style = MaterialTheme.typography.titleLarge
@@ -72,9 +79,9 @@ class ReqTicketActivity : ComponentActivity() {
                                     .padding(10.dp),
                                 onClick = {
                                     usuarioViewModel.initializating()
-                                    usuarioViewModel.aceptarDividirConsumo()
+                                    //usuarioViewModel.aceptarDividirConsumo()
                                     finish()
-                                    System.exit(0)
+                                    exitProcess(0)
                                 },
                                 icon = { Icon(Icons.Filled.Check,  contentDescription ="volver") },
                                 text = { Text(text = "SI ACEPTO", style=MaterialTheme.typography.labelSmall) },
@@ -84,9 +91,9 @@ class ReqTicketActivity : ComponentActivity() {
                                     .padding(10.dp),
                                 onClick = {
                                     usuarioViewModel.initializating()
-                                    usuarioViewModel.rechazarDividirConsumo()
+                                    //usuarioViewModel.rechazarDividirConsumo()
                                     finish()
-                                    System.exit(0)
+                                    //System.exit(0)
                                 },
                                 icon = { Icon(Icons.Filled.Close,  contentDescription ="volver") },
                                 text = { Text(text = "NO ACEPTO", style=MaterialTheme.typography.labelSmall) },
@@ -97,7 +104,7 @@ class ReqTicketActivity : ComponentActivity() {
             }
         }
     }
-}
+}*/
 
 //SI:
 /*

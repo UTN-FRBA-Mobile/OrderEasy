@@ -22,13 +22,17 @@ interface ReqsService {
     companion object{
         val instance = Retrofit.Builder()
             //.baseUrl("http://10.0.2.2:5000/")
-            .baseUrl("http://192.168.0.41:5000/")
+            //baseUrl("http://192.168.0.41:5000/")
             //.baseUrl("https://restowebback-production.up.railway.app/")
+            //.baseUrl("https://ordereasy-backend.onrender.com")
+            .baseUrl("https://order-easy-production.up.railway.app/")
             .addConverterFactory(GsonConverterFactory.create())
             .client(OkHttpClient.Builder().build())
             .build()
             .create(ReqsService::class.java)
     }
+    @GET("/clientes/{idCliente}/{token")
+    suspend fun updatetoken(@Path("idCliente") idCliente: Int, @Path("token") token:String): Response<ResponseApiStandardData>
     @GET("mesas/compas/{idMesa}")
     suspend fun getConsumoTable(@Path("idMesa") idMesa:Int): Response<PedidosMesaData>
     @GET("mesas/estado/{idMesa}")
@@ -39,6 +43,8 @@ interface ReqsService {
     suspend fun getMenu():Response<PedidoMenuData>
     @POST("/mesas/ordenar/{idMesa}/{idCliente}")
     suspend fun makeOrder(@Path("idMesa") idMesa:Int, @Path("idCliente") idCliente:Int,@Body body:Ordenes): Response<PedidoOrdenarData>
+    @GET("mesas/pagar/desafio/{accion}/{idCliente}/{idRival}")
+    suspend fun desafiar(@Path("accion") accion:String, @Path("idCliente") idCliente: Int, @Path("idRival") idRival:Int): Response<ResponseApiStandardData>
     @POST("/mesas/pagar/invitados/{idCliente}")
     suspend fun pagarInvitados(@Path("idCliente") idCliente: Int,@Body body: Invitados): Response<ResponseApiStandardData>
     @GET("/mesas/pagar/dividido/{idMesa}/{idCliente}/{accion}")

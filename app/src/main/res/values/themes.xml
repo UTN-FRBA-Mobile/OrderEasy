@@ -2,7 +2,7 @@
 <resources>
 
     <!--style name="Theme.TpDesarrolloAppsDispMov" parent="android:Theme.Material.Light" /-->
-    <style name="Theme.OrderEasy" parent="Theme.AppCompat.Light"/>
+    <style name="Theme.OrderEasy" parent="Theme.AppCompat.Light" />
     <!-- Customize your theme here. -->
     <!--item name="colorPrimary" type="color">@color/colorPrimary</item>
     <item name="colorPrimaryDark" type="color">@color/colorPrimaryDark</item>

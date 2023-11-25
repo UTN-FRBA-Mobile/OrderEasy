@@ -1,3 +1,10 @@
 <resources>
     <string name="app_name">TpDesarrolloAppsDispMov</string>
+    <string name="CHANNEL1_ID">id_canal1_notificacion_fcm</string>
+    <string name="CHANNEL2_ID">id_canal2_notificacion</string>
+    <string name="CHANNEL1_NAME">CANAL_1</string>
+    <string name="CHANNEL2_NAME">CANAL_2</string>
+    <string name="CHANNEL1_DESCRIPTION">CANAL1_DE_NOTIFICACONES_FCM</string>
+    <string name="CHANNEL2_DESCRIPTION">CANAL2_DE_NOTIFICACONES</string>
+    <string name="title_activity_notification">NotificationActivity</string>
 </resources>

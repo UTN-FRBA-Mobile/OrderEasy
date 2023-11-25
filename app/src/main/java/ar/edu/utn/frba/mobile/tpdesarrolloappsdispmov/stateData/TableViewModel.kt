@@ -63,6 +63,14 @@ class TableViewModel (private val servicioApi: ReqsService): ViewModel() {
             estadoMesa = estadoMesa.copy( invitados = invitadosAux)
         }
     }
+    fun diselectAll(){
+        viewModelScope.launch {
+            val invitadosAux: MutableList<UserInvitedData> = mutableListOf()
+            invitadosAux.addAll(estadoMesa.invitados)
+            invitadosAux.forEach{it.selected=false}
+            estadoMesa = estadoMesa.copy(invitados = invitadosAux)
+        }
+    }
     fun pagarInvitado(idCliente: Int){
         viewModelScope.launch {
             var param = arrayListOf<Int>()

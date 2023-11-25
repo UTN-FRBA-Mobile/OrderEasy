@@ -11,5 +11,9 @@ data class UserData(
     val initializatingApp:Boolean=true,
     val jwt:String="",
     val consumos: List <ItemConsumidoData> = emptyList(),
-    val loadingConsumo: Boolean = true
+    val loadingConsumo: Boolean = true,
+    val gastoTotDivide:String = "",
+    val gastoIndDivide:String = "",
+    val cantDivide:String = "",
+    val game:ChallengeData= ChallengeData(0,"",0,0,0.0f)
 )
