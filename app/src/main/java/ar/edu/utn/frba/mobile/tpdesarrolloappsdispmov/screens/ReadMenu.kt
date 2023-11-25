@@ -1,6 +1,5 @@
 package ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.screens
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.util.TypedValue
 import androidx.compose.foundation.Image
@@ -24,7 +23,6 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material3.BottomAppBar
@@ -64,6 +62,9 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.stateData.MenuViewModel
 import coil.compose.AsyncImage
+import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.apiReqs.PlatosService
+import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.apiReqs.RetrofitHelper
+import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.controllers.Platos
 import coil.compose.rememberImagePainter
 
 data class ShoppingCartItem(
@@ -84,33 +85,10 @@ data class Plato(
     val disponible: Boolean
 )
 
-/*class ShoppingCartViewModel : ViewModel() {
-    private val _cart = MutableLiveData(mutableListOf<ShoppingCartItem>())
-    val cart: LiveData<MutableList<ShoppingCartItem>> get() = _cart
-
-    fun addToCart(product: Plato) {
-        val currentCart = _cart.value ?: mutableListOf()
-
-        val existingItem = currentCart.find { it.product.idPlato == product.idPlato }
-
-        if (existingItem != null) {
-            //existingItem.copy()
-            existingItem.quantity += 1
-        } else {
-            currentCart.add(ShoppingCartItem(product, 1))
-        }
-
-        _cart.value = currentCart
-    }
-}*/
-
 @Composable
 fun ReadMenu(navCont: NavController,menu: MenuViewModel) {
-
-    val cart = remember { mutableStateListOf<ShoppingCartItem>() }
-
-    //val cartViewModel: ShoppingCartViewModel = viewModel()//LO QUE VINO EN EL MERGE
-    //val cart: LiveData<MutableList<ShoppingCartItem>> = cartViewModel.cart
+    val cart       = remember { mutableStateListOf<ShoppingCartItem>() }
+    val viewmodelo = Platos(RetrofitHelper.getInstance(PlatosService::class.java))
 
     Scaffold(
         topBar = {
@@ -127,7 +105,7 @@ fun ReadMenu(navCont: NavController,menu: MenuViewModel) {
                         Plato(1, "Plato 1", "Descripción del plato 1", "", "10", 5, "Categoria 1", "", "", true),
                         Plato(2, "Plato 2", "Descripción del plato 2", "", "15", 4, "Categoria 2", "", "", true)
                     )
-                    Menu(platos, cart)
+                    Menu(viewmodelo.state.platos, cart)
                 }
                 Text(
                     modifier = Modifier

@@ -22,10 +22,13 @@ class TableViewModel (private val servicioApi: ReqsService): ViewModel() {
             if(pedidos.isSuccessful){
                 if(pedidos.body() != null){
                     Log.i("TableViewModel-->","HACIENDO--->REQUEST-API (estado de pedidos)******")
-                    state = state.copy(
-                        pedidosMesa = pedidos.body()!!.pedidos,
-                        requestingData = false
-                    )
+                    var pedidosBody = pedidos.body()!!.pedidos
+                    if(pedidosBody != null){
+                        state = state.copy(
+                            pedidosMesa = pedidosBody,
+                            requestingData = false
+                        )
+                    }
                 }
             }
         }
