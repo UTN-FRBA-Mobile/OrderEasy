@@ -1,5 +1,6 @@
 package ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.screens
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.util.TypedValue
 import androidx.compose.foundation.Image
@@ -12,16 +13,12 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.Check
-import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.node.Ref
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.font.FontWeight
@@ -29,11 +26,6 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.viewinterop.AndroidView
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import coil.compose.rememberImagePainter
 
@@ -55,37 +47,17 @@ data class Plato(
     val disponible: Boolean
 )
 
-class ShoppingCartViewModel : ViewModel() {
-    private val _cart = MutableLiveData(mutableListOf<ShoppingCartItem>())
-    val cart: LiveData<MutableList<ShoppingCartItem>> get() = _cart
-
-    fun addToCart(product: Plato) {
-        val currentCart = _cart.value ?: mutableListOf()
-
-        val existingItem = currentCart.find { it.product.idPlato == product.idPlato }
-
-        if (existingItem != null) {
-            //existingItem.copy()
-            existingItem.quantity += 1
-        } else {
-            currentCart.add(ShoppingCartItem(product, 1))
-        }
-
-        _cart.value = currentCart
-    }
-}
-
+@SuppressLint("UnrememberedMutableState")
 @Composable
 fun ReadMenu(navCont: NavController) {
-    val cartViewModel: ShoppingCartViewModel = viewModel()
-    //val cart: LiveData<MutableList<ShoppingCartItem>> = cartViewModel.cart
+    val cart = remember { mutableStateListOf<ShoppingCartItem>() }
 
     Scaffold(
         topBar = {
             TopAppBar(title = { Text(text = "BARRA SUPERIOR DE LA APP") })
         },
         bottomBar = {
-            BottomAppBarExample(cartViewModel)
+            BottomAppBarExample(cart)
         },
         content = { innerPadding ->
             Column(modifier = Modifier.fillMaxSize()) {
@@ -95,7 +67,7 @@ fun ReadMenu(navCont: NavController) {
                         Plato(1, "Plato 1", "Descripción del plato 1", "", "10", 5, "Categoria 1", "", "", true),
                         Plato(2, "Plato 2", "Descripción del plato 2", "", "15", 4, "Categoria 2", "", "", true)
                     )
-                    Menu(platos, cartViewModel)
+                    Menu(platos, cart)
                 }
                 Button(
                     onClick = { navCont.navigate(route = "mainmenu") },
@@ -111,12 +83,25 @@ fun ReadMenu(navCont: NavController) {
     )
 }
 
+fun addToCart(cart: MutableList<ShoppingCartItem>, product: Plato) {
+    val existingItemIndex = cart.indexOfFirst { it.product.idPlato == product.idPlato }
+
+    if (existingItemIndex != -1) {
+        val existingItem = cart[existingItemIndex]
+        //Hago una copia del objeto y lo seteo de nuevo a la lista para triggerear el evento de MutableList y que actualice la vista.
+        val updatedItem = existingItem.copy(quantity = existingItem.quantity + 1)
+        cart[existingItemIndex] = updatedItem
+    } else {
+        cart.add(ShoppingCartItem(product, 1))
+    }
+}
+
 @Composable
-fun Menu(platos: List<Plato>, cartViewModel: ShoppingCartViewModel) {
+fun Menu(platos: List<Plato>, cart: MutableList<ShoppingCartItem>) {
     LazyColumn {
         items(platos) { food ->
             FoodCard(food = food, modifier = Modifier.padding(16.dp), onAddToCart =  {
-                cartViewModel.addToCart(food)
+                addToCart(cart, food)
             })
         }
     }
@@ -129,7 +114,9 @@ fun FoodCard(food: Plato, modifier: Modifier, onAddToCart: () -> Unit) {
         shadowElevation = 8.dp,
         modifier = modifier
     ) {
-        Column(modifier = Modifier.fillMaxWidth().padding(16.dp)) {
+        Column(modifier = Modifier
+            .fillMaxWidth()
+            .padding(16.dp)) {
             Row {
                 Column(modifier = Modifier.weight(1f)) {
                     Text(
@@ -232,22 +219,11 @@ fun FoodCard(food: Plato, modifier: Modifier, onAddToCart: () -> Unit) {
 }
 
 @Composable
-fun BottomAppBarExample(cartViewModel: ShoppingCartViewModel) {
-    val cartItems = cartViewModel.cart.value ?: emptyList()
-
-    // Calculate the total price
-    var totalPrice by remember(cartItems) {
-        mutableStateOf(calculateTotalPrice(cartItems))
-    }
-
-    LaunchedEffect(cartItems) {
-        totalPrice = calculateTotalPrice(cartItems)
-    }
-
+fun BottomAppBarExample(cart: MutableList<ShoppingCartItem>) {
     BottomAppBar(
         actions = {
             Text(
-                text = "Total: $$totalPrice",
+                text = "Total: $${calculateTotalPrice(cart)}",
                 style = MaterialTheme.typography.labelMedium,
                 modifier = Modifier.padding(8.dp)
             )
@@ -264,12 +240,9 @@ fun BottomAppBarExample(cartViewModel: ShoppingCartViewModel) {
     )
 }
 
-
-private fun calculateTotalPrice(cartItems: List<ShoppingCartItem>): Double {
-    //return cartItems.sumByDouble { it.product.precio.toDouble() * it.quantity }
-    return cartItems.sumOf { it.product.precio.toDouble() }
+private fun calculateTotalPrice(cart: List<ShoppingCartItem>): Double {
+    return cart.sumOf { it.product.precio.toDouble() * it.quantity }
 }
-
 
 fun spToPx(context: Context, spValue: Float): Int {
     val pxValue = TypedValue.applyDimension(
