@@ -1,12 +1,6 @@
 package ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov
 
-import android.app.NotificationChannel
-import android.app.NotificationManager
-import android.app.PendingIntent
-import android.app.TaskStackBuilder
 import android.content.Context
-import android.content.Intent
-import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.ComponentActivity
@@ -14,37 +8,28 @@ import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
-import androidx.navigation.compose.rememberNavController
-import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.stateData.LoginScreen
-import androidx.core.app.ActivityCompat
-import androidx.core.app.NotificationCompat
-import androidx.core.app.NotificationManagerCompat
-import androidx.datastore.core.DataStore
-import androidx.datastore.dataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.intPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.lifecycleScope
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
 import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.apiReqs.ReqsService
 import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.navigation.MainNavigation
-import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.screens.Login
+import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.screens.CloseTable
+import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.screens.MainMenu
+import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.stateData.Login
 import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.stateData.MenuViewModel
 import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.stateData.TableViewModel
 import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.stateData.UserSavedData
@@ -52,14 +37,6 @@ import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.stateData.UserViewModel
 import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.ui.theme.TpDesarrolloAppsDispMovTheme
 import com.google.firebase.Firebase
 import com.google.firebase.messaging.messaging
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.cancellable
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 val Context.dataStore by preferencesDataStore(name="USER_DATA")
 class MainActivity : ComponentActivity() {
@@ -86,7 +63,7 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    GreetingPreview()
+                    //GreetingPreview()
                     val retrofitInst:ReqsService = ReqsService.instance
                     val usuarioViewModel by viewModels <UserViewModel>(factoryProducer = {
                         object : ViewModelProvider.Factory{
@@ -114,7 +91,7 @@ class MainActivity : ComponentActivity() {
                         Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                             CircularProgressIndicator()
                         }
-                        Log.i("MainActivity--->","llendo a inicializar")
+                        Log.i("MainActivity--->","yendo a inicializar")
                         usuarioViewModel.initializating()
                     }else {
                         Starting(
@@ -161,11 +138,11 @@ fun GreetingPreview() {
         val navController = rememberNavController()
         NavHost(
             navController = navController,
-            startDestination = "login"
+            startDestination = "mainmenu"
         ) {
             // Ir sumando las rutas de las pantallas
-            composable(route = "login") { LoginScreen(navController) }
-            composable(route = "greeting") { Greeting("Holaa") }
+            composable(route = "mainmenu") { MainMenu(navController) }
+            composable(route = "closetable") { CloseTable(navController) }
         }
     }
 }

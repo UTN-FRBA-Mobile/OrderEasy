@@ -92,7 +92,7 @@ fun Login(usuarioViewModel:UserViewModel) {
                     coroutineScope.launch {
                         delay(3000)
                         showWelcomeDialog = false
-                        navCont.navigate("mainmenu") // TODO: Modificar la ruta al menu
+                        navCont.navigate("mainmenu")
                     }
                 },
                 modifier = Modifier

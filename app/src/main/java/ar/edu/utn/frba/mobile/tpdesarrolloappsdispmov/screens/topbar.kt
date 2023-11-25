@@ -67,6 +67,15 @@ fun OderEasyTopAppBar(navCont: NavController) {
                             tint = Color.Black
                         )
                     }
+                    Text(
+                        text = "Menú",
+                        style = TextStyle(
+                            fontWeight = FontWeight.Bold,
+                            fontSize = 20.sp,
+                            color = Color.Black
+                        ),
+                        modifier = Modifier.padding(start = 50.dp)
+                    )
                 }
             }
         )
