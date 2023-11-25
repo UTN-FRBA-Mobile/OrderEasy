@@ -47,7 +47,6 @@ data class Plato(
     val disponible: Boolean
 )
 
-@SuppressLint("UnrememberedMutableState")
 @Composable
 fun ReadMenu(navCont: NavController) {
     val cart = remember { mutableStateListOf<ShoppingCartItem>() }
