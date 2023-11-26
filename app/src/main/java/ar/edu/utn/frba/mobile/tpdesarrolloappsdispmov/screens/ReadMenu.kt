@@ -11,7 +11,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -42,16 +41,19 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.R
 import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.stateData.MenuViewModel
 import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.components.TopBar
 import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.stateData.Plato
@@ -60,11 +62,10 @@ import coil.compose.rememberImagePainter
 
 @Composable
 fun ReadMenu(navCont: NavController, menu: MenuViewModel, userViewModel: UserViewModel) {
-
     Scaffold(
         topBar = { TopBar(userViewModel) },
         bottomBar = {
-            BottomAppBarExample(menu)
+            BottomAppBarExample(navCont, menu)
         },
         content = { innerPadding ->
             Column (modifier = Modifier.fillMaxSize().padding(innerPadding)){
@@ -86,15 +87,24 @@ fun ReadMenu(navCont: NavController, menu: MenuViewModel, userViewModel: UserVie
 fun Menu(menu: MenuViewModel) {
     LazyColumn {
         items(menu.estadoMenu.platos) { food ->
-            FoodCard(food = food, modifier = Modifier.padding(16.dp), onAddToCart =  {
-                menu.addItem(food.idPlato)
-            })
+            FoodCard(
+                food = food,
+                modifier = Modifier.padding(16.dp),
+                onAddToCart =  {
+                    menu.addItem(food.idPlato)
+                },
+                onRemoveToCart =  {
+                    menu.delItem(food.idPlato)
+                }
+            )
         }
     }
 }
 
 @Composable
-fun FoodCard(food: Plato, modifier: Modifier, onAddToCart: () -> Unit) {
+fun FoodCard(food: Plato, modifier: Modifier, onAddToCart: () -> Unit, onRemoveToCart: () -> Unit) {
+    var quantity by remember { mutableStateOf(0) }
+
     Surface(
         shape = RoundedCornerShape(8.dp),
         shadowElevation = 8.dp,
@@ -162,40 +172,89 @@ fun FoodCard(food: Plato, modifier: Modifier, onAddToCart: () -> Unit) {
                             contentScale = ContentScale.Crop
                         )
                     }
-                }
-            }
 
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(top = 10.dp)
-                    .height(40.dp),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Text(
-                    text = "$" + food.precio,
-                    style = MaterialTheme.typography.labelMedium
-                )
-                IconButton(
-                    onClick = {
-                        onAddToCart()
-                    },
-                    modifier = Modifier
-                        .border(
-                            1.dp,
-                            color = MaterialTheme.colorScheme.secondary,
-                            shape = RoundedCornerShape(4.dp)
-                        )
-                        .padding(all = 0.dp)
-                        .size(25.dp)
-                ) {
-                    Icon(
-                        imageVector = Icons.Default.Add,
-                        contentDescription = "Agregar producto",
-                        tint = MaterialTheme.colorScheme.secondary,
-                        modifier = Modifier.size(10.dp)
-                    )
+                    Spacer(modifier = Modifier.height(10.dp))
+
+                    if (quantity > 0) {
+                        // Si la cantidad es mayor que 0, aplica el borde a la fila completa
+                        Row(
+                            modifier = Modifier
+                                .align(Alignment.End)
+                                .height(30.dp)
+                                .border(1.dp, MaterialTheme.colorScheme.secondary, RoundedCornerShape(4.dp))
+                                .width(60.dp),
+                            horizontalArrangement = Arrangement.End,
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            IconButton(
+                                onClick = {
+                                    if (quantity > 0) {
+                                        quantity--
+                                        onRemoveToCart()
+                                    }
+                                },
+                                modifier = Modifier
+                                    .size(25.dp)
+                                    .alpha(if (quantity > 0) 1f else 0f)
+                            ) {
+                                Text(
+                                    text = if (quantity > 0) "-" else "",
+                                    style = MaterialTheme.typography.bodyMedium
+                                )
+                            }
+
+                            // Texto de la cantidad
+                            Text(
+                                text = if (quantity > 0) "$quantity" else "",
+                                style = MaterialTheme.typography.bodyMedium
+                            )
+
+                            // Botón de agregar cantidad
+                            IconButton(
+                                onClick = {
+                                    quantity++
+                                    onAddToCart()
+                                },
+                                modifier = Modifier
+                                    .size(25.dp)
+                            ) {
+                                Text(
+                                    text = "+",
+                                    style = MaterialTheme.typography.bodyMedium
+                                )
+                            }
+                        }
+                    } else {
+                        // Si la cantidad es 0, aplica el borde solo al botón de agregar cantidad
+                        Row(
+                            modifier = Modifier.fillMaxWidth()
+                                .height(30.dp),
+                            horizontalArrangement = Arrangement.End,
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            IconButton(
+                                onClick = {
+                                    quantity++
+                                    onAddToCart()
+                                },
+                                modifier = Modifier
+                                    .border(
+                                        1.dp,
+                                        color = MaterialTheme.colorScheme.secondary,
+                                        shape = RoundedCornerShape(4.dp)
+                                    )
+                                    .padding(all = 0.dp)
+                                    .size(25.dp)
+                            ) {
+                                Icon(
+                                    imageVector = Icons.Default.Add,
+                                    contentDescription = "Agregar producto",
+                                    tint = MaterialTheme.colorScheme.secondary,
+                                    modifier = Modifier.size(10.dp)
+                                )
+                            }
+                        }
+                    }
                 }
             }
         }
@@ -203,7 +262,7 @@ fun FoodCard(food: Plato, modifier: Modifier, onAddToCart: () -> Unit) {
 }
 
 @Composable
-fun BottomAppBarExample(menu: MenuViewModel) {
+fun BottomAppBarExample(navCont: NavController, menu: MenuViewModel) {
     BottomAppBar(
         actions = {
             Text(
@@ -214,11 +273,11 @@ fun BottomAppBarExample(menu: MenuViewModel) {
         },
         floatingActionButton = {
             FloatingActionButton(
-                onClick = { /* do something */ },
+                onClick = { navCont.navigate(route="makeorder")},
                 containerColor = BottomAppBarDefaults.bottomAppBarFabColor,
                 elevation = FloatingActionButtonDefaults.elevation()
             ) {
-                Icon(Icons.Default.Add, "Localized description")
+                Icon(imageVector = ImageVector.vectorResource(id = R.drawable.baseline_navigate_next_24), contentDescription ="Confirmar",modifier=Modifier.size(40.dp) )
             }
         }
     )
@@ -231,24 +290,4 @@ fun spToPx(context: Context, spValue: Float): Int {
         context.resources.displayMetrics
     )
     return pxValue.toInt()
-}
-
-@Composable
-@Preview
-fun PreviewFoodCard() {
-    FoodCard(
-        food = Plato(
-            idPlato = 1,
-            nombre = "Sample Food",
-            descripcion = "This is a sample food description. It is a long description to test how it looks.",
-            imagen = "",
-            precio = 20.0f,
-            puntaje = 4,
-            categoria = "Sample Category",
-            ingredientes = "Sample Ingredients",
-            infoNutri = "Sample Nutritional Info",
-            disponible = true
-        ),
-        modifier = Modifier.padding(16.dp)
-    ) {}
 }
