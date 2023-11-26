@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -66,7 +67,7 @@ fun ReadMenu(navCont: NavController, menu: MenuViewModel, userViewModel: UserVie
             BottomAppBarExample(menu)
         },
         content = { innerPadding ->
-            Column (modifier = Modifier.fillMaxSize()){
+            Column (modifier = Modifier.fillMaxSize().padding(innerPadding)){
                 Surface(modifier = Modifier.fillMaxSize()) {
                     if(menu.estadoMenu.loadingMenu){
                         Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center ){
@@ -100,7 +101,7 @@ fun FoodCard(food: Plato, modifier: Modifier, onAddToCart: () -> Unit) {
         modifier = modifier
     ) {
         Column(modifier = Modifier
-            .fillMaxWidth()
+            .fillMaxSize()
             .padding(16.dp)) {
             Row {
                 Column(modifier = Modifier.weight(1f)) {
