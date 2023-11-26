@@ -38,7 +38,7 @@ fun ScanQr(navCont: NavController,userViewModel: UserViewModel) {
                     .fillMaxWidth()
                     .background(color = MaterialTheme.colorScheme.inversePrimary)
                     .padding(40.dp)) {
-                    Text(text = "QR = https://restowebback-production.up.railway.app/mesas/registrarse/5/JDJiJDEwJGRpSTV2QS84ZHhzeEZ6cFcxMi9QMC5vQmpBc3RBaHRZZmFCZDBxSVVYWjEvR2F5WGZEWk9L")
+                    Text(text = "QR = https://restowebback-production.up.railway.app/mesas/registrarse/2/JDJiJDEwJGhNUlEvRlBWVlZ5SVI3TGlSR2NKdWU5bjA1L0NJOG9xWmxEMlFXdno1SjhQQXFtVVNtZm9P")
                 }
 
                 ExtendedFloatingActionButton(
@@ -46,7 +46,7 @@ fun ScanQr(navCont: NavController,userViewModel: UserViewModel) {
                         .fillMaxWidth()
                         .padding(14.dp),
                     onClick = {
-                        userViewModel.takeTable(5,"JDJiJDEwJGRpSTV2QS84ZHhzeEZ6cFcxMi9QMC5vQmpBc3RBaHRZZmFCZDBxSVVYWjEvR2F5WGZEWk9L")
+                        userViewModel.takeTable(2,"JDJiJDEwJGhNUlEvRlBWVlZ5SVI3TGlSR2NKdWU5bjA1L0NJOG9xWmxEMlFXdno1SjhQQXFtVVNtZm9P")
                         navCont.navigate(route="mainmenu")},
                     icon = { Icon(Icons.Filled.ArrowBack,  contentDescription ="volver")},
                     text = { Text(text = "Tocar para simular el escaneo del qr (sobre la idMesa=5)") },
