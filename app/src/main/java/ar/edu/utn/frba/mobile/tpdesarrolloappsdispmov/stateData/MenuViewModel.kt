@@ -1,6 +1,5 @@
 package ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.stateData
 
-//import android.util.Log
 import androidx.lifecycle.ViewModel
 import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.apiReqs.ReqsService
 import androidx.compose.runtime.getValue
@@ -76,5 +75,16 @@ class MenuViewModel (private val servicioApi: ReqsService): ViewModel() {
             }
             estadoMenu = estadoMenu.copy(pedidos = peds)
         }
+    }
+
+    fun getTotalCartPrice(): Float {
+        var total = 0.0f
+        estadoMenu.pedidos.forEach {
+            var t = estadoMenu.platos.find { s -> (s.idPlato==it.idPlato && it.estado=="selected")}
+            if (t != null) {
+                total = total + t.precio * it.cantidad
+            }
+        }
+        return total
     }
 }

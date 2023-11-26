@@ -23,11 +23,8 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.runtime.*
-import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.BottomAppBarDefaults
-import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.FloatingActionButtonDefaults
@@ -35,11 +32,9 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.SmallFloatingActionButton
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -55,35 +50,20 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.stateData.MenuViewModel
-import coil.compose.AsyncImage
-//import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.apiReqs.PlatosService
-//import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.apiReqs.RetrofitHelper
 import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.components.TopBar
-//import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.controllers.Platos
 import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.stateData.Plato
 import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.stateData.UserViewModel
 import coil.compose.rememberImagePainter
 
-data class ShoppingCartItem(
-    val product: Plato,
-    var quantity: Int
-)
-
 @Composable
 fun ReadMenu(navCont: NavController, menu: MenuViewModel, userViewModel: UserViewModel) {
-    val cart       = remember { mutableStateListOf<ShoppingCartItem>() }
-    //val viewmodelo = Platos(RetrofitHelper.getInstance(PlatosService::class.java))
 
     Scaffold(
         topBar = { TopBar(userViewModel) },
         bottomBar = {
-            BottomAppBarExample(cart)
+            BottomAppBarExample(menu)
         },
         content = { innerPadding ->
             Column (modifier = Modifier.fillMaxSize()){
@@ -93,12 +73,7 @@ fun ReadMenu(navCont: NavController, menu: MenuViewModel, userViewModel: UserVie
                             CircularProgressIndicator()
                         }
                     }else{
-                        // Replace with your actual list of platos
-                        val platos = listOf(
-                            Plato(1, "Plato 1", "Descripción del plato 1", "", 10.0f, 5, "Categoria 1", "", "", true),
-                            Plato(2, "Plato 2", "Descripción del plato 2", "", 15.0f, 4, "Categoria 2", "", "", true)
-                        )
-                        Menu(menu.estadoMenu.platos, cart)
+                        Menu(menu)
                     }
                 }
             }
@@ -106,25 +81,12 @@ fun ReadMenu(navCont: NavController, menu: MenuViewModel, userViewModel: UserVie
     )
 }
 
-fun addToCart(cart: MutableList<ShoppingCartItem>, product: Plato) {
-    val existingItemIndex = cart.indexOfFirst { it.product.idPlato == product.idPlato }
-
-    if (existingItemIndex != -1) {
-        val existingItem = cart[existingItemIndex]
-        //Hago una copia del objeto y lo seteo de nuevo a la lista para triggerear el evento de MutableList y que actualice la vista.
-        val updatedItem = existingItem.copy(quantity = existingItem.quantity + 1)
-        cart[existingItemIndex] = updatedItem
-    } else {
-        cart.add(ShoppingCartItem(product, 1))
-    }
-}
-
 @Composable
-fun Menu(platos: List<Plato>, cart: MutableList<ShoppingCartItem>) {
+fun Menu(menu: MenuViewModel) {
     LazyColumn {
-        items(platos) { food ->
+        items(menu.estadoMenu.platos) { food ->
             FoodCard(food = food, modifier = Modifier.padding(16.dp), onAddToCart =  {
-                addToCart(cart, food)
+                menu.addItem(food.idPlato)
             })
         }
     }
@@ -150,8 +112,6 @@ fun FoodCard(food: Plato, modifier: Modifier, onAddToCart: () -> Unit) {
                     )
 
                     val layout = LocalDensity.current.density
-                    val densityMultiplier = 0.7f
-                    val lineHeight = (MaterialTheme.typography.bodyMedium.fontSize * densityMultiplier)
                     var context: Context = LocalContext.current
                     val intValue = spToPx(context, 15.0f)
                     val maxLines = 4
@@ -242,11 +202,11 @@ fun FoodCard(food: Plato, modifier: Modifier, onAddToCart: () -> Unit) {
 }
 
 @Composable
-fun BottomAppBarExample(cart: MutableList<ShoppingCartItem>) {
+fun BottomAppBarExample(menu: MenuViewModel) {
     BottomAppBar(
         actions = {
             Text(
-                text = "Total: $${calculateTotalPrice(cart)}",
+                text = "Total: $${menu.getTotalCartPrice()}",
                 style = MaterialTheme.typography.labelMedium,
                 modifier = Modifier.padding(8.dp)
             )
@@ -261,10 +221,6 @@ fun BottomAppBarExample(cart: MutableList<ShoppingCartItem>) {
             }
         }
     )
-}
-
-private fun calculateTotalPrice(cart: List<ShoppingCartItem>): Double {
-    return cart.sumOf { it.product.precio.toDouble() * it.quantity }
 }
 
 fun spToPx(context: Context, spValue: Float): Int {

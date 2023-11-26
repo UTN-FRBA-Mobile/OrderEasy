@@ -30,12 +30,8 @@ import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.stateData.UserViewModel
 @Composable
 fun MakeOrder (navCont: NavController, menu: MenuViewModel,userViewModel: UserViewModel) {
     var total:Float = remember { 0.0f }
-    menu.estadoMenu.pedidos.forEach {
-        var t = menu.estadoMenu.platos.find { s -> (s.idPlato==it.idPlato && it.estado=="selected")}
-        if (t != null) {
-            total = total + t.precio * it.cantidad
-        }
-    }
+    total = menu.getTotalCartPrice()
+
     Scaffold (
     topBar = { TopBar(userViewModel)},
     content = { innerPadding ->
