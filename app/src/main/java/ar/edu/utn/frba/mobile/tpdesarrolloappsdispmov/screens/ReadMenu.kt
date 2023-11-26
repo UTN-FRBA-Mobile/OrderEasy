@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -58,7 +59,7 @@ import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.stateData.MenuViewModel
 import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.components.TopBar
 import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.stateData.Plato
 import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.stateData.UserViewModel
-import coil.compose.rememberImagePainter
+import coil.compose.rememberAsyncImagePainter
 
 @Composable
 fun ReadMenu(navCont: NavController, menu: MenuViewModel, userViewModel: UserViewModel) {
@@ -68,7 +69,9 @@ fun ReadMenu(navCont: NavController, menu: MenuViewModel, userViewModel: UserVie
             BottomAppBarExample(navCont, menu)
         },
         content = { innerPadding ->
-            Column (modifier = Modifier.fillMaxSize().padding(innerPadding)){
+            Column (modifier = Modifier
+                .fillMaxSize()
+                .padding(innerPadding)){
                 Surface(modifier = Modifier.fillMaxSize()) {
                     if(menu.estadoMenu.loadingMenu){
                         Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center ){
@@ -88,6 +91,7 @@ fun Menu(menu: MenuViewModel) {
     LazyColumn {
         items(menu.estadoMenu.platos) { food ->
             FoodCard(
+                menu = menu,
                 food = food,
                 modifier = Modifier.padding(16.dp),
                 onAddToCart =  {
@@ -102,8 +106,8 @@ fun Menu(menu: MenuViewModel) {
 }
 
 @Composable
-fun FoodCard(food: Plato, modifier: Modifier, onAddToCart: () -> Unit, onRemoveToCart: () -> Unit) {
-    var quantity by remember { mutableStateOf(0) }
+fun FoodCard(menu: MenuViewModel, food: Plato, modifier: Modifier, onAddToCart: () -> Unit, onRemoveToCart: () -> Unit) {
+    var quantity = menu.estadoMenu.pedidos.find{p -> (p.idPlato == food.idPlato && p.estado == "selected")}?.cantidad?:0
 
     Surface(
         shape = RoundedCornerShape(8.dp),
@@ -157,7 +161,7 @@ fun FoodCard(food: Plato, modifier: Modifier, onAddToCart: () -> Unit, onRemoveT
                 Spacer(modifier = Modifier.width(16.dp))
 
                 Column(modifier = Modifier.weight(1f)) {
-                    val painter = rememberImagePainter(data = food.imagen)
+                    val painter = rememberAsyncImagePainter(model = food.imagen)
                     Box(
                         modifier = Modifier
                             .size(150.dp)
@@ -175,86 +179,105 @@ fun FoodCard(food: Plato, modifier: Modifier, onAddToCart: () -> Unit, onRemoveT
 
                     Spacer(modifier = Modifier.height(10.dp))
 
-                    if (quantity > 0) {
-                        // Si la cantidad es mayor que 0, aplica el borde a la fila completa
-                        Row(
-                            modifier = Modifier
-                                .align(Alignment.End)
-                                .height(30.dp)
-                                .border(1.dp, MaterialTheme.colorScheme.secondary, RoundedCornerShape(4.dp))
-                                .width(60.dp),
-                            horizontalArrangement = Arrangement.End,
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
-                            IconButton(
-                                onClick = {
-                                    if (quantity > 0) {
-                                        quantity--
-                                        onRemoveToCart()
-                                    }
-                                },
-                                modifier = Modifier
-                                    .size(25.dp)
-                                    .alpha(if (quantity > 0) 1f else 0f)
-                            ) {
-                                Text(
-                                    text = if (quantity > 0) "-" else "",
-                                    style = MaterialTheme.typography.bodyMedium
-                                )
-                            }
+                }
+            }
+            QuantitySelector(quantity, food.precio, onAddToCart, onRemoveToCart)
+        }
+    }
+}
 
-                            // Texto de la cantidad
-                            Text(
-                                text = if (quantity > 0) "$quantity" else "",
-                                style = MaterialTheme.typography.bodyMedium
-                            )
-
-                            // Botón de agregar cantidad
-                            IconButton(
-                                onClick = {
-                                    quantity++
-                                    onAddToCart()
-                                },
-                                modifier = Modifier
-                                    .size(25.dp)
-                            ) {
-                                Text(
-                                    text = "+",
-                                    style = MaterialTheme.typography.bodyMedium
-                                )
+@Composable
+fun QuantitySelector(
+    quantity: Int,
+    price: Float,
+    onAddToCart: () -> Unit,
+    onRemoveToCart: () -> Unit
+) {
+    Row(
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(30.dp)
+            .padding(2.dp)
+    ) {
+        Column {
+            Text(
+                text = "$$price",
+                style = MaterialTheme.typography.labelMedium
+            )
+        }
+        if (quantity > 0) {
+            Column {
+                Row(
+                    modifier = Modifier
+                        .fillMaxHeight()
+                        .width(60.dp)
+                        .border(
+                            1.dp,
+                            MaterialTheme.colorScheme.secondary,
+                            RoundedCornerShape(4.dp)
+                        ),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ) {
+                    IconButton(
+                        onClick = {
+                            if (quantity > 0) {
+                                onRemoveToCart()
                             }
-                        }
-                    } else {
-                        // Si la cantidad es 0, aplica el borde solo al botón de agregar cantidad
-                        Row(
-                            modifier = Modifier.fillMaxWidth()
-                                .height(30.dp),
-                            horizontalArrangement = Arrangement.End,
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
-                            IconButton(
-                                onClick = {
-                                    quantity++
-                                    onAddToCart()
-                                },
-                                modifier = Modifier
-                                    .border(
-                                        1.dp,
-                                        color = MaterialTheme.colorScheme.secondary,
-                                        shape = RoundedCornerShape(4.dp)
-                                    )
-                                    .padding(all = 0.dp)
-                                    .size(25.dp)
-                            ) {
-                                Icon(
-                                    imageVector = Icons.Default.Add,
-                                    contentDescription = "Agregar producto",
-                                    tint = MaterialTheme.colorScheme.secondary,
-                                    modifier = Modifier.size(10.dp)
-                                )
-                            }
-                        }
+                        },
+                        modifier = Modifier
+                            .size(25.dp)
+                            .alpha(if (quantity > 0) 1f else 0f)
+                    ) {
+                        Text(
+                            text = if (quantity > 0) "-" else "",
+                            style = MaterialTheme.typography.bodyMedium
+                        )
                     }
+
+                    Text(
+                        text = if (quantity > 0) "$quantity" else "",
+                        style = MaterialTheme.typography.bodyMedium
+                    )
+
+                    IconButton(
+                        onClick = {
+                            onAddToCart()
+                        },
+                        modifier = Modifier
+                            .size(25.dp)
+                    ) {
+                        Text(
+                            text = "+",
+                            style = MaterialTheme.typography.bodyMedium
+                        )
+                    }
+
+                }
+            }
+        } else {
+            Column {
+                IconButton(
+                    onClick = {
+                        onAddToCart()
+                    },
+                    modifier = Modifier
+                        .border(
+                            1.dp,
+                            color = MaterialTheme.colorScheme.secondary,
+                            shape = RoundedCornerShape(4.dp)
+                        )
+                        .padding(all = 0.dp)
+                        .size(25.dp)
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.Add,
+                        contentDescription = "Agregar producto",
+                        tint = MaterialTheme.colorScheme.secondary,
+                        modifier = Modifier.size(10.dp)
+                    )
                 }
             }
         }
