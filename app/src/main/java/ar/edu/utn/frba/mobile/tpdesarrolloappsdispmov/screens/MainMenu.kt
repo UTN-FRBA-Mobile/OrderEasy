@@ -222,7 +222,8 @@ fun MainMenu(navCont: NavController,usuarioViewModel: UserViewModel,tabStateView
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .padding(horizontal = 40.dp, vertical = 8.dp),
-                            onClick = { navCont.navigate(route="closetable")},
+                            onClick = {
+                                navCont.navigate(route="closetable")},
                             ){
                             Row (
                                 modifier = Modifier.padding(horizontal=10.dp, vertical = 14.dp),

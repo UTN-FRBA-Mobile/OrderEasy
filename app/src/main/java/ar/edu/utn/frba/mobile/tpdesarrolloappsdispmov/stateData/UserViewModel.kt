@@ -49,14 +49,14 @@ class UserViewModel (private val usuarioServicio: ReqsService,private val dataSt
         viewModelScope.launch {
             estadoUser = estadoUser.copy(requestingData = true)
             //API REQUEST
-            val idCli = usuarioServicio.getLogged(nomb,estadoUser.idDevice)
+            //val idCli = usuarioServicio.getLogged(nomb,estadoUser.idDevice)
             dataStore.edit { preferences ->
-                preferences[intPreferencesKey("idCliente")] = idCli.body()!!.idCliente
+                preferences[intPreferencesKey("idCliente")] = 1//idCli.body()!!.idCliente
                 preferences[stringPreferencesKey("idDevice")] =estadoUser.idDevice
                 preferences[stringPreferencesKey("nombre")] = nomb
             }
             //SETEAR VIEWMODEL
-            setUser(nomb,idCli.body()!!.idCliente)
+            setUser(nomb,1/*idCli.body()!!.idCliente*/)
         }
     }
     fun setUser(nomb:String,idCli:Int){
@@ -80,9 +80,9 @@ class UserViewModel (private val usuarioServicio: ReqsService,private val dataSt
             Log.i("TAKE-TABLE-idCli->",estadoUser.idCliente.toString())
             Log.i("TAKE-TABLE-idMesa->",idMesa.toString())
             Log.i("TAKE-TABLE-hash->",hash)
-            val rta= usuarioServicio.takeTable(idMesa,estadoUser.idCliente,hash)
-            Log.i("TAKE-TAB-SERV-->",rta.toString())
-            estadoUser = estadoUser.copy(idMesa=idMesa, jwt =rta.body()!!.token )
+            //val rta= usuarioServicio.takeTable(idMesa,estadoUser.idCliente,hash)
+            //Log.i("TAKE-TAB-SERV-->",rta.toString())
+            estadoUser = estadoUser.copy(idMesa=idMesa, jwt ="1"/*jwt =rta.body()!!.token */)
             dataStore.edit { preferences -> preferences[intPreferencesKey("idMesa")]=idMesa }
         }
     }
