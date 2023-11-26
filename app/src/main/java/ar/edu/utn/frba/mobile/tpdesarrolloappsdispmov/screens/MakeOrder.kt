@@ -60,13 +60,13 @@ import coil.compose.rememberAsyncImagePainter
 import coil.compose.rememberImagePainter
 
 @Composable
-fun MakeOrder (navCont: NavController, menu: MenuViewModel,userViewModel: UserViewModel) {
+fun MakeOrder (navCont: NavController, menu: MenuViewModel, userViewModel: UserViewModel) {
     var total:Float = remember { 0.0f }
     total = menu.getTotalCartPrice()
 
     Scaffold (
         topBar = { TopBar(userViewModel)},
-        bottomBar = { BottomAppBarMakeOrder(navCont, menu)},
+        bottomBar = { BottomAppBarMakeOrder(navCont, menu, userViewModel)},
         content = { innerPadding ->
             Column (modifier = Modifier
                 .fillMaxSize()
@@ -123,7 +123,7 @@ fun FoodCardMakeOrder(food: Plato, quantity: Int, modifier: Modifier, onAddToCar
 }
 
 @Composable
-fun BottomAppBarMakeOrder(navCont: NavController, menu: MenuViewModel) {
+fun BottomAppBarMakeOrder(navCont: NavController, menu: MenuViewModel, userViewModel: UserViewModel) {
 
     val gradientBrush = Brush.verticalGradient(
         colors = listOf(Color.DarkGray, Color.White),
@@ -159,7 +159,10 @@ fun BottomAppBarMakeOrder(navCont: NavController, menu: MenuViewModel) {
             }
 
             Button(
-                onClick = { /* Acción DE CONFIRMAR PEDIDO */ },
+                onClick = {
+                    menu.orderItem(userViewModel.estadoUser.idMesa,userViewModel.estadoUser.idCliente)
+                    navCont.navigate(route="mainmenu")
+                },
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(50.dp)
