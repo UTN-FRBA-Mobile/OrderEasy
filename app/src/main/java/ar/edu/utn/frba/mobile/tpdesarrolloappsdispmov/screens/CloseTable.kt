@@ -58,7 +58,7 @@ fun CloseTable(navCont: NavController,userViewModel: UserViewModel) {
                     ExtendedFloatingActionButton(
                         modifier = Modifier.fillMaxWidth().wrapContentSize().padding(vertical = 8.dp),
                         onClick = {
-                            //userViewModel.exitTable()
+                            userViewModel.exitTable()
                             showDialog = true
                         },
                         icon = { Icon(Icons.Filled.Notifications,  contentDescription ="call") },
