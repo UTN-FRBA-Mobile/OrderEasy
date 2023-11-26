@@ -29,10 +29,13 @@ import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.components.TopBar
 @Composable
 fun Login (usuarioViewModel:UserViewModel){
     var nombre by remember { mutableStateOf("") }
+    var waiting:Boolean = (usuarioViewModel.estadoUser.idDevice=="")
     Scaffold (
         topBar = { TopBar(userViewModel = usuarioViewModel)},
         content = { innerPadding ->
-            Column (modifier = Modifier.fillMaxSize().padding(innerPadding)){
+            Column (modifier = Modifier
+                .fillMaxSize()
+                .padding(innerPadding)){
                 Text(
                     text = "Elige un nombre de usuario para identificarte en la mesa",
                     modifier = Modifier.padding(16.dp),
@@ -48,7 +51,10 @@ fun Login (usuarioViewModel:UserViewModel){
                     label={Text("Ingresa tu nombre")} )
 
                 ExtendedFloatingActionButton(
-                    modifier = Modifier.fillMaxWidth().wrapContentSize().padding(vertical = 8.dp),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .wrapContentSize()
+                        .padding(vertical = 8.dp),
                     onClick = {usuarioViewModel.log(nombre)},
                     icon = { Icon(Icons.Sharp.ArrowForward,  contentDescription ="volver") },
                     text = { Text(

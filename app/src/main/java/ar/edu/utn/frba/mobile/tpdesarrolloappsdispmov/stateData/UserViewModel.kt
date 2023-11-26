@@ -47,9 +47,13 @@ class UserViewModel (private val usuarioServicio: ReqsService,private val dataSt
     }
     fun log(nomb:String){
         viewModelScope.launch {
-            estadoUser = estadoUser.copy(requestingData = true)
+            Log.i("UserViewModel-->","log->nomb: $nomb idDevice: ${estadoUser.idDevice}")
+            //estadoUser = estadoUser.copy(requestingData = true)
+
             //API REQUEST
             val idCli = usuarioServicio.getLogged(nomb,estadoUser.idDevice)
+            Log.i("UserViewModel-->","log->hecha la apiRequest-idCli: $idCli")
+
             dataStore.edit { preferences ->
                 preferences[intPreferencesKey("idCliente")] = idCli.body()!!.idCliente
                 preferences[stringPreferencesKey("idDevice")] =estadoUser.idDevice
@@ -61,17 +65,21 @@ class UserViewModel (private val usuarioServicio: ReqsService,private val dataSt
     }
     fun setUser(nomb:String,idCli:Int){
         viewModelScope.launch{
+            Log.i("UserViewModel-->","nombre: $nomb idCli:${idCli.toString()}")
             estadoUser = estadoUser.copy(
                 nombre = nomb,
                 idCliente = idCli,
                 isLogged = true,
-                requestingData = false
+                //requestingLog = false
             )
         }
     }
     fun setIdDevice(id:String) {
+        Log.i("UserviewModel-fcm0-->","setIdDevice--idDevice: $id")
         viewModelScope.launch {
+            Log.i("UserviewModel-fcm1-->","setIdDevice--idDevice: $id")
             estadoUser = estadoUser.copy(idDevice = id)
+            Log.i("UserviewModel-fcm2-->","setIdDevice--idDevice: $id")
         }
     }
     fun takeTable(idMesa:Int,hash:String){
@@ -91,17 +99,18 @@ class UserViewModel (private val usuarioServicio: ReqsService,private val dataSt
         viewModelScope.launch {
             //Log.i("UserViewModel--launch1-->","launching")
             val user = mapUser(dataStore.data.first().toPreferences())
-            //Log.i("UserViewModel--launch2-->",user.toString())
-            estadoUser = estadoUser.copy(
-                idCliente = user.idCliente,
-                nombre=user.nombre,
-                idMesa = user.idMesa,
-                idDevice=user.idDevice,
-                initializatingApp = false,
-                isLogged = if(user.idCliente==0)false else true)
-            }
-        Log.i("UserViewModel-->","POST-INITIALIZATING->${estadoUser.toString()}")
+            Log.i("UserViewModel--launch2-->",user.toString())
+                estadoUser = estadoUser.copy(
+                    idCliente = user.idCliente,
+                    nombre = user.nombre,
+                    idMesa = user.idMesa,
+                    //idDevice = user.idDevice,
+                    initializatingApp = false,
+                    isLogged = if (user.idCliente == 0) false else true
+                )
         }
+        Log.i("UserViewModel-->","POST-INITIALIZATING->${estadoUser.toString()}")
+    }
     fun clearSavedData(){
         viewModelScope.launch {
             estadoUser = estadoUser.copy(

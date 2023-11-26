@@ -2,7 +2,7 @@ package ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov
 
 import android.content.Context
 import android.os.Bundle
-//import android.util.Log
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
@@ -71,10 +71,12 @@ class MainActivity : ComponentActivity() {
                     if(usuarioViewModel.estadoUser.initializatingApp){
                         Firebase.messaging.token.addOnCompleteListener {
                             if(!it.isSuccessful){
+                                Log.i("Firebase.messaging.token-->","ERROR")
                                 println("error en obtencion de token")
                                 return@addOnCompleteListener
                             }
                             val token = it.result
+                            Log.i("MainActivity-FCM-->",it.result)
                             usuarioViewModel.setIdDevice(token)
                         }
                         /*if(intent.extras?.getString("action")=="desafio"){
@@ -96,6 +98,9 @@ class MainActivity : ComponentActivity() {
                                 intent.extras?.getString("cantidad")?:"",
                                 intent.extras?.getString("pago")?:""
                             )
+                        }else{
+                            //setear el rquestingData
+                            usuarioViewModel.setInviteDivide("","","")
                         }
                         usuarioViewModel.initializating()
                         menuStateViewModel.getMenu()
@@ -114,13 +119,19 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun Starting(tableViewModel: TableViewModel,usuarioViewModel: UserViewModel,menuStateViewModel: MenuViewModel,navController: NavHostController) {
-    if(usuarioViewModel.estadoUser.initializatingApp){
+    if(usuarioViewModel.estadoUser.initializatingApp || usuarioViewModel.estadoUser.requestingData){
         Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
             CircularProgressIndicator()
         }
     }else if(usuarioViewModel.estadoUser.isLogged){
-        MainNavigation(tableViewModel,menuStateViewModel,usuarioViewModel, navController)
+        if(usuarioViewModel.estadoUser.idDevice!=="") {
+            MainNavigation(tableViewModel, menuStateViewModel, usuarioViewModel, navController)
+        }else{
+            Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                CircularProgressIndicator()
+            }
+        }
     }else{
-        Login(usuarioViewModel)
+            Login(usuarioViewModel)
     }
 }
