@@ -11,7 +11,10 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Person
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExtendedFloatingActionButton
@@ -19,9 +22,15 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
@@ -35,7 +44,8 @@ import java.util.Locale
 @Composable
 fun DivideTicket(navCont: NavController, userViewModel: UserViewModel, tableViewModel: TableViewModel){
     val totGastoMesa = tableViewModel.estadoMesa.consumosMesa.fold(0.0f){ac,e -> ac+e.Pedidos.fold(0.0f){ acc, i -> acc+i.cantidad*i.Plato.precio} }
-    val gastoIndividual = totGastoMesa/tableViewModel.estadoMesa.consumosMesa.size
+    val gastoIndividual = if(tableViewModel.estadoMesa.consumosMesa.size==0) 0 else totGastoMesa/tableViewModel.estadoMesa.consumosMesa.size
+    var showDialog by remember { mutableStateOf(false) }
     Scaffold (
         topBar = { TopBar(userViewModel) },
         content = { innerPadding ->
@@ -107,7 +117,10 @@ fun DivideTicket(navCont: NavController, userViewModel: UserViewModel, tableView
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .padding(14.dp),
-                            onClick = { userViewModel.iniciarDividirConsumo() },
+                            onClick = {
+                                userViewModel.iniciarDividirConsumo()
+                                showDialog = true
+                            },
                             icon = { Icon(Icons.Filled.ArrowBack, contentDescription = "volver") },
                             text = { Text(text = "Enviar invitación a los demás comensales",
                                 style = MaterialTheme.typography.titleSmall,
@@ -123,6 +136,31 @@ fun DivideTicket(navCont: NavController, userViewModel: UserViewModel, tableView
                             icon = { Icon(Icons.Filled.ArrowBack, contentDescription = "volver") },
                             text = { Text(text = "Volver",style = MaterialTheme.typography.titleSmall) },
                         )
+                    }
+                    item{
+                        if (showDialog) {
+                            AlertDialog(
+                                containerColor = Color(251, 201, 143, 255),
+                                icon = { Icon(Icons.Default.Info, "call-mozo") },
+                                title = { Text(text = "Pago dividido") },
+                                text = { Text(text = "Se enviaron notificaciones a todos los integrantes de la mesa "+
+                                        "proponiéndoles ésta forma de pago. Si todos aceptan la operación se concreta"+
+                                        " pero si alguno no acepta la operación se anulará automáticamente.") },
+                                onDismissRequest = { /*TODO*/ },
+                                confirmButton = {
+                                    TextButton(
+                                        colors = ButtonDefaults.buttonColors (
+                                            containerColor = MaterialTheme.colorScheme.inverseSurface,
+                                        ),
+                                        onClick = {
+                                            showDialog = false
+                                            navCont.navigate(route="mainmenu")
+                                        }
+                                    ) {
+                                        Text(text = "ok")
+                                    }
+                                })
+                        }
                     }
                 }
             }
