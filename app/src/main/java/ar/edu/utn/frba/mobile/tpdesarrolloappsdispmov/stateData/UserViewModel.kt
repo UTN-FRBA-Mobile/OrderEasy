@@ -124,6 +124,7 @@ class UserViewModel (private val usuarioServicio: ReqsService,private val dataSt
     }
     fun exitTable(){
         viewModelScope.launch {
+            usuarioServicio.exit(estadoUser.idCliente)
             estadoUser = estadoUser.copy(
                 idMesa = 0,
                 gastoTotDivide = "",
