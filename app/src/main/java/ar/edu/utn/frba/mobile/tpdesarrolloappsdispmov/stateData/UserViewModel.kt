@@ -124,7 +124,12 @@ class UserViewModel (private val usuarioServicio: ReqsService,private val dataSt
     }
     fun exitTable(){
         viewModelScope.launch {
-            estadoUser = estadoUser.copy(idMesa = 0)
+            estadoUser = estadoUser.copy(
+                idMesa = 0,
+                gastoTotDivide = "",
+                gastoIndDivide = "",
+                cantDivide = ""
+            )
             dataStore.edit { preferences -> preferences[intPreferencesKey("idMesa")]=0 }
         }
     }

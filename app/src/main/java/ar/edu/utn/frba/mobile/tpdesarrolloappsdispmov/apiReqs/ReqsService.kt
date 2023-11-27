@@ -55,4 +55,6 @@ interface ReqsService {
     suspend fun getConsumo(@Path("idCliente") idCliente:Int): Response<PedidoConsumoData>
     @GET("/mesas/pagar/individual/{idCliente}")
     suspend fun pay(@Path("idCliente") idCliente: Int): Response<ResponseApiStandardData>
+    @GET("/mesas/exit/{idCliente}")
+    suspend fun exit(@Path("idCliente") idCliente: Int):Response<ResponseApiStandardData>
 }
