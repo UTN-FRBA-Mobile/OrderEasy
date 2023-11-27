@@ -1,8 +1,11 @@
 package ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov
 
-import android.content.Context
-import android.os.Bundle
 //import android.util.Log
+import android.Manifest
+import android.app.AlertDialog
+import android.content.Context
+import android.os.Build
+import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
@@ -31,6 +34,7 @@ import com.google.firebase.messaging.messaging
 
 val Context.dataStore by preferencesDataStore(name="USER_DATA")
 class MainActivity : ComponentActivity() {
+    private val REQUEST_CODE_POST_NOTIFICATIONS = 101
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         /*val bundle = intent.extras
@@ -39,6 +43,23 @@ class MainActivity : ComponentActivity() {
                 Log.i("param(${key})--->",bundle[key].toString())
             }
         }*/
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            if (shouldShowRequestPermissionRationale(Manifest.permission.POST_NOTIFICATIONS)) {
+                AlertDialog.Builder(this)
+                    .setTitle("Permiso de Notificaciones necesario")
+                    .setMessage("Esta aplicación requiere acceso a las notificaciones para realizar avisos significativos. Por favor, permite este permiso para continuar.")
+                    .setPositiveButton("OK") { dialog, which ->
+                        // Intentar de nuevo pedir el permiso
+                        requestPermissions(arrayOf(Manifest.permission.POST_NOTIFICATIONS), REQUEST_CODE_POST_NOTIFICATIONS)
+                    }
+                    .setNegativeButton("Cancelar") { dialog, which ->
+                        dialog.dismiss()
+                    }
+                    .create()
+                    .show()
+            }
+            requestPermissions(arrayOf(Manifest.permission.POST_NOTIFICATIONS), REQUEST_CODE_POST_NOTIFICATIONS)
+        }
         setContent {
             TpDesarrolloAppsDispMovTheme {
                 val navController= rememberNavController()
