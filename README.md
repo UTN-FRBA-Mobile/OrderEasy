@@ -1,3 +1,4 @@
+
 # OrderEasy
 
 OrderEasy es una aplicación móvil diseñada para mejorar la experiencia en restaurantes al simplificar el proceso de ordenar, gestionar pedidos y pagar la cuenta. Con OrderEasy, los usuarios pueden escanear códigos QR colocados en las mesas para asociarse a una mesa en particular, acceder al menú del restaurante, realizar pedidos, realizar un seguimiento del estado de los platos y pagar de manera conveniente.
@@ -33,6 +34,8 @@ OrderEasy es una aplicación móvil diseñada para mejorar la experiencia en res
 - Proporciona un seguimiento claro del estado de los pedidos y la cuenta.
 
 ¡Descarga OrderEasy ahora y simplifica tu experiencia en restaurantes!
+
+![Icono de la Aplicación](app/src/main/res/mipmap-xxxhdpi/ic_launcher.webp)
 
 ---
 
