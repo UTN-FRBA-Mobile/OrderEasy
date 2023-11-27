@@ -6,7 +6,9 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.sharp.ArrowForward
+import androidx.compose.material3.Button
 import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -27,6 +29,7 @@ import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.components.TopBar
 @Composable
 fun Login (usuarioViewModel:UserViewModel){
     var nombre by remember { mutableStateOf("") }
+    var waiting:Boolean = (usuarioViewModel.estadoUser.idDevice=="")
     Scaffold (
         topBar = { TopBar(userViewModel = usuarioViewModel)},
         content = { innerPadding ->
@@ -34,8 +37,8 @@ fun Login (usuarioViewModel:UserViewModel){
                 .fillMaxSize()
                 .padding(innerPadding)){
                 Text(
-                    modifier = Modifier.padding(16.dp),
                     text = "Elige un nombre de usuario para identificarte en la mesa",
+                    modifier = Modifier.padding(16.dp),
                     textAlign = TextAlign.Justify,
                     style = MaterialTheme.typography.titleLarge
                 )
@@ -46,11 +49,18 @@ fun Login (usuarioViewModel:UserViewModel){
                     value = nombre,
                     onValueChange ={nombre=it},
                     label={Text("Ingresa tu nombre")} )
+
                 ExtendedFloatingActionButton(
-                    modifier = Modifier.fillMaxWidth().wrapContentSize().padding(vertical = 8.dp),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .wrapContentSize()
+                        .padding(vertical = 8.dp),
                     onClick = {usuarioViewModel.log(nombre)},
                     icon = { Icon(Icons.Sharp.ArrowForward,  contentDescription ="volver") },
-                    text = { Text(text = "Ingresar",style = MaterialTheme.typography.titleSmall) },
+                    text = { Text(
+                        text = "Ingresar",
+                        style = MaterialTheme.typography.titleSmall
+                    ) },
                 )
             }
         }
