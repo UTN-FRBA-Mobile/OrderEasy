@@ -80,9 +80,9 @@ class UserViewModel (private val usuarioServicio: ReqsService,private val dataSt
             Log.i("TAKE-TABLE-idCli->",estadoUser.idCliente.toString())
             Log.i("TAKE-TABLE-idMesa->",idMesa.toString())
             Log.i("TAKE-TABLE-hash->",hash)
-            //val rta= usuarioServicio.takeTable(idMesa,estadoUser.idCliente,hash)
+            val rta= usuarioServicio.takeTable(idMesa,estadoUser.idCliente,hash)
             //Log.i("TAKE-TAB-SERV-->",rta.toString())
-            estadoUser = estadoUser.copy(idMesa=idMesa, jwt ="1"/*jwt =rta.body()!!.token */)
+            estadoUser = estadoUser.copy(idMesa=idMesa, jwt =rta.body()!!.token )
             dataStore.edit { preferences -> preferences[intPreferencesKey("idMesa")]=idMesa }
         }
     }
