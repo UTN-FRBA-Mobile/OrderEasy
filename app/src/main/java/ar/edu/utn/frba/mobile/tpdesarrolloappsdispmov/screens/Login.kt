@@ -5,7 +5,11 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentSize
-import androidx.compose.material3.Button
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.sharp.ArrowForward
+import androidx.compose.material3.ExtendedFloatingActionButton
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -16,6 +20,7 @@ import androidx.compose.ui.Modifier
 import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.stateData.UserViewModel
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.components.TopBar
 
@@ -25,13 +30,14 @@ fun Login (usuarioViewModel:UserViewModel){
     Scaffold (
         topBar = { TopBar(userViewModel = usuarioViewModel)},
         content = { innerPadding ->
-            Column (modifier = Modifier.fillMaxSize()){
+            Column (modifier = Modifier
+                .fillMaxSize()
+                .padding(innerPadding)){
                 Text(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(innerPadding)
-                        .wrapContentSize(),
-                    text = "Elegir un nombre de usuario para identificarte en la mesa",
+                    modifier = Modifier.padding(16.dp),
+                    text = "Elige un nombre de usuario para identificarte en la mesa",
+                    textAlign = TextAlign.Justify,
+                    style = MaterialTheme.typography.titleLarge
                 )
                 OutlinedTextField(
                     modifier = Modifier
@@ -40,15 +46,12 @@ fun Login (usuarioViewModel:UserViewModel){
                     value = nombre,
                     onValueChange ={nombre=it},
                     label={Text("Ingresa tu nombre")} )
-                Button(
+                ExtendedFloatingActionButton(
+                    modifier = Modifier.fillMaxWidth().wrapContentSize().padding(vertical = 8.dp),
                     onClick = {usuarioViewModel.log(nombre)},
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(innerPadding)
-                        .wrapContentSize()
-                ) {
-                    Text(text = "ingresar")
-                }
+                    icon = { Icon(Icons.Sharp.ArrowForward,  contentDescription ="volver") },
+                    text = { Text(text = "Ingresar",style = MaterialTheme.typography.titleSmall) },
+                )
             }
         }
     )
