@@ -47,16 +47,16 @@ class UserViewModel (private val usuarioServicio: ReqsService,private val dataSt
     }
     fun log(nomb:String){
         viewModelScope.launch {
-            estadoUser = estadoUser.copy(requestingData = true)
+            //estadoUser = estadoUser.copy(requestingData = true)
             //API REQUEST
-            //val idCli = usuarioServicio.getLogged(nomb,estadoUser.idDevice)
+            val idCli = usuarioServicio.getLogged(nomb,estadoUser.idDevice)
             dataStore.edit { preferences ->
-                preferences[intPreferencesKey("idCliente")] = 1//idCli.body()!!.idCliente
+                preferences[intPreferencesKey("idCliente")] = idCli.body()!!.idCliente
                 preferences[stringPreferencesKey("idDevice")] =estadoUser.idDevice
                 preferences[stringPreferencesKey("nombre")] = nomb
             }
             //SETEAR VIEWMODEL
-            setUser(nomb,1/*idCli.body()!!.idCliente*/)
+            setUser(nomb,idCli.body()!!.idCliente)
         }
     }
     fun setUser(nomb:String,idCli:Int){
@@ -65,7 +65,7 @@ class UserViewModel (private val usuarioServicio: ReqsService,private val dataSt
                 nombre = nomb,
                 idCliente = idCli,
                 isLogged = true,
-                requestingData = false
+                //requestingLog = false
             )
         }
     }
@@ -96,7 +96,7 @@ class UserViewModel (private val usuarioServicio: ReqsService,private val dataSt
                 idCliente = user.idCliente,
                 nombre=user.nombre,
                 idMesa = user.idMesa,
-                idDevice=user.idDevice,
+                //idDevice=user.idDevice,
                 initializatingApp = false,
                 isLogged = if(user.idCliente==0)false else true)
             }
