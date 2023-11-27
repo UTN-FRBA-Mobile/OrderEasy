@@ -1,190 +1,246 @@
 package ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.screens
 
-import androidx.annotation.DrawableRes
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ExitToApp
+import androidx.compose.material.icons.filled.Notifications
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.R
-import kotlinx.coroutines.delay
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun MainMenu(navCont: NavController) {
-    var llamandoAlMozo by remember { mutableStateOf(false) }
-
-    Scaffold(
-        topBar = {
-            OderEasyTopAppBar(navCont)
-        }
-    ) { innerPadding ->
-        LazyColumn(
-            contentPadding = PaddingValues(
-                start = 16.dp,
-                top = 16.dp + innerPadding.calculateTopPadding(),
-                end = 16.dp,
-                bottom = 16.dp + innerPadding.calculateBottomPadding()
-            ),
-            verticalArrangement = Arrangement.spacedBy(8.dp)
-        ) {
-            item {
-                MenuButton(
-                    "Escanear QR",
-                    R.drawable.icon_notification_pay
-                ) { //TODO: buscar icono para el boton
-                    navCont.navigate(route = "scanqr")
-                }
-            }
-            item {
-                MenuButton(
-                    "Ver carta/menu",
-                    R.drawable.icon_notification_pay
-                ) { //TODO: buscar icono para el boton
-                    navCont.navigate(route = "readmenu")
-                }
-            }
-            item {
-                MenuButton(
-                    "Hacer el pedido",
-                    R.drawable.icon_notification_pay
-                ) { //TODO: buscar icono para el boton
-                    navCont.navigate(route = "makeorder")
-                }
-            }
-            item {
-                MenuButton(
-                    "Pedir la cuenta",
-                    R.drawable.icon_notification_pay
-                ) { //TODO: buscar icono para el boton
-                    navCont.navigate(route = "requestticket")
-                }
-            }
-            item {
-                MenuButton(
-                    "Llamar mozo",
-                    R.drawable.icon_notification_pay
-                ) { //TODO: buscar icono para el boton
-                    llamandoAlMozo = true
-                }
-            }
-            item {
-                MenuButton(
-                    "Ver pedidos de la mesa",
-                    R.drawable.icon_notification_pay
-                ) { //TODO: buscar icono para el boton
-                    navCont.navigate(route = "ordersstate")
-                }
-            }
-            item {
-                MenuButton(
-                    "Retirarse de la mesa",
-                    R.drawable.icon_notification_pay
-                ) { //TODO: buscar icono para el boton
-                    navCont.navigate(route = "closetable")
-                }
-            }
-        }
-
-        if (llamandoAlMozo) {
-            LlamandoAlMozoDialog {
-                llamandoAlMozo = false
-            }
-        }
-    }
-}
+import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.components.TopBar
+import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.stateData.TableViewModel
+import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.stateData.UserViewModel
 
 @Composable
-fun MenuButton(text: String, @DrawableRes iconId: Int, onClick: () -> Unit) {
-    Button(
-        onClick = onClick,
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 16.dp, vertical = 8.dp)
-            .wrapContentSize(),
-        colors = ButtonDefaults.buttonColors(containerColor = Color.Gray),
-        contentPadding = PaddingValues(8.dp)
-    ) {
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(8.dp)
-        ) {
-            Icon(
-                painter = painterResource(id = iconId),
-                contentDescription = null,
-                tint = Color.White
-            )
-            Text(text = text)
-        }
-    }
-}
+fun MainMenu(navCont: NavController,usuarioViewModel: UserViewModel,tabStateViewModel:TableViewModel) {
+    Scaffold (
+        topBar = {TopBar(usuarioViewModel)},
+        content = { innerPadding ->
+            Column (
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(innerPadding),
+                verticalArrangement = Arrangement.SpaceBetween
+            ){
+                LazyColumn{
+                    item {
+                        Card (
+                            colors = CardDefaults.cardColors(
+                                containerColor = MaterialTheme.colorScheme.primaryContainer,
+                            ),
+                            enabled= (usuarioViewModel.estadoUser.idMesa==0),
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(horizontal = 40.dp, vertical = 8.dp),
+                            onClick = { navCont.navigate(route="scanqr")},
 
-@OptIn(ExperimentalComposeUiApi::class)
-@Composable
-fun LlamandoAlMozoDialog(onDismiss: () -> Unit) {
-    var tiempoEspera by remember { mutableStateOf(0) }
-    var llamadaExitosa by remember { mutableStateOf(false) }
+                        ){
+                            Row (
+                                modifier = Modifier.padding(horizontal=10.dp, vertical = 14.dp),
+                                verticalAlignment = Alignment.CenterVertically
+                            ){
+                                Icon(imageVector = ImageVector.vectorResource(id = R.drawable.baseline_qr_code_24), contentDescription ="carta",modifier=Modifier.size(40.dp) )
+                                Text(
+                                    text =  "Escanear QR",
+                                    textAlign = TextAlign.Center,
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .padding(vertical = 6.dp),
+                                    style = MaterialTheme.typography.titleLarge
+                                )
+                            }
+                        }
+                    }
+                    item {
+                        Card (
+                            colors = CardDefaults.cardColors(
+                                containerColor = MaterialTheme.colorScheme.primaryContainer,
+                            ),
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(horizontal = 40.dp, vertical = 8.dp),
+                            onClick = { navCont.navigate(route="readmenu")},
 
-    // Incrementar el tiempo de espera cada segundo
-    LaunchedEffect(true) {
-        while (!llamadaExitosa) {
-            delay(1000)
-            tiempoEspera++
-        }
-    }
+                            ){
+                            Row (
+                                modifier = Modifier.padding(horizontal=10.dp, vertical = 14.dp),
+                                verticalAlignment = Alignment.CenterVertically
+                            ){
+                                Icon(imageVector = ImageVector.vectorResource(id = R.drawable.baseline_menu_book_24), contentDescription ="carta",modifier=Modifier.size(40.dp) )
+                                Text(
+                                    text =  "Ver el menu de platos",
+                                    textAlign = TextAlign.Center,
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .padding(vertical = 6.dp),
+                                    style = MaterialTheme.typography.titleLarge
+                                )
+                            }
+                        }
+                    }
+                    item {
+                        Card (
+                            colors = CardDefaults.cardColors(
+                                containerColor = MaterialTheme.colorScheme.primaryContainer,
+                            ),
+                            enabled= (usuarioViewModel.estadoUser.idMesa!=0),
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(horizontal = 40.dp, vertical = 8.dp),
+                            onClick = { navCont.navigate(route="makeorder")},
 
-    LaunchedEffect(true) {
-        // Simular una llamada al mozo exitosa después de 5 segundos
-        delay(5000)
-        llamadaExitosa = true
-    }
+                            ){
+                            Row (
+                                modifier = Modifier.padding(horizontal=10.dp, vertical = 14.dp),
+                                verticalAlignment = Alignment.CenterVertically
+                            ){
+                                Icon(imageVector = ImageVector.vectorResource(id = R.drawable.baseline_room_service_24), contentDescription ="call",modifier=Modifier.size(40.dp) )
+                                Text(
+                                    text =  "Ordenar platos elegidos",
+                                    textAlign = TextAlign.Center,
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .padding(vertical = 6.dp),
+                                    style = MaterialTheme.typography.titleLarge
+                                )
+                            }
+                        }
+                    }
+                    item {
+                        Card (
+                            colors = CardDefaults.cardColors(
+                                containerColor = MaterialTheme.colorScheme.primaryContainer,
+                            ),
+                            enabled= (usuarioViewModel.estadoUser.idMesa!=0),
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(horizontal = 40.dp, vertical = 8.dp),
+                            onClick = { navCont.navigate(route="requestticket")},
 
-    LaunchedEffect(key1 = true){
-        // Despues de los 8 segundos desaparece la alerta
-        delay(8000)
-        onDismiss()
-    }
-
-    AlertDialog(
-        onDismissRequest = { },
-        title = {
-            Text(text = "Llamando al mozo")
-        },
-        text = {
-            if (llamadaExitosa) {
-                Text(text = "Llamada exitosa. Espere un momento, por favor...")
-            } else {
-                Text(text = "Llamando... Llevas $tiempoEspera segundos en espera.")
-            }
-        },
-        confirmButton = {
-            if (!llamadaExitosa) {
-                Button(
-                    onClick = onDismiss
-                ) {
-                    Text(text = "Cancelar llamada")
+                            ){
+                            Row (
+                                modifier = Modifier.padding(horizontal=10.dp, vertical = 14.dp),
+                                verticalAlignment = Alignment.CenterVertically
+                            ){
+                                Icon(imageVector = ImageVector.vectorResource(id = R.drawable.baseline_receipt_24), contentDescription ="call",modifier=Modifier.size(40.dp) )
+                                Text(
+                                    text =  "Pedir la cuenta",
+                                    textAlign = TextAlign.Center,
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .padding(vertical = 6.dp),
+                                    style = MaterialTheme.typography.titleLarge
+                                )
+                            }
+                        }
+                    }
+                    item {
+                        Card (
+                            colors = CardDefaults.cardColors(
+                                containerColor = MaterialTheme.colorScheme.primaryContainer,
+                            ),
+                            enabled= (usuarioViewModel.estadoUser.idMesa!=0),
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(horizontal = 40.dp, vertical = 8.dp),
+                            onClick = {
+                                navCont.navigate(route="callmozo")
+                            },
+                            ){
+                            Row (
+                                modifier = Modifier.padding(horizontal=10.dp, vertical = 14.dp),
+                                verticalAlignment = Alignment.CenterVertically
+                            ){
+                                Icon(Icons.Filled.Notifications, contentDescription ="call",modifier=Modifier.size(40.dp) )
+                                Text(
+                                    text =  "Llamar al mozo",
+                                    textAlign = TextAlign.Center,
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .padding(vertical = 6.dp),
+                                    style = MaterialTheme.typography.titleLarge
+                                )
+                            }
+                        }
+                    }
+                    item {
+                        Card (
+                            colors = CardDefaults.cardColors(
+                                containerColor = MaterialTheme.colorScheme.primaryContainer,
+                            ),
+                            enabled= (usuarioViewModel.estadoUser.idMesa!=0),
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(horizontal = 40.dp, vertical = 8.dp),
+                            onClick = {
+                                tabStateViewModel.setRequestingDataOn()
+                                navCont.navigate(route="ordersstate")
+                                tabStateViewModel.getPedidosState(usuarioViewModel.estadoUser.idMesa)
+                            },
+                            ){
+                            Row (
+                                modifier = Modifier.padding(horizontal=10.dp, vertical = 8.dp),
+                                verticalAlignment = Alignment.CenterVertically
+                            ){
+                                Icon(imageVector = ImageVector.vectorResource(id = R.drawable.baseline_playlist_add_check_circle_24), contentDescription ="carta",modifier=Modifier.size(40.dp) )
+                                Text(
+                                    text =  "Ver el estado de los pedidos de la mesa",
+                                    textAlign = TextAlign.Center,
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .padding(vertical = 6.dp),
+                                    style = MaterialTheme.typography.titleLarge
+                                )
+                            }
+                        }
+                    }
+                    item {
+                        Card (
+                            colors = CardDefaults.cardColors(
+                                containerColor = MaterialTheme.colorScheme.primaryContainer,
+                            ),
+                            enabled= (usuarioViewModel.estadoUser.idMesa!=0),
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(horizontal = 40.dp, vertical = 8.dp),
+                            onClick = {
+                                navCont.navigate(route="closetable")},
+                            ){
+                            Row (
+                                modifier = Modifier.padding(horizontal=10.dp, vertical = 14.dp),
+                                verticalAlignment = Alignment.CenterVertically
+                            ){
+                                Icon(Icons.Filled.ExitToApp, contentDescription ="exit",modifier=Modifier.size(40.dp) )
+                                Text(
+                                    text =  "Retirarse de la mesa",
+                                    textAlign = TextAlign.Center,
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .padding(vertical = 6.dp),
+                                    style = MaterialTheme.typography.titleLarge
+                                )
+                            }
+                        }
+                    }
                 }
             }
         }

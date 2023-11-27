@@ -2,7 +2,7 @@ package ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov
 
 import android.content.Context
 import android.os.Bundle
-import android.util.Log
+//import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
@@ -11,28 +11,19 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.datastore.preferences.core.Preferences
-import androidx.datastore.preferences.core.intPreferencesKey
-import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
+import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.apiReqs.ReqsService
 import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.navigation.MainNavigation
-import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.screens.CloseTable
-import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.screens.MainMenu
-import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.stateData.Login
+import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.screens.Login
 import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.stateData.MenuViewModel
 import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.stateData.TableViewModel
-import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.stateData.UserSavedData
 import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.stateData.UserViewModel
 import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.ui.theme.TpDesarrolloAppsDispMovTheme
 import com.google.firebase.Firebase
@@ -40,141 +31,104 @@ import com.google.firebase.messaging.messaging
 
 val Context.dataStore by preferencesDataStore(name="USER_DATA")
 class MainActivity : ComponentActivity() {
-    /*val idCli:Int
-    var idMesa:Int=0
-    var nomb:String=""
-    var userSavData:UserSavedData =UserSavedData("","",0,0)*/
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        /*val userDataSaved:Flow<UserSavedData> = dataStore.data.map {
-            preferences -> mapUser(preferences)  }
-        lifecycleScope.launch (Dispatchers.IO){
-            userDataSaved.collect{
-                withContext(Dispatchers.Main){
-                    userSavData = it
-                }
+        /*val bundle = intent.extras
+        if (bundle != null) {
+            for (key in bundle.keySet()) {
+                Log.i("param(${key})--->",bundle[key].toString())
             }
         }*/
-        //val userData:UserSavedData = mapUser(dataStore.data.first().toPreferences())
         setContent {
             TpDesarrolloAppsDispMovTheme {
-                // A surface container using the 'background' color from the theme
+                val navController= rememberNavController()
+                val retrofitInst:ReqsService = ReqsService.instance
+                val usuarioViewModel by viewModels <UserViewModel>(factoryProducer = {
+                    object : ViewModelProvider.Factory{
+                        override fun <T:ViewModel> create (modelClass: Class<T>): T{
+                            return UserViewModel(retrofitInst,dataStore) as T
+                        }
+                    }
+                })
+                val tabStateViewModel by viewModels <TableViewModel>(factoryProducer = {
+                    object : ViewModelProvider.Factory{
+                        override fun <T: ViewModel> create (modelClass: Class<T>): T{
+                            return TableViewModel(retrofitInst) as T
+                        }
+                    }
+                })
+                val menuStateViewModel by viewModels <MenuViewModel>(factoryProducer = {
+                    object : ViewModelProvider.Factory{
+                        override fun <T: ViewModel> create (modelClass: Class<T>): T{
+                            return MenuViewModel(retrofitInst) as T
+                        }
+                    }
+                })
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    //GreetingPreview()
-                    val retrofitInst:ReqsService = ReqsService.instance
-                    val usuarioViewModel by viewModels <UserViewModel>(factoryProducer = {
-                        object : ViewModelProvider.Factory{
-                            override fun <T:ViewModel> create (modelClass: Class<T>): T{
-                                return UserViewModel(retrofitInst,dataStore) as T
-                            }
-                        }
-                    })
-                    val tabStateViewModel by viewModels <TableViewModel>(factoryProducer = {
-                        object : ViewModelProvider.Factory{
-                            override fun <T: ViewModel> create (modelClass: Class<T>): T{
-                                return TableViewModel(retrofitInst) as T
-                            }
-                        }
-                    })
-                    val menuStateViewModel by viewModels <MenuViewModel>(factoryProducer = {
-                        object : ViewModelProvider.Factory{
-                            override fun <T: ViewModel> create (modelClass: Class<T>): T{
-                                return MenuViewModel(retrofitInst) as T
-                            }
-                        }
-                    })
-                    ///Log.i("MainActivity-userSavedData>",userSavData.toString())
                     if(usuarioViewModel.estadoUser.initializatingApp){
-                        Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                            CircularProgressIndicator()
+                        Firebase.messaging.token.addOnCompleteListener {
+                            if(!it.isSuccessful){
+                                println("error en obtencion de token")
+                                return@addOnCompleteListener
+                            }
+                            val token = it.result
+                            usuarioViewModel.setIdDevice(token)
                         }
-                        Log.i("MainActivity--->","yendo a inicializar")
+                        /*if(intent.extras?.getString("action")=="desafio"){
+                            Log.i("MAINACTIVITY--->","DESAFIO")
+                            val accion = intent.extras?.getString("action")?:""
+                            val idRival = intent.extras?.getInt("idRival")?:0
+                            val nombRival = intent.extras?.getString("nombRival")?:""
+                            usuarioViewModel.setRival(idRival,nombRival,"desafiado")
+                        }else if(intent.extras?.getString("action")=="jugar"){
+                            Log.i("MAINACTIVITY--->","JUGAR")
+                            val accion = intent.extras?.getString("action")?:""
+                            val idPartida = intent.extras?.getInt("idPartida")?:0
+                            Log.i("MainActivity->defy",accion)
+                        usuarioViewModel.setGame(idPartida,"jugando")
+                    }*/
+                        if(intent.extras?.getString("action")=="share"){
+                            usuarioViewModel.setInviteDivide(
+                                intent.extras?.getString("total")?:"",
+                                intent.extras?.getString("cantidad")?:"",
+                                intent.extras?.getString("pago")?:""
+                            )
+                        }else{
+                            usuarioViewModel.setInviteDivide("","","")
+                        }
                         usuarioViewModel.initializating()
-                    }else {
-                        Starting(
-                            tabStateViewModel,
-                            usuarioViewModel,
-                            menuStateViewModel,
-                        )
+                        menuStateViewModel.getMenu()
                     }
+                    Starting(
+                        tabStateViewModel,
+                        usuarioViewModel,
+                        menuStateViewModel,
+                        navController
+                    )
                 }
             }
         }
     }
-
-    private fun mapUser(preferences: Preferences):UserSavedData {
-        val idCli = preferences[intPreferencesKey("idCliente")]?:0
-        val idMesa = preferences[intPreferencesKey("idMesa")]?:0
-        val nomb=preferences[stringPreferencesKey("nombre")]!!
-        return UserSavedData("",nomb,idCli,idMesa)
-    }
-    /*private fun getUserSavedData() =dataStore.data.map {
-                preferences ->
-            //Log.i("getUserSavedData->",preferences[stringPreferencesKey("nombre")].orEmpty())
-            UserSavedData(
-                idCliente=preferences[intPreferencesKey("idCliente")]?:0,
-                idMesa=preferences[intPreferencesKey("idMesa")]?:0,
-                nombre=preferences[stringPreferencesKey("nombre")]!!
-            )
-        }
-    }*/
 }
 
 @Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    TpDesarrolloAppsDispMovTheme {
-        val navController = rememberNavController()
-        NavHost(
-            navController = navController,
-            startDestination = "mainmenu"
-        ) {
-            // Ir sumando las rutas de las pantallas
-            composable(route = "mainmenu") { MainMenu(navController) }
-            composable(route = "closetable") { CloseTable(navController) }
+fun Starting(tableViewModel: TableViewModel,usuarioViewModel: UserViewModel,menuStateViewModel: MenuViewModel,navController: NavHostController) {
+    if(usuarioViewModel.estadoUser.initializatingApp || usuarioViewModel.estadoUser.requestingData){
+        Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+            CircularProgressIndicator()
         }
-    }
-}
-
-@Composable
-fun Starting(tableViewModel: TableViewModel,usuarioViewModel: UserViewModel,menuStateViewModel: MenuViewModel) {
-    Firebase.messaging.token.addOnCompleteListener {
-        if(!it.isSuccessful){
-            println("error en obtencion de token")
-            return@addOnCompleteListener
+    }else if(usuarioViewModel.estadoUser.isLogged){
+        if(usuarioViewModel.estadoUser.idDevice!=""){
+            MainNavigation(tableViewModel,menuStateViewModel,usuarioViewModel, navController)
+        }else{
+            Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                CircularProgressIndicator()
+            }
         }
-        val token = it.result
-        Log.i("MainActivity-Token--->",token)
-        usuarioViewModel.setIdDevice(token)
-    }
-
-    if(usuarioViewModel.estadoUser.isLogged){
-        Log.i("usuarioLogged->","SI")
-        MainNavigation(tableViewModel,menuStateViewModel,usuarioViewModel)
     }else{
-        Log.i("usuarioLogged->","NO")
-        /*if(usuario.idCliente!=0){
-            Log.i("usuarioSaved->","SI")
-            usuarioViewModel.setUser(usuario.nombre,usuario.idCliente)
-            usuarioViewModel.takeTable(usuario.idMesa)
-        }else{*/
-            if(usuarioViewModel.estadoUser.requestingData){
-                Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                    CircularProgressIndicator()
-                }
-            }else{
-                Login(usuarioViewModel)
-            }
+        Login(usuarioViewModel)
     }
 }

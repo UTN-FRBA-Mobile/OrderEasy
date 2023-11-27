@@ -1,117 +1,68 @@
-package ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.stateData
+package ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.screens
 
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.text.BasicTextField
-import androidx.compose.foundation.text.KeyboardActions
-import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.*
-import androidx.compose.material3.AlertDialog
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.sharp.ArrowForward
 import androidx.compose.material3.Button
+import androidx.compose.material3.ExtendedFloatingActionButton
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.ExperimentalComposeUiApi
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalSoftwareKeyboardController
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.input.ImeAction
+import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.stateData.UserViewModel
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import androidx.navigation.compose.rememberNavController
-import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.R
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
+import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.components.TopBar
 
-@OptIn(ExperimentalComposeUiApi::class)
 @Composable
-fun Login(usuarioViewModel:UserViewModel) {
-    var username by remember { mutableStateOf("") }
-    var showWelcomeDialog by remember { mutableStateOf(false) }
-    val keyboardController = LocalSoftwareKeyboardController.current
-    val navCont= rememberNavController()
-    val coroutineScope = rememberCoroutineScope()
-
-
-    Box(
-        modifier = Modifier.fillMaxSize()
-    ) {
-        Image(
-            // TODO: Tomar la imagen del fondo de pantalla
-            painter = painterResource(id = R.drawable.ic_launcher_background),
-            contentDescription = null,
-            modifier = Modifier.fillMaxSize(),
-            contentScale = ContentScale.Crop
-        )
-
-        Column(
-            modifier = Modifier
+fun Login (usuarioViewModel:UserViewModel){
+    var nombre by remember { mutableStateOf("") }
+    var waiting:Boolean = (usuarioViewModel.estadoUser.idDevice=="")
+    Scaffold (
+        topBar = { TopBar(userViewModel = usuarioViewModel)},
+        content = { innerPadding ->
+            Column (modifier = Modifier
                 .fillMaxSize()
-                .padding(16.dp),
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            Text(
-                text = "Bienvenido a OrderEasy",
-                color = Color.White,
-                fontSize = 24.sp,
-                modifier = Modifier.padding(bottom = 16.dp)
-            )
+                .padding(innerPadding)){
+                Text(
+                    text = "Elige un nombre de usuario para identificarte en la mesa",
+                    modifier = Modifier.padding(16.dp),
+                    textAlign = TextAlign.Justify,
+                    style = MaterialTheme.typography.titleLarge
+                )
+                OutlinedTextField(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(14.dp) ,
+                    value = nombre,
+                    onValueChange ={nombre=it},
+                    label={Text("Ingresa tu nombre")} )
 
-            BasicTextField(
-                value = username,
-                onValueChange = { username = it },
-                keyboardOptions = KeyboardOptions(
-                    imeAction = ImeAction.Done
-                ),
-                keyboardActions = KeyboardActions(
-                    onDone = {
-                        // Podria ir una logica para chequear este campo?
-                        keyboardController?.hide()
-                    }
-                ),
-                textStyle = TextStyle(color = Color.Black, fontSize = 18.sp),
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .background(Color.White.copy(alpha = 0.7f))
-                    .padding(8.dp)
-                    .height(56.dp)
-            )
-
-            Spacer(modifier = Modifier.height(16.dp))
-
-            Button(
-                onClick = {
-                    usuarioViewModel.log(username)
-                    keyboardController?.hide()
-                    showWelcomeDialog = true
-                    coroutineScope.launch {
-                        delay(3000)
-                        showWelcomeDialog = false
-                        navCont.navigate("mainmenu")
-                    }
-                },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(56.dp)
-            ) {
-                Text("Ingresar", fontSize = 18.sp)
+                ExtendedFloatingActionButton(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .wrapContentSize()
+                        .padding(vertical = 8.dp),
+                    onClick = {usuarioViewModel.log(nombre)},
+                    icon = { Icon(Icons.Sharp.ArrowForward,  contentDescription ="volver") },
+                    text = { Text(
+                        text = "Ingresar",
+                        style = MaterialTheme.typography.titleSmall
+                    ) },
+                )
             }
         }
-    }
-
-    if (showWelcomeDialog) {
-        AlertDialog(
-            onDismissRequest = {  },
-            title = { Text("Bienvenido $username") },
-            text = { Text("¡Esperamos que comas rico!") },
-            confirmButton = {
-                // Sin boton
-            }
-        )
-    }
+    )
 }
