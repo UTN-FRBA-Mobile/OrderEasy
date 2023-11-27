@@ -96,6 +96,8 @@ class MainActivity : ComponentActivity() {
                                 intent.extras?.getString("cantidad")?:"",
                                 intent.extras?.getString("pago")?:""
                             )
+                        }else{
+                            usuarioViewModel.setInviteDivide("","","")
                         }
                         usuarioViewModel.initializating()
                         menuStateViewModel.getMenu()
@@ -114,12 +116,18 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun Starting(tableViewModel: TableViewModel,usuarioViewModel: UserViewModel,menuStateViewModel: MenuViewModel,navController: NavHostController) {
-    if(usuarioViewModel.estadoUser.initializatingApp){
+    if(usuarioViewModel.estadoUser.initializatingApp || usuarioViewModel.estadoUser.requestingData){
         Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
             CircularProgressIndicator()
         }
     }else if(usuarioViewModel.estadoUser.isLogged){
-        MainNavigation(tableViewModel,menuStateViewModel,usuarioViewModel, navController)
+        if(usuarioViewModel.estadoUser.idDevice!=""){
+            MainNavigation(tableViewModel,menuStateViewModel,usuarioViewModel, navController)
+        }else{
+            Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                CircularProgressIndicator()
+            }
+        }
     }else{
         Login(usuarioViewModel)
     }
