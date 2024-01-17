@@ -137,6 +137,7 @@ fun MainMenu(navCont: NavController,usuarioViewModel: UserViewModel,tabStateView
                                 colors = CardDefaults.cardColors(
                                     containerColor = MaterialTheme.colorScheme.primaryContainer,
                                 ),
+                                enabled = (usuarioViewModel.estadoUser.idMesa != 0),
                                 modifier = Modifier
                                     .fillMaxWidth()
                                     .padding(horizontal = 40.dp, vertical = 8.dp),
