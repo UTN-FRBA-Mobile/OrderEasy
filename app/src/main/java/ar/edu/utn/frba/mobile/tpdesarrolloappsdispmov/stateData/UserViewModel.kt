@@ -47,16 +47,25 @@ class UserViewModel (private val usuarioServicio: ReqsService,private val dataSt
     }
     fun log(nomb:String){
         viewModelScope.launch {
-            //estadoUser = estadoUser.copy(requestingData = true)
-            //API REQUEST
+            estadoUser = estadoUser.copy(registrandoUsuarioApi = true)
             val idCli = usuarioServicio.getLogged(nomb,estadoUser.idDevice)
-            dataStore.edit { preferences ->
-                preferences[intPreferencesKey("idCliente")] = idCli.body()!!.idCliente
-                preferences[stringPreferencesKey("idDevice")] =estadoUser.idDevice
-                preferences[stringPreferencesKey("nombre")] = nomb
+            if (idCli.isSuccessful) {
+                dataStore.edit { preferences ->
+                    preferences[intPreferencesKey("idCliente")] = idCli.body()!!.idCliente
+                    preferences[stringPreferencesKey("idDevice")] = estadoUser.idDevice
+                    preferences[stringPreferencesKey("nombre")] = nomb
+                }
+                //SETEAR VIEWMODEL
+                setUser(nomb, idCli.body()!!.idCliente)
+            }else{
+                estadoUser = estadoUser.copy(errorRegistrandoUsuarioApi = true)
             }
-            //SETEAR VIEWMODEL
-            setUser(nomb,idCli.body()!!.idCliente)
+            estadoUser = estadoUser.copy(registrandoUsuarioApi = false)
+        }
+    }
+    fun cancelarErrorRegistroUsuarioApi(){
+        viewModelScope.launch {
+            estadoUser = estadoUser.copy( errorRegistrandoUsuarioApi = false)
         }
     }
     fun setUser(nomb:String,idCli:Int){
