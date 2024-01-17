@@ -4,8 +4,10 @@ package ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov
 import android.Manifest
 import android.app.AlertDialog
 import android.content.Context
+import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
@@ -17,6 +19,8 @@ import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.datastore.preferences.preferencesDataStore
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
@@ -44,21 +48,39 @@ class MainActivity : ComponentActivity() {
             }
         }*/
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            if (shouldShowRequestPermissionRationale(Manifest.permission.POST_NOTIFICATIONS)) {
-                AlertDialog.Builder(this)
-                    .setTitle("Permiso de Notificaciones necesario")
-                    .setMessage("Esta aplicación requiere acceso a las notificaciones para realizar avisos significativos. Por favor, permite este permiso para continuar.")
-                    .setPositiveButton("OK") { dialog, which ->
-                        // Intentar de nuevo pedir el permiso
-                        requestPermissions(arrayOf(Manifest.permission.POST_NOTIFICATIONS), REQUEST_CODE_POST_NOTIFICATIONS)
-                    }
-                    .setNegativeButton("Cancelar") { dialog, which ->
-                        dialog.dismiss()
-                    }
-                    .create()
-                    .show()
+            when {
+                ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) ==
+                        PackageManager.PERMISSION_GRANTED -> Log.i(
+                    "Permiso de notificaciones->",
+                    "concedida"
+                )
+
+                ActivityCompat.shouldShowRequestPermissionRationale(
+                    this,
+                    Manifest.permission.POST_NOTIFICATIONS
+                ) -> {
+                    AlertDialog.Builder(this)
+                        .setTitle(getString(R.string.notif_perm_title))
+                        .setMessage(getString(R.string.notif_perm_txt))
+                        .setPositiveButton(getString(R.string.btn_ok)) { dialog, which ->
+                            requestPermissions(
+                                arrayOf(Manifest.permission.POST_NOTIFICATIONS),
+                                REQUEST_CODE_POST_NOTIFICATIONS
+                            )
+                        }
+                        .setNegativeButton(getString(R.string.btn_cancel)) { dialog, which ->
+                            dialog.dismiss()
+                        }
+                        .create()
+                        .show()
+                }
+                else -> {
+                    requestPermissions(
+                        arrayOf(Manifest.permission.POST_NOTIFICATIONS),
+                        REQUEST_CODE_POST_NOTIFICATIONS
+                    )
+                }
             }
-            requestPermissions(arrayOf(Manifest.permission.POST_NOTIFICATIONS), REQUEST_CODE_POST_NOTIFICATIONS)
         }
         setContent {
             TpDesarrolloAppsDispMovTheme {
