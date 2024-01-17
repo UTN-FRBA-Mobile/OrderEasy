@@ -12,5 +12,8 @@ data class PlatoOrdenado(
 data class MenuData(
     val loadingMenu:Boolean=false,
     val platos: List<Plato> = emptyList(),
+    val pidiendoDatos:Boolean = false,
+    val errorPedidoApi:Boolean = false,
+    val menucargado:Boolean = false,
     var pedidos: MutableList<PlatoPedido> = mutableListOf()//= emptyList<PlatoPedido>()
 )

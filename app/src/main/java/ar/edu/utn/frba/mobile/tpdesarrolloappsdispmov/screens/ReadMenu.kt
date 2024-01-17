@@ -24,9 +24,12 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.Send
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.BottomAppBarDefaults
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.FilledTonalButton
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.FloatingActionButtonDefaults
 import androidx.compose.material3.Icon
@@ -48,6 +51,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
@@ -63,6 +67,9 @@ import coil.compose.rememberAsyncImagePainter
 
 @Composable
 fun ReadMenu(navCont: NavController, menu: MenuViewModel, userViewModel: UserViewModel) {
+    if (!menu.estadoMenu.menucargado){
+        menu.getMenu()
+    }
     Scaffold(
         topBar = { TopBar(userViewModel) },
         bottomBar = {
@@ -288,19 +295,36 @@ fun QuantitySelector(
 fun BottomAppBarExample(navCont: NavController, menu: MenuViewModel) {
     BottomAppBar(
         actions = {
-            Text(
-                text = "Total: $${menu.getTotalCartPrice()}",
-                style = MaterialTheme.typography.labelMedium,
-                modifier = Modifier.padding(8.dp)
-            )
+            FilledTonalButton(onClick = { navCont.navigate(route="mainmenu") }) {
+                Icon(Icons.Filled.ArrowBack, contentDescription = "")
+                Text(
+                    text = stringResource(id = R.string.btn_back),
+                    style = MaterialTheme.typography.bodyMedium
+                )
+            }
+            FilledTonalButton(onClick = { navCont.navigate(route = "makeorder")},
+                modifier = Modifier.padding(horizontal = 3.dp)) {
+                Text(
+                    text = stringResource(id = R.string.order_ordenar),
+                    style = MaterialTheme.typography.labelSmall,
+                    modifier = Modifier.padding(horizontal = 2.dp)
+                )
+                Icon(Icons.Filled.Send, contentDescription = "ok")
+            }
         },
         floatingActionButton = {
             FloatingActionButton(
-                onClick = { navCont.navigate(route="makeorder")},
-                containerColor = BottomAppBarDefaults.bottomAppBarFabColor,
-                elevation = FloatingActionButtonDefaults.elevation()
-            ) {
-                Icon(imageVector = ImageVector.vectorResource(id = R.drawable.baseline_navigate_next_24), contentDescription ="Confirmar",modifier=Modifier.size(40.dp) )
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .wrapContentSize()
+                    .padding(vertical = 8.dp),
+                onClick = { }
+            ){
+                Text(
+                    text = stringResource(id = R.string.ticket_total) +": $${menu.getTotalCartPrice()}",
+                    style = MaterialTheme.typography.titleSmall,
+                    modifier = Modifier.padding(8.dp)
+                )
             }
         }
     )
