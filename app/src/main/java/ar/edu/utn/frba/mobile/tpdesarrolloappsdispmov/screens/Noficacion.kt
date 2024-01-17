@@ -18,9 +18,11 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.R
 import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.components.TopBar
 import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.stateData.UserViewModel
 
@@ -57,7 +59,7 @@ fun Notificacion(navController: NavController,userViewModel: UserViewModel){//,t
                             navController.navigate(route="mainmenu")
                         },
                         icon = { Icon(Icons.Filled.Check,  contentDescription ="volver") },
-                        text = { Text(text = "SI ACEPTO", style= MaterialTheme.typography.labelSmall) },
+                        text = { Text(text = stringResource(id = R.string.accept), style= MaterialTheme.typography.labelSmall) },
                     )
                     ExtendedFloatingActionButton(
                         modifier = Modifier
@@ -68,7 +70,7 @@ fun Notificacion(navController: NavController,userViewModel: UserViewModel){//,t
                             navController.navigate(route="mainmenu")
                         },
                         icon = { Icon(Icons.Filled.Close,  contentDescription ="volver") },
-                        text = { Text(text = "NO ACEPTO", style= MaterialTheme.typography.labelSmall) },
+                        text = { Text(text = stringResource(id = R.string.decline), style= MaterialTheme.typography.labelSmall) },
                     )
                 }
             }

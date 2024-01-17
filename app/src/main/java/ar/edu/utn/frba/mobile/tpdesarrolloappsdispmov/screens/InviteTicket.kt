@@ -32,6 +32,7 @@ import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.stateData.UserViewModel
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.R
 import java.util.Locale
 
@@ -46,7 +47,7 @@ fun InviteTicket(navCont: NavController, userViewModel: UserViewModel, tableView
                 .padding(innerPadding)){
                 Text(
                     modifier = Modifier.fillMaxWidth(),
-                    text = "Elige a quien queres invitar",
+                    text = stringResource(id = R.string.inviteticket_title),
                     textAlign = TextAlign.Center,
                     style = MaterialTheme.typography.titleLarge
                 )
@@ -92,7 +93,7 @@ fun InviteTicket(navCont: NavController, userViewModel: UserViewModel, tableView
                                             val indice:Int =tableViewModel.estadoMesa.invitados.indexOfFirst{ e -> e.idCliente == userViewModel.estadoUser.idCliente}
                                             val yo = if(indice !=-1) tableViewModel.estadoMesa.invitados[indice] else null
                                             if (yo != null) {
-                                                Text(text ="Consumido: $"+"%,.1f".format(Locale.GERMAN,yo.total),
+                                                Text(text = stringResource(id = R.string.inviteticket_consumido)+"%,.1f".format(Locale.GERMAN,yo.total),
                                                     style=MaterialTheme.typography.labelSmall)
                                             }
                                         }
@@ -123,7 +124,9 @@ fun InviteTicket(navCont: NavController, userViewModel: UserViewModel, tableView
                                     onClick = {tableViewModel.selectInvited(cons.idCliente)},
                                     label = {
                                         Row (
-                                            modifier = Modifier.fillMaxWidth().padding(10.dp),
+                                            modifier = Modifier
+                                                .fillMaxWidth()
+                                                .padding(10.dp),
                                             horizontalArrangement = Arrangement.SpaceBetween,
                                             verticalAlignment = Alignment.CenterVertically
                                         ) {
@@ -145,7 +148,7 @@ fun InviteTicket(navCont: NavController, userViewModel: UserViewModel, tableView
                                                 modifier = Modifier.fillMaxWidth(),
                                                 horizontalArrangement = Arrangement.End
                                             ) {
-                                                Text(text = "Consumido: $"+"%,.1f".format(Locale.GERMAN,cons.total),
+                                                Text(text = stringResource(id = R.string.inviteticket_consumido)+"%,.1f".format(Locale.GERMAN,cons.total),
                                                     style=MaterialTheme.typography.labelSmall)
                                             }
                                         }
@@ -168,7 +171,7 @@ fun InviteTicket(navCont: NavController, userViewModel: UserViewModel, tableView
                             }
                         }
                         item {Text(
-                            text = "Total a Pagar: $"+"%,.1f".format(Locale.GERMAN,tableViewModel.estadoMesa.invitados.filter { e ->e.selected }.fold(0.0f ) {acc, i -> acc + i.total}),
+                            text = stringResource(id = R.string.inviteticket_total)+"%,.1f".format(Locale.GERMAN,tableViewModel.estadoMesa.invitados.filter { e ->e.selected }.fold(0.0f ) {acc, i -> acc + i.total}),
                             textAlign = TextAlign.Center,
                             style = MaterialTheme.typography.titleLarge
                         )}
@@ -182,7 +185,7 @@ fun InviteTicket(navCont: NavController, userViewModel: UserViewModel, tableView
                                 onClick = {
                                     tableViewModel.pagarInvitado(userViewModel.estadoUser.idCliente)
                                     navCont.navigate(route="mainmenu")},
-                                text = { Text(text = "Pedir la cuenta",
+                                text = { Text(text = stringResource(id = R.string.singleticket_request),
                                     style = MaterialTheme.typography.titleSmall) },
                                 icon = { Icon(painter = painterResource(id = R.drawable.baseline_monetization_on_24),
                                     contentDescription ="volver",

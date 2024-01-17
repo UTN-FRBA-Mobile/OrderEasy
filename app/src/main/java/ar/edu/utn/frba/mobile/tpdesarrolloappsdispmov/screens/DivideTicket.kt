@@ -31,6 +31,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
@@ -39,6 +40,7 @@ import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.components.TopBar
 import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.stateData.TableViewModel
 import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.stateData.UserViewModel
 import java.util.Locale
+import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.R
 
 
 @Composable
@@ -64,7 +66,7 @@ fun DivideTicket(navCont: NavController, userViewModel: UserViewModel, tableView
                                 modifier = Modifier
                                     .fillMaxWidth()
                                     .padding(vertical = 4.dp),
-                                text = "Gasto total de la mesa $"+"%,.1f".format(Locale.GERMAN,totGastoMesa),
+                                text = stringResource(id = R.string.ticket_table)+"%,.1f".format(Locale.GERMAN,totGastoMesa),
                                 textAlign = TextAlign.Center,
                                 style = MaterialTheme.typography.titleLarge
                             )
@@ -72,7 +74,7 @@ fun DivideTicket(navCont: NavController, userViewModel: UserViewModel, tableView
                                 modifier = Modifier
                                     .fillMaxWidth()
                                     .padding(vertical = 4.dp),
-                                text = "Pago por integrante de la mesa $"+"%,.1f".format(Locale.GERMAN,gastoIndividual),
+                                text = stringResource(id = R.string.ticket_individual)+"%,.1f".format(Locale.GERMAN,gastoIndividual),
                                 textAlign = TextAlign.Center,
                                 style = MaterialTheme.typography.titleMedium
                             )
@@ -80,7 +82,7 @@ fun DivideTicket(navCont: NavController, userViewModel: UserViewModel, tableView
                                 modifier = Modifier
                                     .fillMaxWidth()
                                     .padding(vertical = 4.dp),
-                                text = "Detalle",
+                                text = stringResource(id = R.string.ticket_detalle),
                                 textAlign = TextAlign.Center,
                                 style = MaterialTheme.typography.displayMedium
                             )
@@ -100,7 +102,7 @@ fun DivideTicket(navCont: NavController, userViewModel: UserViewModel, tableView
                                         Consumer(ped)
                                         tot = tot + ped.cantidad * ped.Plato.precio
                                     }
-                                    Text(text = "Total  $"+"%,.1f".format(Locale.GERMAN,tot),
+                                    Text(text = stringResource(id = R.string.ticket_total)+"%,.1f".format(Locale.GERMAN,tot),
                                         modifier = Modifier
                                             .fillMaxWidth()
                                             .padding(2.dp),
@@ -122,7 +124,7 @@ fun DivideTicket(navCont: NavController, userViewModel: UserViewModel, tableView
                                 showDialog = true
                             },
                             icon = { Icon(Icons.Filled.ArrowBack, contentDescription = "volver") },
-                            text = { Text(text = "Enviar invitación a los demás comensales",
+                            text = { Text(text = stringResource(id = R.string.ticket_invite),
                                 style = MaterialTheme.typography.titleSmall,
                                 textAlign = TextAlign.Center) },
                         )
@@ -134,7 +136,7 @@ fun DivideTicket(navCont: NavController, userViewModel: UserViewModel, tableView
                                 .padding(14.dp),
                             onClick = { navCont.navigate(route = "requestTicket") },
                             icon = { Icon(Icons.Filled.ArrowBack, contentDescription = "volver") },
-                            text = { Text(text = "Volver",style = MaterialTheme.typography.titleSmall) },
+                            text = { Text(text = stringResource(id = R.string.btn_back),style = MaterialTheme.typography.titleSmall) },
                         )
                     }
                     item{
@@ -142,11 +144,9 @@ fun DivideTicket(navCont: NavController, userViewModel: UserViewModel, tableView
                             AlertDialog(
                                 containerColor = Color(251, 201, 143, 255),
                                 icon = { Icon(Icons.Default.Info, "call-mozo") },
-                                title = { Text(text = "Pago dividido") },
-                                text = { Text(text = "Se enviaron notificaciones a todos los integrantes de la mesa "+
-                                        "proponiéndoles ésta forma de pago. Si todos aceptan la operación se concreta"+
-                                        " pero si alguno no acepta la operación se anulará automáticamente.") },
-                                onDismissRequest = { /*TODO*/ },
+                                title = { Text(text = stringResource(id = R.string.ticket_dialog_title)) },
+                                text = { Text(text = stringResource(id = R.string.ticket_dialog_txt)) },
+                                onDismissRequest = { },
                                 confirmButton = {
                                     TextButton(
                                         colors = ButtonDefaults.buttonColors (
@@ -157,7 +157,7 @@ fun DivideTicket(navCont: NavController, userViewModel: UserViewModel, tableView
                                             navCont.navigate(route="mainmenu")
                                         }
                                     ) {
-                                        Text(text = "ok")
+                                        Text(text = stringResource(id = R.string.btn_ok))
                                     }
                                 })
                         }

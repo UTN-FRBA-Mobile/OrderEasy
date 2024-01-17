@@ -15,6 +15,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
@@ -52,14 +53,14 @@ fun RequestTicket(navCont: NavController,userViewModel: UserViewModel,tableViewM
                                     icon = {
                                         Icon(
                                             painter = painterResource(id = R.drawable.pago1_48dp),
-                                            contentDescription = "pagoindividual",
+                                            contentDescription = "desc",
                                             modifier = Modifier.size(120.dp)
                                                 .padding(vertical = 10.dp, horizontal = 14.dp)
                                         )
                                     },
                                     text = {
                                         Text(
-                                            text = "Pagar lo consumido en forma individual",
+                                            text = stringResource(id = R.string.getticket_individual),
                                             textAlign = TextAlign.Justify,
                                             style = MaterialTheme.typography.titleMedium
                                         )
@@ -82,13 +83,13 @@ fun RequestTicket(navCont: NavController,userViewModel: UserViewModel,tableViewM
                                     icon = {
                                         Icon(
                                             painter = painterResource(id = R.drawable.pago6_48dp),
-                                            contentDescription = "pagoDividido",
+                                            contentDescription = "desc",
                                             modifier = Modifier.size(130.dp)
                                         )
                                     },
                                     text = {
                                         Text(
-                                            text = "Pagar la parte resultante de dividir el total consumido en la mesa entre todos",
+                                            text = stringResource(id = R.string.getticket_divide),
                                             textAlign = TextAlign.Justify,
                                             style = MaterialTheme.typography.titleMedium
                                         )
@@ -111,7 +112,7 @@ fun RequestTicket(navCont: NavController,userViewModel: UserViewModel,tableViewM
                                     icon = {
                                         Icon(
                                             painter = painterResource(id = R.drawable.pago2_48dp),
-                                            contentDescription = "pagoInvitado",
+                                            contentDescription = "desc",
                                             modifier = Modifier
                                                 .size(100.dp)
                                                 .padding(vertical = 6.dp, horizontal = 10.dp)
@@ -119,7 +120,7 @@ fun RequestTicket(navCont: NavController,userViewModel: UserViewModel,tableViewM
                                     },
                                     text = {
                                         Text(
-                                            text = "Pagar lo que se consumió en forma individual y pagar la cuenta de alguien mas",
+                                            text = stringResource(id = R.string.getticket_invite),
                                             textAlign = TextAlign.Justify,
                                             style = MaterialTheme.typography.titleMedium
                                         )

@@ -7,4 +7,79 @@
     <string name="CHANNEL1_DESCRIPTION">CANAL1_DE_NOTIFICACONES_FCM</string>
     <string name="CHANNEL2_DESCRIPTION">CANAL2_DE_NOTIFICACONES</string>
     <string name="title_activity_notification">NotificationActivity</string>
+
+    <string name="btn_volver">Volver al menu</string>
+    <string name="btn_back">Volver</string>
+    <string name="btn_ok">OK</string>
+    <string name="btn_cancel">Cancelar</string>
+    <string name="decline">NO ACEPTO</string>
+    <string name="accept">SI ACEPTO</string>
+
+    <string name="login_title">Elige un nombre de usuario para identificarte en la mesa (de entre 2 y 10 caracteres)</string>
+    <string name="login_label">Ingresa tu nombre</string>
+    <string name="login_btn">Ingresar</string>
+    <string name="login_dialog_title">Ingresar</string>
+    <string name="login_dialog_txt">El nombre es erróneo</string>
+
+    <string name="mainmenu_scan">Escanear QR</string>
+    <string name="mainmenu_carta">Ver la carta de platos</string>
+    <string name="mainmenu_ordenar">Ordenar platos elegidos</string>
+    <string name="mainmenu_ticket">Pedir la cuenta</string>
+    <string name="mainmenu_mozo">Llamar al mozo</string>
+    <string name="mainmenu_estado">Ver el estado de los pedidos de la mesa</string>
+    <string name="mainmenu_exit">Retirarse de la mesa</string>
+    <string name="mainmenu_msj">
+        Para comenzar a utilizar la aplicacion, y como primer paso para registrarte como comensal, debes escanear el código QR que se encuentre en la mesa.
+    </string>
+
+    <string name="callmozo_title">Puedes solicitar que un mozo se acerque a la mesa si no encuentras ninguna opción de la aplicación que te permita realizar la acción que deseas</string>
+    <string name="callmozo_btn">Llamar</string>
+    <string name="callmozo_dialog_title">Llamar al mozo</string>
+    <string name="callmozo_dialog_txt">En un momento un mozo se acercará a la mesa</string>
+
+    <string name="closetab_title">Si ya finalizaste y abandonas la mesa elige esta opción. Esperamos que tu experiencia en nuestro local haya sido grata y deseamos verte nuevamente</string>
+    <string name="closetab_btn">Abandonar la mesa</string>
+    <string name="closetab_dialog_title">Retirarse</string>
+    <string name="closetab_dialog_txt">Gracias por tu visita</string>
+    <string name="closetab_error">Tienes platos pendientes de entrega y/o pago.</string>
+
+    <string name="getticket_individual">Pagar lo consumido en forma individual</string>
+    <string name="getticket_confirm">En instantes se facturará tu cuenta</string>
+    <string name="getticket_divide">Pagar la parte resultante de dividir el total consumido en la mesa entre todos</string>
+    <string name="getticket_invite">Pagar lo que se consumió en forma individual y pagar la cuenta de alguien mas</string>
+    <string name="ticket_table">Gasto total de la mesa $</string>
+    <string name="ticket_individual">Pago por integrante de la mesa $</string>
+    <string name="ticket_detalle">Detalle</string>
+    <string name="ticket_total">Total</string>
+    <string name="ticket_vacio">Sin platos consumidos</string>
+    <string name="ticket_invite">Enviar invitación a los demás comensales</string>
+    <string name="ticket_dialog_title">Pago dividido</string>
+    <string name="ticket_dialog_txt">Se enviaron notificaciones a los integrantes de la mesa proponiéndoles ésta forma de pago. Si aceptan entonces la operación se concreta, pero si alguien no acepta, entonces la operación se anulará automáticamente.</string>
+    <string name="singleticket_title">Consumido</string>
+    <string name="singleticket_request">Pedir la cuenta</string>
+    <string name="inviteticket_title">Elige a quien queres invitar</string>
+    <string name="inviteticket_yo">Yo</string>
+    <string name="inviteticket_consumido">Consumido: $</string>
+    <string name="inviteticket_total">Total a Pagar: $</string>
+
+    <string name="plato_selected">selected</string>
+    <string name="order_confirm">Confirmar pedido</string>
+    <string name="order_ordenar">Ordenar</string>
+    <string name="order_dialog_title">Ups</string>
+    <string name="order_dialog_vacio">Ups, tu carrito está vacío</string>
+    <string name="order_dialog_txt">Necesitas tener platos en tu carrito para confirmar el pedido</string>
+
+    <string name="orderstate_title">Estados de los pedidos de la mesa</string>
+    <string name="orderstate_preparando">EN PREPARACION</string>
+    <string name="orderstate_aviso">Todavía hay platos en preparación</string>
+
+    <string name="carta_less">Leer menos</string>
+    <string name="carta_more">Leer mas</string>
+    <string name="carta_add">Confirmar pedido</string>
+
+    <string name="topbar_app">OrderEasy</string>
+    <string name="notif_perm_title">Permiso de Notificaciones necesario</string>
+    <string name="notif_perm_txt">Esta aplicación requiere acceso a las notificaciones para realizar avisos significativos. Por favor, permite este permiso para continuar.</string>
+
+    <string name="error_api">Ha ocurrido un error en la conexión.</string>
 </resources>

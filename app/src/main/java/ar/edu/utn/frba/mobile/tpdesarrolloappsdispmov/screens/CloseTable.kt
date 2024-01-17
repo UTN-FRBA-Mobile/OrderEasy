@@ -25,12 +25,14 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.components.TopBar
 import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.components.VolverBtn
 import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.stateData.UserViewModel
+import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.R
 
 @Composable
 fun CloseTable(navCont: NavController,userViewModel: UserViewModel) {
@@ -47,23 +49,24 @@ fun CloseTable(navCont: NavController,userViewModel: UserViewModel) {
                 )
                 {
                     Text(
-                        text = "Si ya finalizaste y abandonas la mesa elige esta opción." +
-                                " Esperamos que tu experiencia en nuestro local haya sido grata y " +
-                                "deseamos verte nuevamente",
+                        text = stringResource(id = R.string.closetab_title),
                         modifier = Modifier.padding(16.dp),
                         textAlign = TextAlign.Justify,
                         style = MaterialTheme.typography.displayMedium
                     )
 
                     ExtendedFloatingActionButton(
-                        modifier = Modifier.fillMaxWidth().wrapContentSize().padding(vertical = 8.dp),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .wrapContentSize()
+                            .padding(vertical = 8.dp),
                         onClick = {
                             userViewModel.exitTable()
                             showDialog = true
                         },
                         icon = { Icon(Icons.Filled.Notifications,  contentDescription ="call") },
                         text = { Text(
-                            text = "Abandonar la mesa",
+                            text = stringResource(id = R.string.closetab_btn),
                             style = MaterialTheme.typography.titleSmall
                         ) },
                     )
@@ -72,8 +75,8 @@ fun CloseTable(navCont: NavController,userViewModel: UserViewModel) {
                         AlertDialog(
                             containerColor = Color(251, 201, 143, 255),
                             icon = { Icon(Icons.Default.Info, "call-mozo") },
-                            title = { Text(text = "Retirarse") },
-                            text = { Text(text = "Gracias por tu visita") },
+                            title = { Text(text = stringResource(id = R.string.closetab_dialog_title)) },
+                            text = { Text(text = stringResource(id = R.string.closetab_dialog_txt)) },
                             onDismissRequest = { /*TODO*/ },
                             confirmButton = {
                                 TextButton(

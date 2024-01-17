@@ -21,6 +21,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -60,7 +61,7 @@ fun MainMenu(navCont: NavController,usuarioViewModel: UserViewModel,tabStateView
                             ){
                                 Icon(imageVector = ImageVector.vectorResource(id = R.drawable.baseline_qr_code_24), contentDescription ="carta",modifier=Modifier.size(40.dp) )
                                 Text(
-                                    text =  "Escanear QR",
+                                    text =  stringResource(id = R.string.mainmenu_scan),
                                     textAlign = TextAlign.Center,
                                     modifier = Modifier
                                         .fillMaxWidth()
@@ -87,7 +88,7 @@ fun MainMenu(navCont: NavController,usuarioViewModel: UserViewModel,tabStateView
                             ){
                                 Icon(imageVector = ImageVector.vectorResource(id = R.drawable.baseline_menu_book_24), contentDescription ="carta",modifier=Modifier.size(40.dp) )
                                 Text(
-                                    text =  "Ver el menu de platos",
+                                    text =  stringResource(id = R.string.mainmenu_carta),
                                     textAlign = TextAlign.Center,
                                     modifier = Modifier
                                         .fillMaxWidth()
@@ -115,7 +116,7 @@ fun MainMenu(navCont: NavController,usuarioViewModel: UserViewModel,tabStateView
                             ){
                                 Icon(imageVector = ImageVector.vectorResource(id = R.drawable.baseline_room_service_24), contentDescription ="call",modifier=Modifier.size(40.dp) )
                                 Text(
-                                    text =  "Ordenar platos elegidos",
+                                    text =  stringResource(id = R.string.mainmenu_ordenar),
                                     textAlign = TextAlign.Center,
                                     modifier = Modifier
                                         .fillMaxWidth()
@@ -143,7 +144,7 @@ fun MainMenu(navCont: NavController,usuarioViewModel: UserViewModel,tabStateView
                             ){
                                 Icon(imageVector = ImageVector.vectorResource(id = R.drawable.baseline_receipt_24), contentDescription ="call",modifier=Modifier.size(40.dp) )
                                 Text(
-                                    text =  "Pedir la cuenta",
+                                    text = stringResource(id = R.string.mainmenu_ticket),
                                     textAlign = TextAlign.Center,
                                     modifier = Modifier
                                         .fillMaxWidth()
@@ -172,7 +173,7 @@ fun MainMenu(navCont: NavController,usuarioViewModel: UserViewModel,tabStateView
                             ){
                                 Icon(Icons.Filled.Notifications, contentDescription ="call",modifier=Modifier.size(40.dp) )
                                 Text(
-                                    text =  "Llamar al mozo",
+                                    text =  stringResource(id = R.string.mainmenu_mozo),
                                     textAlign = TextAlign.Center,
                                     modifier = Modifier
                                         .fillMaxWidth()
@@ -203,7 +204,7 @@ fun MainMenu(navCont: NavController,usuarioViewModel: UserViewModel,tabStateView
                             ){
                                 Icon(imageVector = ImageVector.vectorResource(id = R.drawable.baseline_playlist_add_check_circle_24), contentDescription ="carta",modifier=Modifier.size(40.dp) )
                                 Text(
-                                    text =  "Ver el estado de los pedidos de la mesa",
+                                    text =  stringResource(id = R.string.mainmenu_estado),
                                     textAlign = TextAlign.Center,
                                     modifier = Modifier
                                         .fillMaxWidth()
@@ -231,7 +232,7 @@ fun MainMenu(navCont: NavController,usuarioViewModel: UserViewModel,tabStateView
                             ){
                                 Icon(Icons.Filled.ExitToApp, contentDescription ="exit",modifier=Modifier.size(40.dp) )
                                 Text(
-                                    text =  "Retirarse de la mesa",
+                                    text =  stringResource(id = R.string.mainmenu_exit),
                                     textAlign = TextAlign.Center,
                                     modifier = Modifier
                                         .fillMaxWidth()

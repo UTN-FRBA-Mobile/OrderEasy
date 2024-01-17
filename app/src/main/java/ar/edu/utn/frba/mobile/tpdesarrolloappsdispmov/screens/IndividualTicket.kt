@@ -29,6 +29,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
@@ -47,8 +48,10 @@ fun IndividualTicket(navCont:NavController,userViewModel: UserViewModel){
                 .fillMaxSize()
                 .padding(innerPadding)){
                 Text(
-                    modifier = Modifier.fillMaxWidth().padding(vertical = 4.dp),
-                    text = "Consumido",
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(vertical = 4.dp),
+                    text = stringResource(id = R.string.singleticket_title),
                     textAlign = TextAlign.Center,
                     style = MaterialTheme.typography.titleLarge
                 )
@@ -64,12 +67,16 @@ fun IndividualTicket(navCont:NavController,userViewModel: UserViewModel){
                     ){
                         items(userViewModel.estadoUser.consumos) { e ->
                             total = total+ e.Plato.precio * e.cantidad
-                            Log.i("TOTAL->",total.toString())
                             Row(
                                 horizontalArrangement = Arrangement.SpaceEvenly,
                                 verticalAlignment = Alignment.CenterVertically,
-                                modifier = Modifier.background(color = Color(206,222,213,255))
-                                    .border(0.dp,color= Color.Transparent,shape = RoundedCornerShape(0.dp))
+                                modifier = Modifier
+                                    .background(color = Color(206, 222, 213, 255))
+                                    .border(
+                                        0.dp,
+                                        color = Color.Transparent,
+                                        shape = RoundedCornerShape(0.dp)
+                                    )
                             ) {
                                 Icon(imageVector =Icons.Filled.Done , contentDescription = "item", modifier = Modifier.size(14.dp))
                                 Text(
@@ -87,8 +94,10 @@ fun IndividualTicket(navCont:NavController,userViewModel: UserViewModel){
                         }
                         item{
                             Row {
-                                Text(text = "Total $"+"%,.1f".format(Locale.GERMAN,total),
-                                    modifier = Modifier.fillMaxWidth().padding(2.dp),
+                                Text(text = stringResource(id = R.string.ticket_total)+"%,.1f".format(Locale.GERMAN,total),
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .padding(2.dp),
                                     style= MaterialTheme.typography.displayLarge,
                                     textAlign = TextAlign.End)
                             }
@@ -107,7 +116,7 @@ fun IndividualTicket(navCont:NavController,userViewModel: UserViewModel){
                         contentDescription ="volver",
                         modifier = Modifier.size(30.dp)) },
                     text = { Text(
-                            text = "Pedir la cuenta",
+                            text = stringResource(id = R.string.singleticket_request),
                             style= MaterialTheme.typography.displayMedium
                         ) }
                 )
@@ -118,7 +127,7 @@ fun IndividualTicket(navCont:NavController,userViewModel: UserViewModel){
                         .padding(14.dp),
                     onClick = { navCont.navigate(route="requestTicket")},
                     icon = { Icon(Icons.Filled.ArrowBack,  contentDescription ="volver") },
-                    text = { Text(text = "Volver",style= MaterialTheme.typography.displayMedium) }
+                    text = { Text(text = stringResource(id = R.string.btn_back),style= MaterialTheme.typography.displayMedium) }
                 )
             }
         }

@@ -25,12 +25,14 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.components.TopBar
 import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.components.VolverBtn
 import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.stateData.UserViewModel
+import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.R
 
 @Composable
 fun CallMozo(navCont: NavController,userViewModel: UserViewModel) {
@@ -47,19 +49,21 @@ fun CallMozo(navCont: NavController,userViewModel: UserViewModel) {
                 )
                 {
                     Text(
-                        text = "Puedes solicitar que un mozo se acerque a la mesa si no encuentras" +
-                                " ninguna opción de la aplicación que te permita realizar la acción que deseas",
+                        text = stringResource(id = R.string.callmozo_title),
                         modifier = Modifier.padding(16.dp),
                         textAlign = TextAlign.Justify,
                         style = MaterialTheme.typography.displayMedium
                     )
 
                     ExtendedFloatingActionButton(
-                        modifier = Modifier.fillMaxWidth().wrapContentSize().padding(vertical = 8.dp),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .wrapContentSize()
+                            .padding(vertical = 8.dp),
                         onClick = {showDialog = true},
                         icon = { Icon(Icons.Filled.Notifications,  contentDescription ="call") },
                         text = { Text(
-                            text = "Llamar",
+                            text = stringResource(id = R.string.callmozo_btn),
                             style = MaterialTheme.typography.titleSmall
                         ) },
                     )
@@ -68,9 +72,9 @@ fun CallMozo(navCont: NavController,userViewModel: UserViewModel) {
                         AlertDialog(
                             containerColor = Color(251, 201, 143, 255),
                             icon = { Icon(Icons.Default.Info, "call-mozo") },
-                            title = { Text(text = "Llamar al mozo") },
-                            text = { Text(text = "En un momento un mozo se acercará a la mesa") },
-                            onDismissRequest = { /*TODO*/ },
+                            title = { Text(text = stringResource(id = R.string.callmozo_dialog_title)) },
+                            text = { Text(text = stringResource(id = R.string.callmozo_dialog_txt)) },
+                            onDismissRequest = { },
                             confirmButton = {
                                 TextButton(
                                     colors = ButtonDefaults.buttonColors (
@@ -78,7 +82,7 @@ fun CallMozo(navCont: NavController,userViewModel: UserViewModel) {
                                     ),
                                     onClick = { showDialog = false }
                                 ) {
-                                    Text(text = "ok")
+                                    Text(text = stringResource(id = R.string.btn_ok))
                                 }
                             })
                     }

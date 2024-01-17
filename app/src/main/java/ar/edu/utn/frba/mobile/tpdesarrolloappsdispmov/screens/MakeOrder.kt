@@ -41,15 +41,16 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.R
 import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.components.TopBar
 import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.stateData.MenuViewModel
 import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.stateData.Plato
 import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.stateData.UserViewModel
 import coil.compose.rememberAsyncImagePainter
+import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.R
 
 @Composable
 fun MakeOrder (navCont: NavController, menu: MenuViewModel, userViewModel: UserViewModel) {
@@ -68,10 +69,10 @@ fun MakeOrder (navCont: NavController, menu: MenuViewModel, userViewModel: UserV
                 } else {
                     LazyColumn(modifier = Modifier.fillMaxWidth()) {
                         items(menu.estadoMenu.pedidos) { p ->
-                            if (p.estado == "selected") {
+                            if (p.estado == stringResource(id = R.string.plato_selected)) {
                                 var e = menu.estadoMenu.platos.find { m -> m.idPlato == p.idPlato }
                                 if (e != null) {
-                                    var quantity = menu.estadoMenu.pedidos.find { p -> (p.idPlato == e.idPlato && p.estado == "selected") }?.cantidad ?: 0
+                                    var quantity = menu.estadoMenu.pedidos.find { p -> (p.idPlato == e.idPlato && p.estado == stringResource(id = R.string.plato_selected)) }?.cantidad ?: 0
                                     FoodCardMakeOrder(food = e,
                                         quantity = quantity,
                                         modifier = Modifier.padding(16.dp),
@@ -176,7 +177,7 @@ fun BottomAppBarMakeOrder(navCont: NavController, menu: MenuViewModel, userViewM
                     containerColor = MaterialTheme.colorScheme.primaryContainer,
                 )
             ) {
-                Text(text = "Confirmar pedido", color= Color.Black)
+                Text(text = stringResource(id = R.string.order_confirm), color= Color.Black)
             }
         }
 
@@ -184,8 +185,8 @@ fun BottomAppBarMakeOrder(navCont: NavController, menu: MenuViewModel, userViewM
             AlertDialog(
                 containerColor = Color(251, 201, 143, 255),
                 icon = { Icon(Icons.Default.Info, "make-order") },
-                title = { Text(text = "Ups") },
-                text = { Text(text = "Necesitas tener platos en tu carrito para confirmar el pedido") },
+                title = { Text(text = stringResource(id = R.string.order_dialog_title)) },
+                text = { Text(text = stringResource(id = R.string.order_dialog_txt)) },
                 onDismissRequest = { showDialog = false },
                 confirmButton = {
                     TextButton(
@@ -194,7 +195,7 @@ fun BottomAppBarMakeOrder(navCont: NavController, menu: MenuViewModel, userViewM
                         ),
                         onClick = { showDialog = false }
                     ) {
-                        Text(text = "ok")
+                        Text(text =stringResource(id = R.string.btn_ok))
                     }
                 }
             )
@@ -212,7 +213,7 @@ fun EmptyCartMessage(navCont: NavController) {
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(
-            text = "Ups, tu carrito está vacío",
+            text = stringResource(id = R.string.order_dialog_vacio),
             style = MaterialTheme.typography.labelSmall,
             modifier = Modifier.padding(bottom = 16.dp)
         )
@@ -225,7 +226,7 @@ fun EmptyCartMessage(navCont: NavController) {
                     modifier=Modifier.size(30.dp)
                     )
                    },
-            text = { Text(text = "Volver al menu de platos") },
+            text = { Text(text = stringResource(id = R.string.btn_ok)) },
         )
     }
 }

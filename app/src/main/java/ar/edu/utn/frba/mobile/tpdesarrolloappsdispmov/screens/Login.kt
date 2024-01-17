@@ -22,9 +22,12 @@ import androidx.compose.ui.Modifier
 import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.stateData.UserViewModel
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.datastore.preferences.core.stringPreferencesKey
 import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.components.TopBar
+import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.R
 
 @Composable
 fun Login (usuarioViewModel:UserViewModel){
@@ -37,7 +40,7 @@ fun Login (usuarioViewModel:UserViewModel){
                 .fillMaxSize()
                 .padding(innerPadding)){
                 Text(
-                    text = "Elige un nombre de usuario para identificarte en la mesa",
+                    text = stringResource(id = R.string.login_title),
                     modifier = Modifier.padding(16.dp),
                     textAlign = TextAlign.Justify,
                     style = MaterialTheme.typography.titleLarge
@@ -48,7 +51,7 @@ fun Login (usuarioViewModel:UserViewModel){
                         .padding(14.dp) ,
                     value = nombre,
                     onValueChange ={nombre=it},
-                    label={Text("Ingresa tu nombre")} )
+                    label={Text(text = stringResource(id = R.string.login_label))} )
 
                 ExtendedFloatingActionButton(
                     modifier = Modifier
@@ -58,7 +61,7 @@ fun Login (usuarioViewModel:UserViewModel){
                     onClick = {usuarioViewModel.log(nombre)},
                     icon = { Icon(Icons.Sharp.ArrowForward,  contentDescription ="volver") },
                     text = { Text(
-                        text = "Ingresar",
+                        text = stringResource(id = R.string.login_btn),
                         style = MaterialTheme.typography.titleSmall
                     ) },
                 )
