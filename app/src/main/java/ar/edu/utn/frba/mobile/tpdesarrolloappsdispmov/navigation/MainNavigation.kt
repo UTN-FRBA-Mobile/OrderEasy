@@ -23,7 +23,6 @@ import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.screens.Notificacion
 import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.screens.OrdersState
 import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.screens.ReadMenu
 import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.screens.RequestTicket
-import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.screens.ScanQr
 import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.stateData.MenuViewModel
 import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.stateData.TableViewModel
 import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.stateData.UserViewModel
@@ -39,7 +38,6 @@ fun MainNavigation (tabStateViewModel: TableViewModel,menuStateViewModel: MenuVi
         composable(route="readmenu"){ ReadMenu(navController,menuStateViewModel,usuarioViewModel) }
         composable(route="makeorder"){ MakeOrder(navController,menuStateViewModel,usuarioViewModel) }
         composable(route="callmozo"){ CallMozo(navController,usuarioViewModel) }
-        composable(route="scanqr"){ ScanQr(navController,usuarioViewModel) }
         composable(route="closetable"){ CloseTable(navController,usuarioViewModel) }
         composable(route="ordersstate"){OrdersState(navController,tabStateViewModel,usuarioViewModel) }
         composable(route="requestticket"){ RequestTicket(navController,usuarioViewModel,tabStateViewModel) }

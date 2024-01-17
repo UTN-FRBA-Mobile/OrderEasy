@@ -1,5 +1,6 @@
 package ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.screens
 
+import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -30,9 +31,19 @@ import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.R
 import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.components.TopBar
 import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.stateData.TableViewModel
 import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.stateData.UserViewModel
+import com.journeyapps.barcodescanner.ScanContract
+import com.journeyapps.barcodescanner.ScanOptions
 
 @Composable
 fun MainMenu(navCont: NavController,usuarioViewModel: UserViewModel,tabStateViewModel:TableViewModel) {
+    val scanLauncher = rememberLauncherForActivityResult(ScanContract()) { result ->
+        if (result.contents != null) {
+            val parts = result.contents.split("/")
+            val idMesa = parts[parts.indexOf("registrarse") + 1]
+            val hash = parts[parts.indexOf("registrarse") + 2]
+            usuarioViewModel.takeTable(idMesa.toInt(), hash)
+        }
+    }
     Scaffold (
         topBar = {TopBar(usuarioViewModel)},
         content = { innerPadding ->
@@ -52,8 +63,14 @@ fun MainMenu(navCont: NavController,usuarioViewModel: UserViewModel,tabStateView
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .padding(horizontal = 40.dp, vertical = 8.dp),
-                            onClick = { navCont.navigate(route="scanqr")},
-
+                                onClick = {
+                                    val options = ScanOptions()
+                                    options.setDesiredBarcodeFormats(ScanOptions.QR_CODE)
+                                    options.setPrompt("")
+                                    options.setBeepEnabled(false)
+                                    options.setBarcodeImageEnabled(true)
+                                    scanLauncher.launch(options)
+                                },
                         ){
                             Row (
                                 modifier = Modifier.padding(horizontal=10.dp, vertical = 14.dp),
