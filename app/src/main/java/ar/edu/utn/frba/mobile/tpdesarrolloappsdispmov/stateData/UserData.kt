@@ -7,6 +7,7 @@ data class UserData(
     val idMesa:Int=0,
     val registrandoUsuarioApi:Boolean = false,
     val errorRegistrandoUsuarioApi:Boolean = false,
+    val pidiendoDatos:Boolean=true,
     val isLogged:Boolean=false,
     val requestingData:Boolean=true,
     val initializatingApp:Boolean=true,
@@ -17,5 +18,6 @@ data class UserData(
     val gastoTotDivide:String = "",
     val gastoIndDivide:String = "",
     val cantDivide:String = "",
-    val game:ChallengeData= ChallengeData(0,"",0,0,0.0f,"vacio",0)
+    val game:ChallengeData= ChallengeData(0,"",0,0,0.0f,"vacio",0),
+    val resultPedidoApi:Int = 0,
 )

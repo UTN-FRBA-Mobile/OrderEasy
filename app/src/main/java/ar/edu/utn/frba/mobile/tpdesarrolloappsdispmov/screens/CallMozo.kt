@@ -68,25 +68,29 @@ fun CallMozo(navCont: NavController,userViewModel: UserViewModel) {
                         ) },
                     )
                     VolverBtn(navCont)
-                    if (showDialog) {
-                        AlertDialog(
-                            containerColor = Color(251, 201, 143, 255),
-                            icon = { Icon(Icons.Default.Info, "call-mozo") },
-                            title = { Text(text = stringResource(id = R.string.callmozo_dialog_title)) },
-                            text = { Text(text = stringResource(id = R.string.callmozo_dialog_txt)) },
-                            onDismissRequest = { },
-                            confirmButton = {
-                                TextButton(
-                                    colors = ButtonDefaults.buttonColors (
-                                        containerColor = MaterialTheme.colorScheme.inverseSurface,
-                                    ),
-                                    onClick = { showDialog = false }
-                                ) {
-                                    Text(text = stringResource(id = R.string.btn_ok))
-                                }
-                            })
-                    }
                 }
+            }
+            if (userViewModel.estadoUser.resultPedidoApi == 1) {
+                AlertDialog(
+                    containerColor = Color(251, 201, 143, 255),
+                    icon = { Icon(Icons.Default.Info, "call-mozo") },
+                    title = { Text(text = stringResource(id = R.string.callmozo_dialog_title)) },
+                    text = { Text(text = stringResource(id = R.string.callmozo_dialog_txt)) },
+                    onDismissRequest = { },
+                    confirmButton = {
+                        TextButton(
+                            colors = ButtonDefaults.buttonColors (
+                                containerColor = MaterialTheme.colorScheme.inverseSurface,
+                            ),
+                            onClick = {
+                                userViewModel.desactivarErrorPedidoApi()
+                                navCont.navigate(route="mainmenu")
+                            }
+                        ) {
+                            Text(text = stringResource(id = R.string.btn_ok))
+                        }
+                    }
+                )
             }
         }
     )

@@ -204,5 +204,21 @@ class UserViewModel (private val usuarioServicio: ReqsService,private val dataSt
         SocketManager.sendMsj("hola soy order easy")
         //SocketManager.disconnect()
     }
-
+    fun llamarmozo(idMesa: Int){
+        viewModelScope.launch {
+            estadoUser = estadoUser.copy(pidiendoDatos = true, resultPedidoApi = 0)
+            val rta = usuarioServicio.llamarmozo(idMesa)
+            estadoUser = if(rta.isSuccessful){
+                estadoUser.copy(resultPedidoApi = 1) //OK
+            }else{
+                estadoUser.copy(resultPedidoApi = 2) //ERROR
+            }
+            estadoUser = estadoUser.copy( pidiendoDatos = false )
+        }
+    }
+    fun desactivarErrorPedidoApi(){
+        viewModelScope.launch {
+            estadoUser = estadoUser.copy( resultPedidoApi = 0)
+        }
+    }
 }

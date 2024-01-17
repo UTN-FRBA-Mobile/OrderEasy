@@ -59,4 +59,6 @@ interface ReqsService {
     suspend fun pay(@Path("idCliente") idCliente: Int): Response<ResponseApiStandardData>
     @GET("/mesas/exit/{idCliente}")
     suspend fun exit(@Path("idCliente") idCliente: Int):Response<ResponseApiStandardData>
+    @GET("/mesas/llamarmozo/{idMesa}")
+    suspend fun llamarmozo(@Path("idMesa") idMesa: Int):Response<ResponseApiStandardData>
 }
