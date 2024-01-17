@@ -25,17 +25,25 @@ import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.MainActivity
 //import androidx.core.net.toUri
 //import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.InitNotifications
 import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.R
+import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.apiReqs.ReqsService
 import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.stateData.UserSavedData
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.launch
 
 //val Context.dataStore by preferencesDataStore(name="USER_DATA")
 class MyFirebaseMessagingService: FirebaseMessagingService() {
-    /*override fun onNewToken(token: String) {
+    override fun onNewToken(token: String) {
         super.onNewToken(token)
-        //ReqsService.instance.updatetoken(token)
-    }*/
+        val scope = CoroutineScope(Job() + Dispatchers.IO)
+        scope.launch {
+            ReqsService.instance.actualizarToken(token)
+        }
+    }
     override fun onMessageReceived(message: RemoteMessage) {
         super.onMessageReceived(message)
         //val payload:MutableMap<String,String> = message.data

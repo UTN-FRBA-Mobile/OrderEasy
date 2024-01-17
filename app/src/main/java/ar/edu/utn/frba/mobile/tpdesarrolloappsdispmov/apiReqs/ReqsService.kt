@@ -31,6 +31,8 @@ interface ReqsService {
             .build()
             .create(ReqsService::class.java)
     }
+    @GET("/clientes/updatetoken/{idCliente}/{token}")
+    suspend fun actualizarToken(@Path("token") token:String): Response<ResponseApiStandardData>
     @GET("/clientes/{idCliente}/{token")
     suspend fun updatetoken(@Path("idCliente") idCliente: Int, @Path("token") token:String): Response<ResponseApiStandardData>
     @GET("mesas/compas/{idMesa}")
