@@ -19,6 +19,7 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.R
 
@@ -32,7 +33,9 @@ fun BarraSuperior (userViewModel: VistaModeloUsuario){
         ),
         title = {
         Row (
-            modifier = Modifier.fillMaxWidth().padding(vertical = 4.dp),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(vertical = 4.dp),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween
         ){
@@ -40,7 +43,7 @@ fun BarraSuperior (userViewModel: VistaModeloUsuario){
                 Row (verticalAlignment = Alignment.CenterVertically){
                     Icon(Icons.Filled.AccountCircle, contentDescription = "usuario", modifier = Modifier.size(20.dp))
                     Text(
-                        text = userViewModel.estadoUser.nombre,
+                        text = userViewModel.estadoUsuario.nombre,
                         style = MaterialTheme.typography.titleSmall
                     )
                 }
@@ -48,7 +51,7 @@ fun BarraSuperior (userViewModel: VistaModeloUsuario){
             Box {
                 Row (verticalAlignment = Alignment.CenterVertically){
                     Icon(painter = painterResource(id = R.drawable.baseline_restaurant_24),"resto",modifier = Modifier.size(24.dp))
-                    Text(text = "OrderEasy",
+                    Text(text = stringResource(id = R.string.topbar_app),
                         style = MaterialTheme.typography.titleSmall
                     )
                 }

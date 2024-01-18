@@ -111,14 +111,14 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    if(usuarioViewModel.estadoUser.initializatingApp){
+                    if(usuarioViewModel.estadoUsuario.initializatingApp){
                         Firebase.messaging.token.addOnCompleteListener {
                             if(!it.isSuccessful){
                                 println("error en obtencion de token")
                                 return@addOnCompleteListener
                             }
                             val token = it.result
-                            usuarioViewModel.setIdDevice(token)
+                            usuarioViewModel.setearDispositivoId(token)
                         }
                         /*if(intent.extras?.getString("action")=="desafio"){
                             Log.i("MAINACTIVITY--->","DESAFIO")
@@ -134,16 +134,16 @@ class MainActivity : ComponentActivity() {
                         usuarioViewModel.setGame(idPartida,"jugando")
                     }*/
                         if(intent.extras?.getString("action")=="share"){
-                            usuarioViewModel.setInviteDivide(
+                            usuarioViewModel.setearInvitacionDividir(
                                 intent.extras?.getString("total")?:"",
                                 intent.extras?.getString("cantidad")?:"",
                                 intent.extras?.getString("pago")?:""
                             )
                         }else{
-                            usuarioViewModel.setInviteDivide("","","")
+                            usuarioViewModel.setearInvitacionDividir("","","")
                         }
-                        usuarioViewModel.initializating()
-                        menuStateViewModel.getMenu()
+                        usuarioViewModel.inicializar()
+                        menuStateViewModel.obtenerMenu()
                     }
                     Starting(
                         tabStateViewModel,
@@ -159,12 +159,12 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun Starting(tableViewModel: VistaModeloMesa, usuarioViewModel: VistaModeloUsuario, menuStateViewModel: VistaModeloMenu, navController: NavHostController) {
-    if(usuarioViewModel.estadoUser.initializatingApp || usuarioViewModel.estadoUser.requestingData){
+    if(usuarioViewModel.estadoUsuario.initializatingApp || usuarioViewModel.estadoUsuario.pidiendoDatos){
         Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
             CircularProgressIndicator()
         }
-    }else if(usuarioViewModel.estadoUser.isLogged){
-        if(usuarioViewModel.estadoUser.idDevice!=""){
+    }else if(usuarioViewModel.estadoUsuario.estaIngresado){
+        if(usuarioViewModel.estadoUsuario.idDispositivo!=""){
             NavegacionPrincipal(tableViewModel,menuStateViewModel,usuarioViewModel, navController)
         }else{
             Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {

@@ -7,58 +7,72 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.pedidosApi.ServicioDePedidos
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 class VistaModeloMesa (private val servicioApi: ServicioDePedidos): ViewModel() {
     var estadoMesa by mutableStateOf(TipoDatoEstadoPedidosMesa())
         private set
-    fun getPedidosState (idMesa:Int){
+    fun obtenerEstadoPedidos (idMesa:Int){
         viewModelScope.launch {
-            val pedidos = servicioApi.getStateTable(idMesa)
+            estadoMesa = estadoMesa.copy(pidiendoDatos = true)
+            val pedidos = servicioApi.obtenerEstadoDeMesa(idMesa)
             if(pedidos.isSuccessful){
-                if(pedidos.body() != null){
-                    estadoMesa = estadoMesa.copy(
-                        pedidosMesa = pedidos.body()!!.comensales,
-                        requestingData = false
-                    )
+                if(pedidos.body() != null) {
+                    estadoMesa = estadoMesa.copy(pedidosMesa = pedidos.body()!!.comensales, resultPedidoApi = 1)
                 }
+            }else{
+                estadoMesa = estadoMesa.copy( resultPedidoApi = 2)
             }
+            estadoMesa = estadoMesa.copy(pidiendoDatos = false)
         }
     }
-    fun getConsumosState (idMesa:Int,idCliente: Int){
+    fun obtenerEstadoConsumos (idMesa:Int, idCliente: Int){
         viewModelScope.launch {
-            val pedidos = servicioApi.getConsumoTable(idMesa)
-            delay(1000)
+            estadoMesa = estadoMesa.copy( pidiendoConsumos = true, resultPedidoConsumos = 0)
+            val pedidos = servicioApi.obtenerConsumosDeLaMesa(idMesa)
             if(pedidos.isSuccessful){
                 if(pedidos.body() != null){
+                    val consumComensales: MutableList<ComensalData> = mutableListOf()
+                    consumComensales.addAll(pedidos.body()!!.comensales)
+                    consumComensales.forEach{ e ->
+                        var aux: ArrayList<PedidoData> = ArrayList<PedidoData>()
+                        aux.addAll(e.pedidos)
+                        e.pedidos.clear()
+                        e.pedidos.addAll(aux.filter{it.estado != "PAGANDO"})
+                    }
                     estadoMesa = estadoMesa.copy(
                         consumosMesa = pedidos.body()!!.comensales,
-                        invitados = pedidos.body()!!.comensales.map { c ->
+                        invitados = consumComensales.map { c ->
                             UserInvitedData(
                                 c.idCliente,
                                 c.nombre,
-                                c.Pedidos.fold(0.0f ) {acc, i -> acc + i.Plato.precio * i.cantidad.toFloat()},
-                                selected= c.idCliente==idCliente
+                                c.pedidos.fold(0.0f ) { acc, i -> acc + i.plato.precio * i.cantidad.toFloat()},
+                                seleccionado= c.idCliente==idCliente,
+                                c.pedidos.any {it.estado=="PREPARANDO"}
                             )}.toMutableList(),
-                        requestingData = false
+                        resultPedidoConsumos = 1,
+                        pidiendoConsumos = false
                     )
                 }
+            }else{
+                estadoMesa = estadoMesa.copy( resultPedidoConsumos = 2, pidiendoConsumos = false)
             }
         }
     }
-    fun setRequestingDataOn(){
+    fun setearPedidoDatos(){
         estadoMesa = estadoMesa.copy(
-            requestingData = true
+            pidiendoDatos = true
         )
     }
-    fun selectInvited (idCliente:Int){
+    fun limpiarPedidoConsumos(){
+        estadoMesa = estadoMesa.copy( pidiendoConsumos = false)
+    }
+    fun seleccionarInvitados (idCliente:Int){
         viewModelScope.launch {
             val invitadosAux: MutableList<UserInvitedData> = mutableListOf()
             invitadosAux.addAll(estadoMesa.invitados)
             val indice =estadoMesa.invitados.indexOfFirst { it.idCliente == idCliente }
-            invitadosAux[indice].selected = !estadoMesa.invitados[indice].selected
-            val bul=estadoMesa.requestingData
+            invitadosAux[indice].seleccionado = !estadoMesa.invitados[indice].seleccionado
             estadoMesa = estadoMesa.copy( invitados = mutableListOf())// , requestingData = !bul)
             estadoMesa = estadoMesa.copy( invitados = invitadosAux)
         }
@@ -67,21 +81,34 @@ class VistaModeloMesa (private val servicioApi: ServicioDePedidos): ViewModel() 
         viewModelScope.launch {
             val invitadosAux: MutableList<UserInvitedData> = mutableListOf()
             invitadosAux.addAll(estadoMesa.invitados)
-            invitadosAux.forEach{it.selected=false}
+            invitadosAux.forEach{it.seleccionado=false}
             estadoMesa = estadoMesa.copy(invitados = invitadosAux)
         }
     }
-    fun pagarInvitado(idCliente: Int){
+    fun pagarInvitado(idCliente: Int) {
         viewModelScope.launch {
-            var param = arrayListOf<Int>()
+            estadoMesa = estadoMesa.copy(pidiendoDatos = true)
+            val param = arrayListOf<Int>()
             estadoMesa.invitados.forEach {
-                if (it.selected && it.idCliente!=idCliente) param.add(it.idCliente)
+                if (it.seleccionado && it.idCliente != idCliente) param.add(it.idCliente)
             }
             val reqOrd = servicioApi.pagarInvitados(idCliente, Invitados(pagoscli = param))
-            //Limpiar:
-            estadoMesa = estadoMesa.copy(
-                invitados = mutableListOf(),
-            )
+
+            estadoMesa = if (reqOrd.isSuccessful) {
+                //Limpiar
+                estadoMesa.copy(
+                    invitados = mutableListOf(),
+                    resultPedidoApi = 1
+                )
+            } else {
+                estadoMesa.copy(resultPedidoApi = 2)
+            }
+            estadoMesa = estadoMesa.copy(pidiendoDatos = false)
+        }
+    }
+    fun desactivarErrorPedidoApi(){
+        viewModelScope.launch {
+            estadoMesa = estadoMesa.copy( resultPedidoApi = 0)
         }
     }
 }

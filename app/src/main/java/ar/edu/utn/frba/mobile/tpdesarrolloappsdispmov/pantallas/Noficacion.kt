@@ -38,8 +38,8 @@ fun Notificacion(navController: NavController,userViewModel: VistaModeloUsuario)
                 )
                 {
                     Text(
-                        text = "Se dividirá el total gastado en la mesa de $${userViewModel.estadoUser.gastoTotDivide} entre los ${userViewModel.estadoUser.cantDivide} comensales," +
-                                " pagando cada uno $${userViewModel.estadoUser.gastoIndDivide}. Si alguno de los integrantes de la mesa no acepta la propuesta, entonces se cancelará ésta" +
+                        text = "Se dividirá el total gastado en la mesa de $${userViewModel.estadoUsuario.gastoADividir} entre los ${userViewModel.estadoUsuario.cantDividida} comensales," +
+                                " pagando cada uno $${userViewModel.estadoUsuario.gastoIndDivide}. Si alguno de los integrantes de la mesa no acepta la propuesta, entonces se cancelará ésta" +
                                 " forma de pago",
                         modifier = Modifier.padding(16.dp),
                         textAlign = TextAlign.Justify,
@@ -54,7 +54,7 @@ fun Notificacion(navController: NavController,userViewModel: VistaModeloUsuario)
                         modifier = Modifier
                             .padding(10.dp),
                         onClick = {
-                            userViewModel.unsetInviteDivide()
+                            userViewModel.limpiarInvitacionDividir()
                             userViewModel.aceptarDividirConsumo()
                             navController.navigate(route="mainmenu")
                         },
@@ -65,7 +65,7 @@ fun Notificacion(navController: NavController,userViewModel: VistaModeloUsuario)
                         modifier = Modifier
                             .padding(10.dp),
                         onClick = {
-                            userViewModel.unsetInviteDivide()
+                            userViewModel.limpiarInvitacionDividir()
                             userViewModel.rechazarDividirConsumo()
                             navController.navigate(route="mainmenu")
                         },

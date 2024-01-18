@@ -1,5 +1,7 @@
 package ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.pantallas
 
+import android.view.Gravity
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -41,6 +43,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
@@ -55,7 +58,7 @@ import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.R
 @Composable
 fun OrdenarPedido (navCont: NavController, menu: VistaModeloMenu, userViewModel: VistaModeloUsuario) {
     var total:Float = remember { 0.0f }
-    total = menu.getTotalCartPrice()
+    total = menu.obtenerPrecioCarroTotal()
 
     Scaffold (
         topBar = { BarraSuperior(userViewModel)},
@@ -77,10 +80,10 @@ fun OrdenarPedido (navCont: NavController, menu: VistaModeloMenu, userViewModel:
                                         quantity = quantity,
                                         modifier = Modifier.padding(16.dp),
                                         onAddToCart = {
-                                            menu.addItem(e.idPlato)
+                                            menu.sumarItem(e.idPlato)
                                         },
                                         onRemoveToCart = {
-                                            menu.delItem(e.idPlato)
+                                            menu.restarItem(e.idPlato)
                                         })
                                 }
                             }
@@ -125,7 +128,7 @@ fun FoodCardMakeOrder(food: Plato, quantity: Int, modifier: Modifier, onAddToCar
 @Composable
 fun BottomAppBarMakeOrder(navCont: NavController, menu: VistaModeloMenu, userViewModel: VistaModeloUsuario) {
     var showDialog by remember { mutableStateOf(false) }
-
+    val toast = Toast.makeText(LocalContext.current, stringResource(id = R.string.error_api), Toast.LENGTH_SHORT)
     val gradientBrush = Brush.verticalGradient(
         colors = listOf(Color.DarkGray, Color.White),
         startY = 1.0f,
@@ -153,7 +156,7 @@ fun BottomAppBarMakeOrder(navCont: NavController, menu: VistaModeloMenu, userVie
                     modifier = Modifier.padding(start = 8.dp, end = 8.dp)
                 )
                 Text(
-                    text = "$${menu.getTotalCartPrice()}",
+                    text = "$${menu.obtenerPrecioCarroTotal()}",
                     style = MaterialTheme.typography.labelMedium,
                     modifier = Modifier.padding(start = 8.dp, end = 8.dp)
                 )
@@ -162,7 +165,7 @@ fun BottomAppBarMakeOrder(navCont: NavController, menu: VistaModeloMenu, userVie
             Button(
                 onClick = {
                     if(menu.estadoMenu.pedidos.size > 0){
-                        menu.orderItem(userViewModel.estadoUser.idMesa,userViewModel.estadoUser.idCliente)
+                        menu.ordenarItem(userViewModel.estadoUsuario.idMesa,userViewModel.estadoUsuario.idCliente)
                         navCont.navigate(route="mainmenu")
                     } else {
                         showDialog = true
@@ -199,6 +202,11 @@ fun BottomAppBarMakeOrder(navCont: NavController, menu: VistaModeloMenu, userVie
                     }
                 }
             )
+        }
+        if (menu.estadoMenu.errorPedidoApi){
+            toast.setGravity(Gravity.TOP,0,0)
+            toast.show()
+            menu.cancelErrorReqApi()
         }
     }
 }

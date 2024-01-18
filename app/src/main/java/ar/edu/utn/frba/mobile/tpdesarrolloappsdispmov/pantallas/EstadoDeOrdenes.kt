@@ -54,7 +54,7 @@ fun EstadoDeOrdenes(navCont: NavController, viewmodelo: VistaModeloMesa, vistaMo
                     textAlign = TextAlign.Center,
                     style = MaterialTheme.typography.titleMedium
                 )
-                if(viewmodelo.estadoMesa.requestingData){
+                if(viewmodelo.estadoMesa.pidiendoDatos){
                     Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                         CircularProgressIndicator()
                     }
@@ -82,7 +82,7 @@ fun EstadoDeOrdenes(navCont: NavController, viewmodelo: VistaModeloMesa, vistaMo
                                     }
                                 }
                                 item {
-                                    cli.Pedidos.forEach { ped ->
+                                    cli.pedidos.forEach { ped ->
                                         Row(
                                             horizontalArrangement = Arrangement.SpaceEvenly,
                                             verticalAlignment = Alignment.CenterVertically,
@@ -103,7 +103,7 @@ fun EstadoDeOrdenes(navCont: NavController, viewmodelo: VistaModeloMesa, vistaMo
                                                     .weight(1f)
                                             )
                                             Text(
-                                                text = ped.Plato.nombre + " (x" + ped.cantidad.toString() + ")",
+                                                text = ped.plato.nombre + " (x" + ped.cantidad.toString() + ")",
                                                 modifier = Modifier.weight(8f),
                                                 style = MaterialTheme.typography.displaySmall
                                             )
@@ -124,7 +124,7 @@ fun EstadoDeOrdenes(navCont: NavController, viewmodelo: VistaModeloMesa, vistaMo
                         ExtendedFloatingActionButton(
                             modifier = Modifier.align(Alignment.TopEnd).padding(0.dp)
                                 .wrapContentSize(),
-                            onClick = { viewmodelo.getPedidosState(vistaModeloUsuario.estadoUser.idMesa) },
+                            onClick = { viewmodelo.obtenerEstadoPedidos(vistaModeloUsuario.estadoUsuario.idMesa) },
                             shape = CircleShape,
                             containerColor = MaterialTheme.colorScheme.secondaryContainer,
                             contentColor = MaterialTheme.colorScheme.secondary

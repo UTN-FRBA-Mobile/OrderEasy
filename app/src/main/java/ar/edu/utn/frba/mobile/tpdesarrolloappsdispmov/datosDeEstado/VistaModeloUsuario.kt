@@ -18,118 +18,120 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 class VistaModeloUsuario (private val usuarioServicio: ServicioDePedidos, private val dataStore: DataStore<Preferences>): ViewModel() {
-    var estadoUser by mutableStateOf(TipoDatoUsuario())
+    var estadoUsuario by mutableStateOf(TipoDatoUsuario())
         private set
-    /*init {
-        estadoUser = estadoUser.copy(requestingData=true)
-        initializating()
-    }*/
-    fun setInviteDivide(tot:String,cant:String,indiv:String){
-        Log.i("VistaModeloUsuario--invite-->","tot->$tot cant->$cant indiv->$indiv")
+    fun setearInvitacionDividir(tot:String, cant:String, indiv:String){
         viewModelScope.launch {
-            estadoUser = estadoUser.copy(
+            estadoUsuario = estadoUsuario.copy(
                 gastoIndDivide = indiv,
-                gastoTotDivide = tot,
-                cantDivide = cant,
-                requestingData = false
+                gastoADividir = tot,
+                cantDividida = cant,
+                pidiendoDatos = false
             )
-            Log.i("VistaModeloUsuario--stat-->","estado.gastoInd->${estadoUser.gastoIndDivide} .gastoTot->${estadoUser.gastoIndDivide}")
         }
     }
-    fun unsetInviteDivide(){
+    fun limpiarInvitacionDividir(){
         viewModelScope.launch {
-            estadoUser = estadoUser.copy(
+            estadoUsuario = estadoUsuario.copy(
                 gastoIndDivide = "",
-                gastoTotDivide = "",
-                cantDivide = "",
+                gastoADividir = "",
+                cantDividida = "",
             )
         }
     }
-    fun log(nomb:String){
+    fun ingresar(nomb:String){
         viewModelScope.launch {
-            estadoUser = estadoUser.copy(registrandoUsuarioApi = true)
-            val idCli = usuarioServicio.getLogged(nomb,estadoUser.idDevice)
+            estadoUsuario = estadoUsuario.copy(registrandoUsuarioApi = true)
+            val idCli = usuarioServicio.ingresar(nomb,estadoUsuario.idDispositivo)
             if (idCli.isSuccessful) {
                 dataStore.edit { preferences ->
                     preferences[intPreferencesKey("idCliente")] = idCli.body()!!.idCliente
-                    preferences[stringPreferencesKey("idDevice")] = estadoUser.idDevice
+                    preferences[stringPreferencesKey("idDevice")] = estadoUsuario.idDispositivo
                     preferences[stringPreferencesKey("nombre")] = nomb
                 }
                 //SETEAR VIEWMODEL
-                setUser(nomb, idCli.body()!!.idCliente)
+                setearUsuario(nomb, idCli.body()!!.idCliente)
             }else{
-                estadoUser = estadoUser.copy(errorRegistrandoUsuarioApi = true)
+                estadoUsuario = estadoUsuario.copy(errorRegistrandoUsuarioApi = true)
             }
-            estadoUser = estadoUser.copy(registrandoUsuarioApi = false)
+            estadoUsuario = estadoUsuario.copy(registrandoUsuarioApi = false)
         }
     }
     fun cancelarErrorRegistroUsuarioApi(){
         viewModelScope.launch {
-            estadoUser = estadoUser.copy( errorRegistrandoUsuarioApi = false)
+            estadoUsuario = estadoUsuario.copy( errorRegistrandoUsuarioApi = false)
         }
     }
-    fun setUser(nomb:String,idCli:Int){
+    fun cancelarErrorPedApi(){
+        viewModelScope.launch {
+            estadoUsuario = estadoUsuario.copy( errorPedidoApi = false)
+        }
+    }
+    fun setearUsuario(nomb:String, idCli:Int){
         viewModelScope.launch{
-            estadoUser = estadoUser.copy(
+            estadoUsuario = estadoUsuario.copy(
                 nombre = nomb,
                 idCliente = idCli,
-                isLogged = true,
-                //requestingLog = false
+                estaIngresado = true,
             )
         }
     }
-    fun setIdDevice(id:String) {
+    fun setearDispositivoId(id:String) {
         viewModelScope.launch {
-            estadoUser = estadoUser.copy(idDevice = id)
+            estadoUsuario = estadoUsuario.copy(idDispositivo = id)
         }
     }
-    fun takeTable(idMesa:Int,hash:String){
+    fun tomarMesa(idMesa:Int, hash:String){
         viewModelScope.launch {
             Log.i("TAKE-TABLE-->","OK")
-            Log.i("TAKE-TABLE-idCli->",estadoUser.idCliente.toString())
+            Log.i("TAKE-TABLE-idCli->",estadoUsuario.idCliente.toString())
             Log.i("TAKE-TABLE-idMesa->",idMesa.toString())
             Log.i("TAKE-TABLE-hash->",hash)
-            val rta= usuarioServicio.takeTable(idMesa,estadoUser.idCliente,hash)
-            //Log.i("TAKE-TAB-SERV-->",rta.toString())
-            estadoUser = estadoUser.copy(idMesa=idMesa, jwt =rta.body()!!.token )
-            dataStore.edit { preferences -> preferences[intPreferencesKey("idMesa")]=idMesa }
+            val rta= usuarioServicio.registrarseEnMesa(idMesa,estadoUsuario.idCliente,hash)
+            if (rta.isSuccessful){
+                estadoUsuario = estadoUsuario.copy(idMesa=idMesa, jwt =rta.body()!!.token )
+                dataStore.edit { preferences -> preferences[intPreferencesKey("idMesa")]=idMesa }
+            }else{
+                estadoUsuario = estadoUsuario.copy( errorPedidoApi = true)
+            }
+            estadoUsuario = estadoUsuario.copy(pidiendoDatos = false)
         }
     }
-    fun initializating(){
+    fun inicializar(){
         Log.i("VistaModeloUsuario--->","INITIALIZATING")
         viewModelScope.launch {
             //Log.i("VistaModeloUsuario--launch1-->","launching")
             val user = mapUser(dataStore.data.first().toPreferences())
             //Log.i("VistaModeloUsuario--launch2-->",user.toString())
-            estadoUser = estadoUser.copy(
+            estadoUsuario = estadoUsuario.copy(
                 idCliente = user.idCliente,
                 nombre=user.nombre,
                 idMesa = user.idMesa,
-                //idDevice=user.idDevice,
                 initializatingApp = false,
-                isLogged = if(user.idCliente==0)false else true)
+                estaIngresado = user.idCliente != 0//if(user.idCliente==0)false else true)
+            )
             }
-        Log.i("VistaModeloUsuario-->","POST-INITIALIZATING->${estadoUser.toString()}")
+        Log.i("VistaModeloUsuario-->","POST-INITIALIZATING->${estadoUsuario.toString()}")
         }
     fun clearSavedData(){
         viewModelScope.launch {
-            estadoUser = estadoUser.copy(
+            estadoUsuario = estadoUsuario.copy(
                 idCliente = 0,
                 nombre = "",
                 idMesa = 0,
-                isLogged = false
+                estaIngresado = false
             )
             dataStore.edit {  preferences -> preferences.clear() }
         }
     }
-    fun exitTable(){
+    fun retirarseDeMesa(){
         viewModelScope.launch {
-            usuarioServicio.exit(estadoUser.idCliente)
-            estadoUser = estadoUser.copy(
+            usuarioServicio.retirarse(estadoUsuario.idCliente)
+            estadoUsuario = estadoUsuario.copy(
                 idMesa = 0,
                 gastoIndDivide = "",
-                gastoTotDivide = "",
-                cantDivide = ""
+                gastoADividir = "",
+                cantDividida = ""
             )
             dataStore.edit { preferences -> preferences[intPreferencesKey("idMesa")]=0 }
         }
@@ -141,60 +143,94 @@ class VistaModeloUsuario (private val usuarioServicio: ServicioDePedidos, privat
         val idDevice=preferences[stringPreferencesKey("idDevice")]?:"vacio"
         return TipoDatoUsuarioAlmacenado(idDevice,nomb,idCli,idMesa)
     }
-    fun getConsumo (){
+    fun obtenerConsumo (){
         viewModelScope.launch {
-            delay(1000)
-            val consumidos = usuarioServicio.getConsumo(estadoUser.idCliente)
+            estadoUsuario = estadoUsuario.copy( cargandoConsumo = true)
+            //delay(1000)
+            val consumidos = usuarioServicio.obtenerConsumo(estadoUsuario.idCliente)
             if(consumidos.isSuccessful){
                 if(consumidos.body() != null){
-                    estadoUser = estadoUser.copy(
+                    estadoUsuario = estadoUsuario.copy(
                         consumos = consumidos.body()!!.consumo,
-                        loadingConsumo = false
+                        resultadoCargandoConsumo = 1,
+                        cargandoConsumo = false
                     )
                 }
+            }else{
+                estadoUsuario = estadoUsuario.copy(
+                    resultadoCargandoConsumo = 2,
+                    cargandoConsumo = false)
             }
         }
     }
     fun pagar(){
         viewModelScope.launch {
-            usuarioServicio.pay(estadoUser.idCliente)
+            estadoUsuario = estadoUsuario.copy(pidiendoDatos = true, resultPedidoApi = 0)
+            val rta = usuarioServicio.pagarIndividual(estadoUsuario.idCliente)
+            estadoUsuario = if(rta.isSuccessful){
+                estadoUsuario.copy(resultPedidoApi = 1)
+            }else{
+                estadoUsuario.copy(resultPedidoApi = 2)
+            }
+            estadoUsuario = estadoUsuario.copy( pidiendoDatos = false )
         }
     }
     fun rechazarDividirConsumo(){
         viewModelScope.launch {
-            usuarioServicio.pagarDivididos(estadoUser.idMesa,estadoUser.idCliente,"no")
+            estadoUsuario = estadoUsuario.copy(pidiendoDatos = true)
+            val rta = usuarioServicio.pagarDivididos(estadoUsuario.idMesa,estadoUsuario.idCliente,"no")
+            if (rta.isSuccessful){
+                limpiarInvitacionDividir()
+            }else{
+                estadoUsuario = estadoUsuario.copy(errorPedidoApi = true)
+            }
+            estadoUsuario = estadoUsuario.copy(pidiendoDatos = false)
         }
     }
     fun aceptarDividirConsumo(){
         viewModelScope.launch {
-            usuarioServicio.pagarDivididos(estadoUser.idMesa,estadoUser.idCliente,"si")
+            estadoUsuario = estadoUsuario.copy(pidiendoDatos = true)
+            val rta = usuarioServicio.pagarDivididos(estadoUsuario.idMesa,estadoUsuario.idCliente,"si")
+            if (rta.isSuccessful){
+                limpiarInvitacionDividir()
+            }else{
+                estadoUsuario = estadoUsuario.copy(errorPedidoApi = true)
+            }
+            estadoUsuario = estadoUsuario.copy(pidiendoDatos = false)
         }
     }
     fun iniciarDividirConsumo(){
         viewModelScope.launch {
-            usuarioServicio.pagarDivididos(estadoUser.idMesa,estadoUser.idCliente,"start")
+            estadoUsuario = estadoUsuario.copy(pidiendoDatos = true)
+            val rta =  usuarioServicio.pagarDivididos(estadoUsuario.idMesa,estadoUsuario.idCliente,"start")
+            estadoUsuario = if(rta.isSuccessful){
+                estadoUsuario.copy(resultPedidoApi = 1)
+            }else{
+                estadoUsuario.copy(resultPedidoApi = 2)
+            }
+            estadoUsuario = estadoUsuario.copy( pidiendoDatos = false )
         }
     }
     fun selectRival(idCli:Int,monto:Float){
         viewModelScope.launch {
-            val juego:ChallengeData = ChallengeData(idCli,estadoUser.game.nombOponente,estadoUser.game.ptsPropios, estadoUser.game.ptsRival, monto,estadoUser.game.estado,estadoUser.game.idPartida)
-            estadoUser = estadoUser.copy(
+            val juego:ChallengeData = ChallengeData(idCli,estadoUsuario.game.nombOponente,estadoUsuario.game.ptsPropios, estadoUsuario.game.ptsRival, monto,estadoUsuario.game.estado,estadoUsuario.game.idPartida)
+            estadoUsuario = estadoUsuario.copy(
                 game = juego
             )
         }
     }
     fun setRival(idCli: Int,nombre:String,estado:String){
         viewModelScope.launch {
-            val juego:ChallengeData = ChallengeData(idCli,nombre,estadoUser.game.ptsPropios, estadoUser.game.ptsRival, estadoUser.game.gastoRival,estado,estadoUser.game.idPartida)
-            estadoUser = estadoUser.copy(
+            val juego:ChallengeData = ChallengeData(idCli,nombre,estadoUsuario.game.ptsPropios, estadoUsuario.game.ptsRival, estadoUsuario.game.gastoRival,estado,estadoUsuario.game.idPartida)
+            estadoUsuario = estadoUsuario.copy(
                 game = juego
             )
         }
     }
     fun setGame(idpartida:Int,estado:String){
         viewModelScope.launch {
-            val juego:ChallengeData = ChallengeData(estadoUser.game.idOponente,estadoUser.game.nombOponente,estadoUser.game.ptsPropios, estadoUser.game.ptsRival, estadoUser.game.gastoRival,estado,idpartida)
-            estadoUser = estadoUser.copy(
+            val juego:ChallengeData = ChallengeData(estadoUsuario.game.idOponente,estadoUsuario.game.nombOponente,estadoUsuario.game.ptsPropios, estadoUsuario.game.ptsRival, estadoUsuario.game.gastoRival,estado,idpartida)
+            estadoUsuario = estadoUsuario.copy(
                 game = juego
             )
         }
@@ -206,19 +242,19 @@ class VistaModeloUsuario (private val usuarioServicio: ServicioDePedidos, privat
     }
     fun llamarmozo(idMesa: Int){
         viewModelScope.launch {
-            estadoUser = estadoUser.copy(pidiendoDatos = true, resultPedidoApi = 0)
+            estadoUsuario = estadoUsuario.copy(pidiendoDatos = true, resultPedidoApi = 0)
             val rta = usuarioServicio.llamarmozo(idMesa)
-            estadoUser = if(rta.isSuccessful){
-                estadoUser.copy(resultPedidoApi = 1) //OK
+            estadoUsuario = if(rta.isSuccessful){
+                estadoUsuario.copy(resultPedidoApi = 1) //OK
             }else{
-                estadoUser.copy(resultPedidoApi = 2) //ERROR
+                estadoUsuario.copy(resultPedidoApi = 2) //ERROR
             }
-            estadoUser = estadoUser.copy( pidiendoDatos = false )
+            estadoUsuario = estadoUsuario.copy( pidiendoDatos = false )
         }
     }
     fun desactivarErrorPedidoApi(){
         viewModelScope.launch {
-            estadoUser = estadoUser.copy( resultPedidoApi = 0)
+            estadoUsuario = estadoUsuario.copy( resultPedidoApi = 0)
         }
     }
 }

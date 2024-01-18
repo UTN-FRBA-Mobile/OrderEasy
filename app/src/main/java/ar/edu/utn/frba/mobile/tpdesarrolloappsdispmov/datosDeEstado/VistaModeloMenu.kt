@@ -12,21 +12,24 @@ import kotlinx.coroutines.launch
 class VistaModeloMenu (private val servicioApi: ServicioDePedidos): ViewModel() {
     var estadoMenu by mutableStateOf(MenuData())
         private set
-    fun getMenu (){
+    fun obtenerMenu (){
         viewModelScope.launch {
             estadoMenu = estadoMenu.copy(loadingMenu = true)
-            val reqMenu = servicioApi.getMenu()
+            val reqMenu = servicioApi.obtenerMenuPlatos()
             if(reqMenu.isSuccessful){
                 if(reqMenu.body() != null){
                     estadoMenu = estadoMenu.copy(
                         platos = reqMenu.body()!!.platos,
-                        loadingMenu = false
+                        loadingMenu = false,
+                        menucargado = true
                     )
                 }
+            }else{
+                estadoMenu = estadoMenu.copy( errorPedidoApi = true, loadingMenu = false, menucargado = false)
             }
         }
     }
-    fun addItem(idPlato:Int){
+    fun sumarItem(idPlato:Int){
        var ped = estadoMenu.pedidos.singleOrNull { e->(e.idPlato==idPlato && e.estado=="selected")}
        var peds:MutableList<PlatoPedido> = mutableListOf()
        peds.addAll(estadoMenu.pedidos)
@@ -38,7 +41,7 @@ class VistaModeloMenu (private val servicioApi: ServicioDePedidos): ViewModel() 
        }
         estadoMenu = estadoMenu.copy(pedidos = peds)
     }
-    fun delItem(idPlato:Int){
+    fun restarItem(idPlato:Int){
         var ped = estadoMenu.pedidos.singleOrNull { e->(e.idPlato==idPlato && e.estado=="selected") }
         var peds:MutableList<PlatoPedido> = mutableListOf()
         peds.addAll(estadoMenu.pedidos)
@@ -53,8 +56,9 @@ class VistaModeloMenu (private val servicioApi: ServicioDePedidos): ViewModel() 
             estadoMenu = estadoMenu.copy(pedidos = peds)
         }
     }
-    fun orderItem(idMesa:Int,idCliente:Int){
+    fun ordenarItem(idMesa:Int, idCliente:Int){
         viewModelScope.launch {
+            estadoMenu = estadoMenu.copy( pidiendoDatos = true)
             var param = arrayListOf<PlatoOrdenado>()
             estadoMenu.pedidos.forEach{
                 if(it.estado == "selected"){
@@ -63,21 +67,26 @@ class VistaModeloMenu (private val servicioApi: ServicioDePedidos): ViewModel() 
                 }
             }
             var gson = GsonBuilder().setPrettyPrinting().create()
-            val reqOrd = servicioApi.makeOrder(idMesa,idCliente,Ordenes(ordenes = param))
+            val reqOrd = servicioApi.ordenar(idMesa,idCliente,Ordenes(ordenes = param))
             if (reqOrd.isSuccessful){
-                val msj = reqOrd.body()?.msg
+                var peds:MutableList<PlatoPedido> = mutableListOf()
+                peds.addAll(estadoMenu.pedidos)
+                peds.forEach{
+                    if(it.estado == "selected") it.estado = "pedido"
+                }
+                estadoMenu = estadoMenu.copy(pedidos = peds)
+            }else{
+                estadoMenu = estadoMenu.copy( errorPedidoApi = true)
             }
-
-            var peds:MutableList<PlatoPedido> = mutableListOf()
-            peds.addAll(estadoMenu.pedidos)
-            peds.forEach{
-                if(it.estado == "selected") it.estado = "pedido"
-            }
-            estadoMenu = estadoMenu.copy(pedidos = peds)
+            estadoMenu = estadoMenu.copy( pidiendoDatos = false)
         }
     }
-
-    fun getTotalCartPrice(): Float {
+    fun cancelErrorReqApi(){
+        viewModelScope.launch {
+            estadoMenu = estadoMenu.copy( errorPedidoApi = false)
+        }
+    }
+    fun obtenerPrecioCarroTotal(): Float {
         var total = 0.0f
         estadoMenu.pedidos.forEach {
             var t = estadoMenu.platos.find { s -> (s.idPlato==it.idPlato && it.estado=="selected")}

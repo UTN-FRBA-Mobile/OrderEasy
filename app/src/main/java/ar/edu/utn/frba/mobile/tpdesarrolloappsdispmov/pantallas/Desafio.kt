@@ -37,7 +37,7 @@ fun Desafio(navController: NavController, userViewModel: VistaModeloUsuario){//,
                 )
                 {
                     Text(
-                        text = "Tu compañero de mesa ${userViewModel.estadoUser.game.nombOponente} te desafía a un juego de piedra-papel-tijera al mejor de 3 partidas. Quien pierda" +
+                        text = "Tu compañero de mesa ${userViewModel.estadoUsuario.game.nombOponente} te desafía a un juego de piedra-papel-tijera al mejor de 3 partidas. Quien pierda" +
                                 "se hará cargo de pagar ambas cuentas. El juego comenzará apenas aceptes el desafío y en cada partida dispondrás de 5 segundos para elejir una" +
                                 "opcion. En caso de quedar empatados al termino de las 3 partidas se jugarán partidas adicionales hasta que uno de los dos gane. ",
                         modifier = Modifier.padding(16.dp),

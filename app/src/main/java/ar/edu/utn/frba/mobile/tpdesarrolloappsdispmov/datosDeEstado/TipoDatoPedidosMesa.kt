@@ -1,4 +1,7 @@
 package ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.datosDeEstado
+
+import com.google.gson.annotations.SerializedName
+
 data class PlatoData(
     val nombre:String,
     val precio:Float
@@ -12,17 +15,18 @@ data class PedidoData(
     val idCliente:Int,
     val idMesa:Int,
     val idPlato:Int,
-    val Plato:PlatoData
+    @SerializedName("Plato")val plato:PlatoData
 )
 data class ComensalData(
     val idCliente:Int,
     val nombre:String,
-    val Pedidos:Array<PedidoData>
+    @SerializedName ("Pedidos")val pedidos:ArrayList<PedidoData>
 )
 data class UserInvitedData(
     val idCliente:Int,
     val nombre:String,
     val total:Float,
-    var selected:Boolean
+    var seleccionado:Boolean,
+    val pedPendientes:Boolean
 )
 data class PedidosMesaData(val comensales:List<ComensalData>)

@@ -64,7 +64,7 @@ import coil.compose.rememberAsyncImagePainter
 @Composable
 fun LeerMenuPlatos(navCont: NavController, menu: VistaModeloMenu, userViewModel: VistaModeloUsuario) {
     if (!menu.estadoMenu.menucargado){
-        menu.getMenu()
+        menu.obtenerMenu()
     }
     Scaffold(
         topBar = { BarraSuperior(userViewModel) },
@@ -98,10 +98,10 @@ fun Menu(menu: VistaModeloMenu) {
                 food = food,
                 modifier = Modifier.padding(16.dp),
                 onAddToCart =  {
-                    menu.addItem(food.idPlato)
+                    menu.sumarItem(food.idPlato)
                 },
                 onRemoveToCart =  {
-                    menu.delItem(food.idPlato)
+                    menu.restarItem(food.idPlato)
                 }
             )
         }
@@ -317,7 +317,7 @@ fun BottomAppBarExample(navCont: NavController, menu: VistaModeloMenu) {
                 onClick = { }
             ){
                 Text(
-                    text = stringResource(id = R.string.ticket_total) +": $${menu.getTotalCartPrice()}",
+                    text = stringResource(id = R.string.ticket_total) +": $${menu.obtenerPrecioCarroTotal()}",
                     style = MaterialTheme.typography.titleSmall,
                     modifier = Modifier.padding(8.dp)
                 )

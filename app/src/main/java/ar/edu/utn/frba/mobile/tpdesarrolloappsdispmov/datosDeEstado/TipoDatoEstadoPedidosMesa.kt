@@ -4,5 +4,8 @@ data class TipoDatoEstadoPedidosMesa(
     val pedidosMesa:List<ComensalData> = emptyList(),
     val consumosMesa:List<ComensalData> = emptyList(),
     val invitados:MutableList<UserInvitedData> = mutableListOf(),
-    val requestingData:Boolean = true
+    val pidiendoDatos:Boolean = false,
+    val resultPedidoApi:Int = 0,
+    val pidiendoConsumos:Boolean = false,
+    val resultPedidoConsumos:Int = 0
 )

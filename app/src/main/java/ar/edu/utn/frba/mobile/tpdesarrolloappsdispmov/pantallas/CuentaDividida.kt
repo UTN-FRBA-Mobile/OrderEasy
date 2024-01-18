@@ -1,5 +1,7 @@
 package ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.pantallas
 
+import android.view.Gravity
+import android.widget.Toast
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -31,6 +33,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -45,13 +48,14 @@ import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.R
 
 @Composable
 fun CuentaDividida(navCont: NavController, userViewModel: VistaModeloUsuario, vistaModeloMesa: VistaModeloMesa){
-    val totGastoMesa = vistaModeloMesa.estadoMesa.consumosMesa.fold(0.0f){ ac, e -> ac+e.Pedidos.fold(0.0f){ acc, i -> acc+i.cantidad*i.Plato.precio} }
+    val totGastoMesa = vistaModeloMesa.estadoMesa.consumosMesa.fold(0.0f){ ac, e -> ac+e.pedidos.fold(0.0f){ acc, i -> acc+i.cantidad*i.plato.precio} }
     val gastoIndividual = if(vistaModeloMesa.estadoMesa.consumosMesa.size==0) 0 else totGastoMesa/vistaModeloMesa.estadoMesa.consumosMesa.size
-    var showDialog by remember { mutableStateOf(false) }
+    var mostrarDialog by remember { mutableStateOf(false) }
+    val toast = Toast.makeText(LocalContext.current, stringResource(id = R.string.error_api), Toast.LENGTH_SHORT)
     Scaffold (
         topBar = { BarraSuperior(userViewModel) },
         content = { innerPadding ->
-            if(vistaModeloMesa.estadoMesa.requestingData){
+            if(vistaModeloMesa.estadoMesa.pidiendoDatos){
                 Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                     CircularProgressIndicator()
                 }
@@ -98,9 +102,9 @@ fun CuentaDividida(navCont: NavController, userViewModel: VistaModeloUsuario, vi
                                 Spacer(modifier = Modifier.size(16.dp))
                                 Column (){
                                     var tot:Float=0.0f
-                                    consm.Pedidos.forEach {ped ->
+                                    consm.pedidos.forEach {ped ->
                                         Consumidor(ped)
-                                        tot = tot + ped.cantidad * ped.Plato.precio
+                                        tot = tot + ped.cantidad * ped.plato.precio
                                     }
                                     Text(text = stringResource(id = R.string.ticket_total)+"%,.1f".format(Locale.GERMAN,tot),
                                         modifier = Modifier
@@ -121,7 +125,7 @@ fun CuentaDividida(navCont: NavController, userViewModel: VistaModeloUsuario, vi
                                 .padding(14.dp),
                             onClick = {
                                 userViewModel.iniciarDividirConsumo()
-                                showDialog = true
+                                mostrarDialog = true
                             },
                             icon = { Icon(Icons.Filled.ArrowBack, contentDescription = "volver") },
                             text = { Text(text = stringResource(id = R.string.ticket_invite),
@@ -140,7 +144,7 @@ fun CuentaDividida(navCont: NavController, userViewModel: VistaModeloUsuario, vi
                         )
                     }
                     item{
-                        if (showDialog) {
+                        if (mostrarDialog) {
                             AlertDialog(
                                 containerColor = Color(251, 201, 143, 255),
                                 icon = { Icon(Icons.Default.Info, "call-mozo") },
@@ -153,7 +157,7 @@ fun CuentaDividida(navCont: NavController, userViewModel: VistaModeloUsuario, vi
                                             containerColor = MaterialTheme.colorScheme.inverseSurface,
                                         ),
                                         onClick = {
-                                            showDialog = false
+                                            mostrarDialog = false
                                             navCont.navigate(route="mainmenu")
                                         }
                                     ) {
@@ -163,6 +167,11 @@ fun CuentaDividida(navCont: NavController, userViewModel: VistaModeloUsuario, vi
                         }
                     }
                 }
+            }
+            if (userViewModel.estadoUsuario.resultPedidoApi == 2){
+                toast.setGravity(Gravity.TOP,0,0)
+                toast.show()
+                userViewModel.desactivarErrorPedidoApi()
             }
         }
     )

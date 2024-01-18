@@ -53,7 +53,7 @@ fun MenuPrincipal(navCont: NavController, usuarioViewModel: VistaModeloUsuario, 
             val parts = result.contents.split("/")
             val idMesa = parts[parts.indexOf("registrarse") + 1]
             val hash = parts[parts.indexOf("registrarse") + 2]
-            usuarioViewModel.takeTable(idMesa.toInt(), hash)
+            usuarioViewModel.tomarMesa(idMesa.toInt(), hash)
         }
     }
     Scaffold (
@@ -65,7 +65,7 @@ fun MenuPrincipal(navCont: NavController, usuarioViewModel: VistaModeloUsuario, 
                     .padding(innerPadding),
                 verticalArrangement = Arrangement.SpaceBetween
             ){
-                if(usuarioViewModel.estadoUser.idMesa == 0 && mostrarDialog) {
+                if(usuarioViewModel.estadoUsuario.idMesa == 0 && mostrarDialog) {
                     AlertDialog(
                         containerColor = Color(251, 201, 143, 255),
                         icon = { Icon(Icons.Default.Info, "call-mozo") },
@@ -85,7 +85,7 @@ fun MenuPrincipal(navCont: NavController, usuarioViewModel: VistaModeloUsuario, 
                             }
                         })
                 }
-                if(usuarioViewModel.estadoUser.pidiendoDatos){ //escaneando){
+                if(usuarioViewModel.estadoUsuario.pidiendoDatos){ //escaneando){
                     Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                         CircularProgressIndicator()
                     }
@@ -96,7 +96,7 @@ fun MenuPrincipal(navCont: NavController, usuarioViewModel: VistaModeloUsuario, 
                                 colors = CardDefaults.cardColors(
                                     containerColor = MaterialTheme.colorScheme.primaryContainer,
                                 ),
-                                enabled = (usuarioViewModel.estadoUser.idMesa == 0),
+                                enabled = (usuarioViewModel.estadoUsuario.idMesa == 0),
                                 modifier = Modifier
                                     .fillMaxWidth()
                                     .padding(horizontal = 40.dp, vertical = 8.dp),
@@ -137,7 +137,7 @@ fun MenuPrincipal(navCont: NavController, usuarioViewModel: VistaModeloUsuario, 
                                 colors = CardDefaults.cardColors(
                                     containerColor = MaterialTheme.colorScheme.primaryContainer,
                                 ),
-                                enabled = (usuarioViewModel.estadoUser.idMesa != 0),
+                                enabled = (usuarioViewModel.estadoUsuario.idMesa != 0),
                                 modifier = Modifier
                                     .fillMaxWidth()
                                     .padding(horizontal = 40.dp, vertical = 8.dp),
@@ -172,7 +172,7 @@ fun MenuPrincipal(navCont: NavController, usuarioViewModel: VistaModeloUsuario, 
                                 colors = CardDefaults.cardColors(
                                     containerColor = MaterialTheme.colorScheme.primaryContainer,
                                 ),
-                                enabled = (usuarioViewModel.estadoUser.idMesa != 0),
+                                enabled = (usuarioViewModel.estadoUsuario.idMesa != 0),
                                 modifier = Modifier
                                     .fillMaxWidth()
                                     .padding(horizontal = 40.dp, vertical = 8.dp),
@@ -207,7 +207,7 @@ fun MenuPrincipal(navCont: NavController, usuarioViewModel: VistaModeloUsuario, 
                                 colors = CardDefaults.cardColors(
                                     containerColor = MaterialTheme.colorScheme.primaryContainer,
                                 ),
-                                enabled = (usuarioViewModel.estadoUser.idMesa != 0),
+                                enabled = (usuarioViewModel.estadoUsuario.idMesa != 0),
                                 modifier = Modifier
                                     .fillMaxWidth()
                                     .padding(horizontal = 40.dp, vertical = 8.dp),
@@ -242,7 +242,7 @@ fun MenuPrincipal(navCont: NavController, usuarioViewModel: VistaModeloUsuario, 
                                 colors = CardDefaults.cardColors(
                                     containerColor = MaterialTheme.colorScheme.primaryContainer,
                                 ),
-                                enabled = (usuarioViewModel.estadoUser.idMesa != 0),
+                                enabled = (usuarioViewModel.estadoUsuario.idMesa != 0),
                                 modifier = Modifier
                                     .fillMaxWidth()
                                     .padding(horizontal = 40.dp, vertical = 8.dp),
@@ -278,14 +278,14 @@ fun MenuPrincipal(navCont: NavController, usuarioViewModel: VistaModeloUsuario, 
                                 colors = CardDefaults.cardColors(
                                     containerColor = MaterialTheme.colorScheme.primaryContainer,
                                 ),
-                                enabled = (usuarioViewModel.estadoUser.idMesa != 0),
+                                enabled = (usuarioViewModel.estadoUsuario.idMesa != 0),
                                 modifier = Modifier
                                     .fillMaxWidth()
                                     .padding(horizontal = 40.dp, vertical = 8.dp),
                                 onClick = {
-                                    tabStateViewModel.setRequestingDataOn()
+                                    tabStateViewModel.setearPedidoDatos()
                                     navCont.navigate(route = "ordersstate")
-                                    tabStateViewModel.getPedidosState(usuarioViewModel.estadoUser.idMesa)
+                                    tabStateViewModel.obtenerEstadoPedidos(usuarioViewModel.estadoUsuario.idMesa)
                                 },
                             ) {
                                 Row(
@@ -316,7 +316,7 @@ fun MenuPrincipal(navCont: NavController, usuarioViewModel: VistaModeloUsuario, 
                                 colors = CardDefaults.cardColors(
                                     containerColor = MaterialTheme.colorScheme.primaryContainer,
                                 ),
-                                enabled = (usuarioViewModel.estadoUser.idMesa != 0),
+                                enabled = (usuarioViewModel.estadoUsuario.idMesa != 0),
                                 modifier = Modifier
                                     .fillMaxWidth()
                                     .padding(horizontal = 40.dp, vertical = 8.dp),

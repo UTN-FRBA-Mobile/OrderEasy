@@ -1,6 +1,8 @@
 package ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.pantallas
 
 //import android.util.Log
+import android.view.Gravity
+import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -31,6 +33,7 @@ import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.datosDeEstado.VistaModeloM
 import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.datosDeEstado.VistaModeloUsuario
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.R
@@ -39,6 +42,7 @@ import java.util.Locale
 
 @Composable
 fun CuentaInvitados(navCont: NavController, userViewModel: VistaModeloUsuario, vistaModeloMesa: VistaModeloMesa){
+    val toast = Toast.makeText(LocalContext.current, stringResource(id = R.string.error_api), Toast.LENGTH_SHORT)
     Scaffold (
         topBar = { BarraSuperior(userViewModel) },
         content = { innerPadding ->
@@ -52,7 +56,7 @@ fun CuentaInvitados(navCont: NavController, userViewModel: VistaModeloUsuario, v
                     style = MaterialTheme.typography.titleLarge
                 )
 
-                if(vistaModeloMesa.estadoMesa.requestingData){
+                if(vistaModeloMesa.estadoMesa.pidiendoDatos){
                     Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                         CircularProgressIndicator()
                     }
@@ -90,7 +94,7 @@ fun CuentaInvitados(navCont: NavController, userViewModel: VistaModeloUsuario, v
                                             modifier = Modifier.fillMaxWidth(),
                                             horizontalArrangement = Arrangement.End
                                         ) {
-                                            val indice:Int =vistaModeloMesa.estadoMesa.invitados.indexOfFirst{ e -> e.idCliente == userViewModel.estadoUser.idCliente}
+                                            val indice:Int =vistaModeloMesa.estadoMesa.invitados.indexOfFirst{ e -> e.idCliente == userViewModel.estadoUsuario.idCliente}
                                             val yo = if(indice !=-1) vistaModeloMesa.estadoMesa.invitados[indice] else null
                                             if (yo != null) {
                                                 Text(text = stringResource(id = R.string.inviteticket_consumido)+"%,.1f".format(Locale.GERMAN,yo.total),
@@ -109,7 +113,7 @@ fun CuentaInvitados(navCont: NavController, userViewModel: VistaModeloUsuario, v
                             )
                         }
                         items(vistaModeloMesa.estadoMesa.invitados) { cons ->
-                            if (cons.idCliente != userViewModel.estadoUser.idCliente){
+                            if (cons.idCliente != userViewModel.estadoUsuario.idCliente){
                                 FilterChip(
                                     colors = FilterChipDefaults.filterChipColors(
                                         selectedContainerColor = Color(206,222,213,255),
@@ -117,11 +121,11 @@ fun CuentaInvitados(navCont: NavController, userViewModel: VistaModeloUsuario, v
                                     border = FilterChipDefaults.filterChipBorder(
                                         borderColor = Color(206, 222, 213, 255)
                                     ),
-                                    selected = cons.selected,
+                                    selected = cons.seleccionado,
                                     modifier = Modifier
                                         .fillMaxWidth()
                                         .padding(5.dp),
-                                    onClick = {vistaModeloMesa.selectInvited(cons.idCliente)},
+                                    onClick = {vistaModeloMesa.seleccionarInvitados(cons.idCliente)},
                                     label = {
                                         Row (
                                             modifier = Modifier
@@ -131,7 +135,7 @@ fun CuentaInvitados(navCont: NavController, userViewModel: VistaModeloUsuario, v
                                             verticalAlignment = Alignment.CenterVertically
                                         ) {
                                             Column {
-                                                if(cons.selected) {
+                                                if(cons.seleccionado) {
                                                     Icon(painter = painterResource(id = R.drawable.baseline_sentiment_very_satisfied_24),
                                                         contentDescription = "userIn",
                                                         modifier = Modifier.size(28.dp) )
@@ -154,7 +158,7 @@ fun CuentaInvitados(navCont: NavController, userViewModel: VistaModeloUsuario, v
                                         }
                                     },
                                     leadingIcon = {
-                                        if (cons.selected) {
+                                        if (cons.seleccionado) {
                                             Icon(
                                                 painter = painterResource(id = R.drawable.baseline_check_box_24),
                                                 contentDescription = "userIn",
@@ -171,7 +175,7 @@ fun CuentaInvitados(navCont: NavController, userViewModel: VistaModeloUsuario, v
                             }
                         }
                         item {Text(
-                            text = stringResource(id = R.string.inviteticket_total)+"%,.1f".format(Locale.GERMAN,vistaModeloMesa.estadoMesa.invitados.filter { e ->e.selected }.fold(0.0f ) { acc, i -> acc + i.total}),
+                            text = stringResource(id = R.string.inviteticket_total)+"%,.1f".format(Locale.GERMAN,vistaModeloMesa.estadoMesa.invitados.filter { e ->e.seleccionado }.fold(0.0f ) { acc, i -> acc + i.total}),
                             textAlign = TextAlign.Center,
                             style = MaterialTheme.typography.titleLarge
                         )}
@@ -183,7 +187,7 @@ fun CuentaInvitados(navCont: NavController, userViewModel: VistaModeloUsuario, v
                                     .fillMaxWidth()
                                     .padding(10.dp),
                                 onClick = {
-                                    vistaModeloMesa.pagarInvitado(userViewModel.estadoUser.idCliente)
+                                    vistaModeloMesa.pagarInvitado(userViewModel.estadoUsuario.idCliente)
                                     navCont.navigate(route="mainmenu")},
                                 text = { Text(text = stringResource(id = R.string.singleticket_request),
                                     style = MaterialTheme.typography.titleSmall) },
@@ -203,6 +207,11 @@ fun CuentaInvitados(navCont: NavController, userViewModel: VistaModeloUsuario, v
 
                         }
                     }
+                }
+                if (vistaModeloMesa.estadoMesa.resultPedidoApi == 2){
+                    toast.setGravity(Gravity.TOP,0,0)
+                    toast.show()
+                    vistaModeloMesa.desactivarErrorPedidoApi()
                 }
             }
         }

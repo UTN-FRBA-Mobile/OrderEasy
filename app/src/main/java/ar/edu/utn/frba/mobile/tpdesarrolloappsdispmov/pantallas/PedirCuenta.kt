@@ -30,11 +30,11 @@ fun PedirCuenta(navCont: NavController, userViewModel: VistaModeloUsuario, table
     Scaffold (
         topBar = { BarraSuperior(userViewModel)},
         content = { innerPadding ->
-            when(userViewModel.estadoUser.game.estado){
+            when(userViewModel.estadoUsuario.game.estado){
                 "jugando" -> navCont.navigate("game")
                 "desafiado" -> navCont.navigate("desafio")
                 else ->{
-                    if(userViewModel.estadoUser.gastoTotDivide==null||userViewModel.estadoUser.gastoTotDivide=="") {
+                    if(userViewModel.estadoUsuario.gastoADividir==null||userViewModel.estadoUsuario.gastoADividir=="") {
                         LazyColumn(
                             modifier = Modifier
                                 .fillMaxSize()
@@ -47,7 +47,7 @@ fun PedirCuenta(navCont: NavController, userViewModel: VistaModeloUsuario, table
                                         .fillMaxWidth()
                                         .padding(vertical = 8.dp, horizontal = 14.dp),
                                     onClick = {
-                                        userViewModel.getConsumo()
+                                        userViewModel.obtenerConsumo()
                                         navCont.navigate(route = "IndividualTicket")
                                     },
                                     icon = {
@@ -73,10 +73,10 @@ fun PedirCuenta(navCont: NavController, userViewModel: VistaModeloUsuario, table
                                         .fillMaxWidth()
                                         .padding(8.dp),
                                     onClick = {
-                                        tableViewModel.setRequestingDataOn()
-                                        tableViewModel.getConsumosState(
-                                            userViewModel.estadoUser.idMesa,
-                                            userViewModel.estadoUser.idCliente
+                                        tableViewModel.setearPedidoDatos()
+                                        tableViewModel.obtenerEstadoConsumos(
+                                            userViewModel.estadoUsuario.idMesa,
+                                            userViewModel.estadoUsuario.idCliente
                                         )
                                         navCont.navigate(route = "DivideTicket")
                                     },
@@ -102,10 +102,10 @@ fun PedirCuenta(navCont: NavController, userViewModel: VistaModeloUsuario, table
                                         .fillMaxWidth()
                                         .padding(8.dp),
                                     onClick = {
-                                        tableViewModel.setRequestingDataOn()
-                                        tableViewModel.getConsumosState(
-                                            userViewModel.estadoUser.idMesa,
-                                            userViewModel.estadoUser.idCliente
+                                        tableViewModel.setearPedidoDatos()
+                                        tableViewModel.obtenerEstadoConsumos(
+                                            userViewModel.estadoUsuario.idMesa,
+                                            userViewModel.estadoUsuario.idCliente
                                         )
                                         navCont.navigate(route = "InviteTicket")
                                     },

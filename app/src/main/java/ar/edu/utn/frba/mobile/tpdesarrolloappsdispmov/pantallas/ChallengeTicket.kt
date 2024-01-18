@@ -58,7 +58,7 @@ fun ChallengeTicket(navCont: NavController, userViewModel: VistaModeloUsuario, t
                     style = MaterialTheme.typography.titleLarge
                 )
 
-                if(tableViewModel.estadoMesa.requestingData){
+                if(tableViewModel.estadoMesa.pidiendoDatos){
                     Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                         CircularProgressIndicator()
                     }
@@ -95,7 +95,7 @@ fun ChallengeTicket(navCont: NavController, userViewModel: VistaModeloUsuario, t
                                             modifier = Modifier.fillMaxWidth(),
                                             horizontalArrangement = Arrangement.End
                                         ) {
-                                            val indice:Int =tableViewModel.estadoMesa.invitados.indexOfFirst{ e -> e.idCliente == userViewModel.estadoUser.idCliente}
+                                            val indice:Int =tableViewModel.estadoMesa.invitados.indexOfFirst{ e -> e.idCliente == userViewModel.estadoUsuario.idCliente}
                                             val yo = if(indice !=-1) tableViewModel.estadoMesa.invitados[indice] else null
                                             if (yo != null) {
                                                 Text(text ="Consumido: $"+"%,.1f".format(Locale.GERMAN,yo.total),
@@ -140,7 +140,7 @@ fun ChallengeTicket(navCont: NavController, userViewModel: VistaModeloUsuario, t
                             )
                         }
                         items(tableViewModel.estadoMesa.invitados) { cons ->
-                            if (cons.idCliente != userViewModel.estadoUser.idCliente){
+                            if (cons.idCliente != userViewModel.estadoUsuario.idCliente){
                                 FilterChip(
                                     colors = FilterChipDefaults.filterChipColors(
                                         selectedContainerColor = Color(206,222,213,255),
@@ -148,14 +148,14 @@ fun ChallengeTicket(navCont: NavController, userViewModel: VistaModeloUsuario, t
                                     border = FilterChipDefaults.filterChipBorder(
                                         borderColor = Color(206, 222, 213, 255)
                                     ),
-                                    selected = cons.selected,
+                                    selected = cons.seleccionado,
                                     modifier = Modifier
                                         .fillMaxWidth()
                                         .padding(5.dp),
                                     onClick = {
                                         //desseleccionar a los demás
                                         tableViewModel.diselectAll()
-                                        tableViewModel.selectInvited(cons.idCliente)
+                                        tableViewModel.seleccionarInvitados(cons.idCliente)
                                     },
                                     label = {
                                         Row (
@@ -166,7 +166,7 @@ fun ChallengeTicket(navCont: NavController, userViewModel: VistaModeloUsuario, t
                                             verticalAlignment = Alignment.CenterVertically
                                         ) {
                                             Column {
-                                                if(cons.selected) {
+                                                if(cons.seleccionado) {
                                                     userViewModel.selectRival(cons.idCliente,cons.total)
                                                     Icon(Icons.Filled.Face,
                                                         contentDescription = "userIn",
@@ -190,7 +190,7 @@ fun ChallengeTicket(navCont: NavController, userViewModel: VistaModeloUsuario, t
                                         }
                                     },
                                     leadingIcon = {
-                                        if (cons.selected) {
+                                        if (cons.seleccionado) {
                                             Icon(
                                                 painter = painterResource(id = R.drawable.baseline_check_box_24),
                                                 contentDescription = "userIn",
@@ -209,7 +209,7 @@ fun ChallengeTicket(navCont: NavController, userViewModel: VistaModeloUsuario, t
 
 
                         item {Text(
-                            text = "Monto en juego: $"+tableViewModel.estadoMesa.invitados.filter { e ->e.selected }.fold(0.0f ) {acc, i -> acc + i.total}.toString(),
+                            text = "Monto en juego: $"+tableViewModel.estadoMesa.invitados.filter { e ->e.seleccionado }.fold(0.0f ) { acc, i -> acc + i.total}.toString(),
                             textAlign = TextAlign.Center,
                             style = MaterialTheme.typography.titleLarge
                         )}
@@ -220,7 +220,7 @@ fun ChallengeTicket(navCont: NavController, userViewModel: VistaModeloUsuario, t
                                     .fillMaxWidth()
                                     .padding(10.dp),
                                 onClick = {
-                                    tableViewModel.pagarInvitado(userViewModel.estadoUser.idCliente)
+                                    tableViewModel.pagarInvitado(userViewModel.estadoUsuario.idCliente)
                                     navCont.navigate(route="mainmenu")},
                                 text = { Text(text = "Enviar desafío",
                                     style = MaterialTheme.typography.titleSmall) },

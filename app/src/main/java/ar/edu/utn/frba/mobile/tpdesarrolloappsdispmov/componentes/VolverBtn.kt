@@ -11,17 +11,22 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.R
 
 @Composable
 fun VolverBtn(navCont: NavController){
     ExtendedFloatingActionButton(
-        modifier = Modifier.fillMaxWidth().wrapContentSize().padding(vertical = 8.dp),
+        modifier = Modifier
+            .fillMaxWidth()
+            .wrapContentSize()
+            .padding(vertical = 8.dp),
         onClick = { navCont.navigate(route="mainmenu")},
         icon = { Icon(Icons.Filled.ArrowBack,  contentDescription ="volver") },
         text = { Text(
-            text = "Volver al menu",
+            text = stringResource(id = R.string.btn_back),
             style = MaterialTheme.typography.titleSmall
         ) },
     )

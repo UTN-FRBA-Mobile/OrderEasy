@@ -48,7 +48,7 @@ fun Ingresar (usuarioViewModel:VistaModeloUsuario){
             Column (modifier = Modifier
                 .fillMaxSize()
                 .padding(innerPadding)) {
-                if (usuarioViewModel.estadoUser.registrandoUsuarioApi) {
+                if (usuarioViewModel.estadoUsuario.registrandoUsuarioApi) {
                     Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                         CircularProgressIndicator()
                     }
@@ -72,7 +72,7 @@ fun Ingresar (usuarioViewModel:VistaModeloUsuario){
                             .fillMaxWidth()
                             .wrapContentSize()
                             .padding(vertical = 8.dp),
-                        onClick = { usuarioViewModel.log(nombre) },
+                        onClick = { usuarioViewModel.ingresar(nombre) },
                         icon = { Icon(Icons.Sharp.ArrowForward, contentDescription = "volver") },
                         text = {
                             Text(
@@ -98,7 +98,7 @@ fun Ingresar (usuarioViewModel:VistaModeloUsuario){
                                 }
                             })
                     }
-                    if (usuarioViewModel.estadoUser.errorRegistrandoUsuarioApi){
+                    if (usuarioViewModel.estadoUsuario.errorRegistrandoUsuarioApi){
                         toast.setGravity(Gravity.TOP,0,0)
                         toast.show()
                         usuarioViewModel.cancelarErrorRegistroUsuarioApi()

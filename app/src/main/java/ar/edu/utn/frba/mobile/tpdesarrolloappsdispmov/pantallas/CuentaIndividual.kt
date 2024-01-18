@@ -1,5 +1,7 @@
 package ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.pantallas
 
+import android.view.Gravity
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -27,6 +29,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
@@ -40,6 +43,7 @@ import java.util.Locale
 @Composable
 fun CuentaIndividual(navCont:NavController, vistaModeloUsuario: VistaModeloUsuario){
     var total:Float=0.0f
+    val toast = Toast.makeText(LocalContext.current, stringResource(id = R.string.error_api), Toast.LENGTH_SHORT)
     Scaffold (
         topBar = { BarraSuperior(vistaModeloUsuario) },
         content = { innerPadding ->
@@ -54,7 +58,7 @@ fun CuentaIndividual(navCont:NavController, vistaModeloUsuario: VistaModeloUsuar
                     textAlign = TextAlign.Center,
                     style = MaterialTheme.typography.titleLarge
                 )
-                if(vistaModeloUsuario.estadoUser.loadingConsumo){
+                if(vistaModeloUsuario.estadoUsuario.cargandoConsumo){
                     Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                         CircularProgressIndicator()
                     }
@@ -64,7 +68,7 @@ fun CuentaIndividual(navCont:NavController, vistaModeloUsuario: VistaModeloUsuar
                         modifier = Modifier.fillMaxWidth(),
                         verticalArrangement = Arrangement.spacedBy(4.dp)
                     ){
-                        items(vistaModeloUsuario.estadoUser.consumos) { e ->
+                        items(vistaModeloUsuario.estadoUsuario.consumos) { e ->
                             total = total+ e.Plato.precio * e.cantidad
                             Row(
                                 horizontalArrangement = Arrangement.SpaceEvenly,
@@ -119,7 +123,6 @@ fun CuentaIndividual(navCont:NavController, vistaModeloUsuario: VistaModeloUsuar
                             style= MaterialTheme.typography.displayMedium
                         ) }
                 )
-
                 ExtendedFloatingActionButton(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -128,6 +131,11 @@ fun CuentaIndividual(navCont:NavController, vistaModeloUsuario: VistaModeloUsuar
                     icon = { Icon(Icons.Filled.ArrowBack,  contentDescription ="volver") },
                     text = { Text(text = stringResource(id = R.string.btn_back),style= MaterialTheme.typography.displayMedium) }
                 )
+                if (vistaModeloUsuario.estadoUsuario.resultPedidoApi == 2){
+                    toast.setGravity(Gravity.TOP,0,0)
+                    toast.show()
+                    vistaModeloUsuario.desactivarErrorPedidoApi()
+                }
             }
         }
     )

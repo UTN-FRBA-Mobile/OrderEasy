@@ -1,23 +1,25 @@
 package ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.datosDeEstado
 
 data class TipoDatoUsuario(
-    val idDevice:String="",
+    val idDispositivo:String="",
     val nombre:String="",
     val idCliente:Int=0,
     val idMesa:Int=0,
+    val estaIngresado:Boolean=false,
     val registrandoUsuarioApi:Boolean = false,
     val errorRegistrandoUsuarioApi:Boolean = false,
     val pidiendoDatos:Boolean=true,
-    val isLogged:Boolean=false,
-    val requestingData:Boolean=true,
     val initializatingApp:Boolean=true,
-    val requestingLog:Boolean=true,
+    val requiriendoIngreso:Boolean=true,
     val jwt:String="",
     val consumos: List <ItemConsumidoData> = emptyList(),
-    val loadingConsumo: Boolean = true,
-    val gastoTotDivide:String = "",
+    val cargandoConsumo: Boolean = true,
+    val resultadoCargandoConsumo:Int = 0,
+    val gastoADividir:String = "",
     val gastoIndDivide:String = "",
-    val cantDivide:String = "",
+    val cantDividida:String = "",
+    val errorPedidoApi:Boolean=false,
     val game:ChallengeData= ChallengeData(0,"",0,0,0.0f,"vacio",0),
     val resultPedidoApi:Int = 0,
+    val msjDialog:String =""
 )
