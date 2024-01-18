@@ -77,7 +77,7 @@ fun CerrarMesa(navCont: NavController, vistaModeloUsuario: VistaModeloUsuario) {
                             onClick = {
                                 vistaModeloUsuario.retirarseDeMesa()
                             },
-                            icon = {Icon(Icons.Filled.Notifications,contentDescription = "call" ) },
+                            icon = { Icon(Icons.Filled.Notifications,  contentDescription ="call") },
                             text = {
                                 Text(
                                     text = stringResource(id = R.string.closetab_btn),
@@ -90,18 +90,18 @@ fun CerrarMesa(navCont: NavController, vistaModeloUsuario: VistaModeloUsuario) {
                     if (mostrarDialog) {
                         AlertDialog(
                             containerColor = Color(251, 201, 143, 255),
-                            icon = { Icon(Icons.Default.Info, "call-mozo") },
+                            icon = { Icon(Icons.Default.Info, "call") },
                             title = { Text(text = stringResource(id = R.string.closetab_dialog_title)) },
-                            text = { Text(text = stringResource(id = R.string.closetab_dialog_txt)) },
-                            onDismissRequest = {},
+                            text = { Text(text = vistaModeloUsuario.estadoUsuario.msjDialog)},//stringResource(id = R.string.closetab_dialog_txt)) },
+                            onDismissRequest = { /*TODO*/ },
                             confirmButton = {
                                 TextButton(
-                                    colors = ButtonDefaults.buttonColors(
+                                    colors = ButtonDefaults.buttonColors (
                                         containerColor = MaterialTheme.colorScheme.inverseSurface,
                                     ),
                                     onClick = {
                                         mostrarDialog = false
-                                        navCont.navigate(route = "mainmenu")
+                                        navCont.navigate(route="mainmenu")
                                     }
                                 ) {
                                     Text(text = stringResource(id = R.string.btn_ok))

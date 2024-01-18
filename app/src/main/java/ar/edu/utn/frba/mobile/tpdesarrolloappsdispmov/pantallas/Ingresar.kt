@@ -1,5 +1,6 @@
 package ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.pantallas
 
+import android.util.Log
 import android.view.Gravity
 import android.widget.Toast
 import androidx.compose.foundation.layout.Box
@@ -41,49 +42,49 @@ import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.R
 fun Ingresar (usuarioViewModel:VistaModeloUsuario){
     var nombre by remember { mutableStateOf("") }
     var mostrarDialog by remember { mutableStateOf(false) }
-    val toast = Toast.makeText(LocalContext.current, stringResource(id = R.string.error_api), Toast.LENGTH_SHORT)
+    val toast = Toast.makeText(LocalContext.current, stringResource(id = R.string.error_api),Toast.LENGTH_SHORT)
     Scaffold (
         topBar = { BarraSuperior(userViewModel = usuarioViewModel)},
         content = { innerPadding ->
             Column (modifier = Modifier
                 .fillMaxSize()
-                .padding(innerPadding)) {
-                if (usuarioViewModel.estadoUsuario.registrandoUsuarioApi) {
+                .padding(innerPadding)){
+                if(usuarioViewModel.estadoUsuario.registrandoUsuarioApi){
                     Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                         CircularProgressIndicator()
                     }
-                } else {
+                }else {
                     Text(
-                        text = stringResource(id = R.string.login_title),
+                        text = stringResource(R.string.login_title),
                         modifier = Modifier.padding(16.dp),
                         textAlign = TextAlign.Justify,
-                        style = MaterialTheme.typography.titleLarge
+                        style = MaterialTheme.typography.titleMedium
                     )
                     OutlinedTextField(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(14.dp),
+                            .padding(14.dp) ,
                         value = nombre,
-                        onValueChange = { nombre = it },
-                        label = { Text(text = stringResource(id = R.string.login_label)) })
+                        onValueChange ={nombre=it},
+                        label={Text(stringResource(id = R.string.login_label))}
+                    )
                     ExtendedFloatingActionButton(
                         modifier = Modifier
                             .fillMaxWidth()
                             .wrapContentSize()
                             .padding(vertical = 8.dp),
-                        onClick = { usuarioViewModel.ingresar(nombre) },
-                        icon = {
+                        onClick = {
                             if(nombre.trim().isNotEmpty() && nombre.length>1 && nombre.length<11) {
                                 usuarioViewModel.ingresar(nombre)
                             }else{
                                 mostrarDialog=true
                             }
                         },
-                        text = {
-                            Text(
-                                text = stringResource(id = R.string.login_btn),
-                                style = MaterialTheme.typography.titleSmall
-                            ) },
+                        icon = { Icon(Icons.Sharp.ArrowForward,  contentDescription = stringResource(id = R.string.btn_back)) },
+                        text = { Text(
+                            text = stringResource(id = R.string.login_btn),
+                            style = MaterialTheme.typography.titleSmall
+                        ) },
                     )
                     if (mostrarDialog) {
                         AlertDialog(

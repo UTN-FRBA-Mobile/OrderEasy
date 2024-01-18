@@ -51,7 +51,7 @@ interface ServicioDePedidos {
     @GET("/mesas/pagar/individual/{idCliente}")
     suspend fun pagarIndividual(@Path("idCliente") idCliente: Int): Response<TipoDatoRespuestaApiEstandard>
     @GET("/mesas/exit/{idCliente}")
-    suspend fun retirarse(@Path("idCliente") idCliente: Int):Response<RespuestaApiDejarMesa>
+    suspend fun  retirarse(@Path("idCliente") idCliente: Int):Response<RespuestaApiDejarMesa>
     @GET("/mesas/llamarmozo/{idMesa}")
     suspend fun llamarmozo(@Path("idMesa") idMesa: Int):Response<TipoDatoRespuestaApiEstandard>
 }

@@ -68,11 +68,11 @@ fun CuentaDividida(navCont: NavController, userViewModel: VistaModeloUsuario, vi
     Scaffold (
         topBar = { BarraSuperior(userViewModel) },
         content = { innerPadding ->
-            if(vistaModeloMesa.estadoMesa.pidiendoDatos){
+            if(vistaModeloMesa.estadoMesa.pidiendoConsumos){
                 Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                     CircularProgressIndicator()
                 }
-            }else  if(vistaModeloMesa.estadoMesa.resultPedidoConsumos==2){
+            }else if(vistaModeloMesa.estadoMesa.resultPedidoConsumos==2){
                 AlertDialog(
                     containerColor = Color(251, 201, 143, 255),
                     icon = { Icon(Icons.Default.Info, "descrip") },

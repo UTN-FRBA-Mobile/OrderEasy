@@ -29,20 +29,20 @@ class VistaModeloMenu (private val servicioApi: ServicioDePedidos): ViewModel() 
         }
     }
     fun sumarItem(idPlato:Int){
-       var ped = estadoMenu.pedidos.singleOrNull { e->(e.idPlato==idPlato && e.estado=="selected")}
-       var peds:MutableList<PlatoPedido> = mutableListOf()
-       peds.addAll(estadoMenu.pedidos)
-       if(ped == null){
-           peds.add(PlatoPedido(idPlato,1,"selected"))
-       }else{
-           val indi = peds.indexOf(ped)
-           peds.set(indi,PlatoPedido(idPlato,ped.cantidad+1,"selected"))
-       }
+        val ped = estadoMenu.pedidos.singleOrNull { e->(e.idPlato==idPlato && e.estado=="selected")}
+        val peds:MutableList<PlatoPedido> = mutableListOf()
+        peds.addAll(estadoMenu.pedidos)
+        if(ped == null){
+            peds.add(PlatoPedido(idPlato,1,"selected"))
+        }else{
+            val indi = peds.indexOf(ped)
+            peds.set(indi,PlatoPedido(idPlato,ped.cantidad+1,"selected"))
+        }
         estadoMenu = estadoMenu.copy(pedidos = peds)
     }
     fun restarItem(idPlato:Int){
-        var ped = estadoMenu.pedidos.singleOrNull { e->(e.idPlato==idPlato && e.estado=="selected") }
-        var peds:MutableList<PlatoPedido> = mutableListOf()
+        val ped = estadoMenu.pedidos.singleOrNull { e->(e.idPlato==idPlato && e.estado=="selected") }
+        val peds:MutableList<PlatoPedido> = mutableListOf()
         peds.addAll(estadoMenu.pedidos)
         if(ped != null){
             if ( ped.cantidad == 1){
@@ -58,16 +58,16 @@ class VistaModeloMenu (private val servicioApi: ServicioDePedidos): ViewModel() 
     fun ordenarItem(idMesa:Int, idCliente:Int){
         viewModelScope.launch {
             estadoMenu = estadoMenu.copy( pidiendoDatos = true)
-            var param = arrayListOf<PlatoOrdenado>()
+            val param = arrayListOf<PlatoOrdenado>()
             estadoMenu.pedidos.forEach{
                 if(it.estado == "selected"){
-                    var plato = PlatoOrdenado(it.idPlato,it.cantidad)
+                    val plato = PlatoOrdenado(it.idPlato,it.cantidad)
                     param.add(plato)// += plato
                 }
             }
             val reqOrd = servicioApi.ordenar(idMesa,idCliente,Ordenes(ordenes = param))
             if (reqOrd.isSuccessful){
-                var peds:MutableList<PlatoPedido> = mutableListOf()
+                val peds:MutableList<PlatoPedido> = mutableListOf()
                 peds.addAll(estadoMenu.pedidos)
                 peds.forEach{
                     if(it.estado == "selected") it.estado = "pedido"
@@ -87,9 +87,9 @@ class VistaModeloMenu (private val servicioApi: ServicioDePedidos): ViewModel() 
     fun obtenerPrecioCarroTotal(): Float {
         var total = 0.0f
         estadoMenu.pedidos.forEach {
-            var t = estadoMenu.platos.find { s -> (s.idPlato==it.idPlato && it.estado=="selected")}
+            val t = estadoMenu.platos.find { s -> (s.idPlato==it.idPlato && it.estado=="selected")}
             if (t != null) {
-                total = total + t.precio * it.cantidad
+                total += t.precio * it.cantidad
             }
         }
         return total
