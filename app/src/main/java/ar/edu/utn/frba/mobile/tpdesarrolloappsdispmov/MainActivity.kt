@@ -41,12 +41,6 @@ class MainActivity : ComponentActivity() {
     private val REQUEST_CODE_POST_NOTIFICATIONS = 101
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        /*val bundle = intent.extras
-        if (bundle != null) {
-            for (key in bundle.keySet()) {
-                Log.i("param(${key})--->",bundle[key].toString())
-            }
-        }*/
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             when {
                 ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) ==
@@ -84,23 +78,23 @@ class MainActivity : ComponentActivity() {
         }
         setContent {
             TpDesarrolloAppsDispMovTheme {
-                val navController= rememberNavController()
+                val controladorDeNavegacion= rememberNavController()
                 val retrofitInst:ServicioDePedidos = ServicioDePedidos.instance
-                val usuarioViewModel by viewModels <VistaModeloUsuario>(factoryProducer = {
+                val vistaModeloUsuario by viewModels <VistaModeloUsuario>(factoryProducer = {
                     object : ViewModelProvider.Factory{
                         override fun <T:ViewModel> create (modelClass: Class<T>): T{
                             return VistaModeloUsuario(retrofitInst,dataStore) as T
                         }
                     }
                 })
-                val tabStateViewModel by viewModels <VistaModeloMesa>(factoryProducer = {
+                val vistaModeloMesa by viewModels <VistaModeloMesa>(factoryProducer = {
                     object : ViewModelProvider.Factory{
                         override fun <T: ViewModel> create (modelClass: Class<T>): T{
                             return VistaModeloMesa(retrofitInst) as T
                         }
                     }
                 })
-                val menuStateViewModel by viewModels <VistaModeloMenu>(factoryProducer = {
+                val vistaModeloMenu by viewModels <VistaModeloMenu>(factoryProducer = {
                     object : ViewModelProvider.Factory{
                         override fun <T: ViewModel> create (modelClass: Class<T>): T{
                             return VistaModeloMenu(retrofitInst) as T
@@ -111,45 +105,32 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    if(usuarioViewModel.estadoUsuario.initializatingApp){
+                    if(vistaModeloUsuario.estadoUsuario.initializatingApp){
                         Firebase.messaging.token.addOnCompleteListener {
                             if(!it.isSuccessful){
                                 println("error en obtencion de token")
                                 return@addOnCompleteListener
                             }
                             val token = it.result
-                            usuarioViewModel.setearDispositivoId(token)
+                            vistaModeloUsuario.setearDispositivoId(token)
                         }
-                        /*if(intent.extras?.getString("action")=="desafio"){
-                            Log.i("MAINACTIVITY--->","DESAFIO")
-                            val accion = intent.extras?.getString("action")?:""
-                            val idRival = intent.extras?.getInt("idRival")?:0
-                            val nombRival = intent.extras?.getString("nombRival")?:""
-                            usuarioViewModel.setRival(idRival,nombRival,"desafiado")
-                        }else if(intent.extras?.getString("action")=="jugar"){
-                            Log.i("MAINACTIVITY--->","JUGAR")
-                            val accion = intent.extras?.getString("action")?:""
-                            val idPartida = intent.extras?.getInt("idPartida")?:0
-                            Log.i("MainActivity->defy",accion)
-                        usuarioViewModel.setGame(idPartida,"jugando")
-                    }*/
                         if(intent.extras?.getString("action")=="share"){
-                            usuarioViewModel.setearInvitacionDividir(
+                            vistaModeloUsuario.setearInvitacionDividir(
                                 intent.extras?.getString("total")?:"",
                                 intent.extras?.getString("cantidad")?:"",
                                 intent.extras?.getString("pago")?:""
                             )
                         }else{
-                            usuarioViewModel.setearInvitacionDividir("","","")
+                            vistaModeloUsuario.setearInvitacionDividir("","","")
                         }
-                        usuarioViewModel.inicializar()
-                        menuStateViewModel.obtenerMenu()
+                        vistaModeloUsuario.inicializar()
+                        vistaModeloMenu.obtenerMenu()
                     }
                     Starting(
-                        tabStateViewModel,
-                        usuarioViewModel,
-                        menuStateViewModel,
-                        navController
+                        vistaModeloMesa,
+                        vistaModeloUsuario,
+                        vistaModeloMenu,
+                        controladorDeNavegacion
                     )
                 }
             }

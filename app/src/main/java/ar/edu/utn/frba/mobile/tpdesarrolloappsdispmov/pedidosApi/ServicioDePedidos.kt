@@ -21,10 +21,6 @@ import retrofit2.http.Path
 interface ServicioDePedidos {
     companion object{
         val instance = Retrofit.Builder()
-            //.baseUrl("http://10.0.2.2:5000/")
-            //baseUrl("http://192.168.0.41:5000/")
-            //.baseUrl("https://restowebback-production.up.railway.app/")
-            //.baseUrl("https://ordereasy-backend.onrender.com")
             .baseUrl("https://order-easy-production.up.railway.app/")
             .addConverterFactory(GsonConverterFactory.create())
             .client(OkHttpClient.Builder().build())
@@ -43,8 +39,6 @@ interface ServicioDePedidos {
     suspend fun obtenerMenuPlatos():Response<PedidoMenuData>
     @POST("/mesas/ordenar/{idMesa}/{idCliente}")
     suspend fun ordenar(@Path("idMesa") idMesa:Int, @Path("idCliente") idCliente:Int, @Body body:Ordenes): Response<PedidoOrdenarData>
-    @GET("mesas/pagar/desafio/{accion}/{idCliente}/{idRival}")
-    suspend fun desafiar(@Path("accion") accion:String, @Path("idCliente") idCliente: Int, @Path("idRival") idRival:Int): Response<TipoDatoRespuestaApiEstandard>
     @POST("/mesas/pagar/invitados/{idCliente}")
     suspend fun pagarInvitados(@Path("idCliente") idCliente: Int,@Body body: Invitados): Response<TipoDatoRespuestaApiEstandard>
     @GET("/mesas/pagar/dividido/{idMesa}/{idCliente}/{accion}")

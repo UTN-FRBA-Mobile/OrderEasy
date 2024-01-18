@@ -73,7 +73,7 @@ fun CuentaInvitados(navCont: NavController, userViewModel: VistaModeloUsuario, v
                                 modifier = Modifier
                                     .fillMaxWidth()
                                     .padding(5.dp),
-                                onClick = { /*TODO*/ },
+                                onClick = {},
                                 label= {
                                     Row (
                                         modifier = Modifier
@@ -179,8 +179,6 @@ fun CuentaInvitados(navCont: NavController, userViewModel: VistaModeloUsuario, v
                             textAlign = TextAlign.Center,
                             style = MaterialTheme.typography.titleLarge
                         )}
-
-
                         item{
                             ExtendedFloatingActionButton(
                                 modifier = Modifier
@@ -204,7 +202,6 @@ fun CuentaInvitados(navCont: NavController, userViewModel: VistaModeloUsuario, v
                                 text = { Text(text = "Volver",
                                     style = MaterialTheme.typography.titleSmall) },
                             )
-
                         }
                     }
                 }

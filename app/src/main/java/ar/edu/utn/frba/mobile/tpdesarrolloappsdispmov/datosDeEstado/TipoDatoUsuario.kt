@@ -19,7 +19,6 @@ data class TipoDatoUsuario(
     val gastoIndDivide:String = "",
     val cantDividida:String = "",
     val errorPedidoApi:Boolean=false,
-    val game:ChallengeData= ChallengeData(0,"",0,0,0.0f,"vacio",0),
     val resultPedidoApi:Int = 0,
     val msjDialog:String =""
 )

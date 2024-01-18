@@ -93,7 +93,7 @@ fun CerrarMesa(navCont: NavController, vistaModeloUsuario: VistaModeloUsuario) {
                                 icon = { Icon(Icons.Default.Info, "call-mozo") },
                                 title = { Text(text = stringResource(id = R.string.closetab_dialog_title)) },
                                 text = { Text(text = stringResource(id = R.string.closetab_dialog_txt)) },
-                                onDismissRequest = { /*TODO*/ },
+                                onDismissRequest = {},
                                 confirmButton = {
                                     TextButton(
                                         colors = ButtonDefaults.buttonColors(

@@ -20,15 +20,8 @@ class InicializarNotificaciones : Application() {
                 NotificationManager.IMPORTANCE_HIGH).apply {
                     description = getString(R.string.CHANNEL1_DESCRIPTION)
             }
-            /*var canal2 = NotificationChannel(
-                getString(R.string.CHANNEL2_ID),
-                getString(R.string.CHANNEL2_NAME),
-                NotificationManager.IMPORTANCE_HIGH).apply {
-                description = getString(R.string.CHANNEL2_DESCRIPTION)
-            }*/
             val manager:NotificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
             manager.createNotificationChannel(canal1)
-            //manager.createNotificationChannel(canal2)
         }
     }
 }

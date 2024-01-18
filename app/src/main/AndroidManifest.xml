@@ -37,32 +37,16 @@
             android:name=".MainActivity"
             android:exported="true"
             android:theme="@style/Theme.OrderEasy">
-            <!-- android:launchMode="singleTask" -->
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-
-            <!--intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
-
-                <data android:scheme="order" android:host="easy" />
-            </intent-filter-->
-
         </activity>
         <activity
             android:name="com.journeyapps.barcodescanner.CaptureActivity"
             android:screenOrientation="fullSensor"
             tools:replace="screenOrientation"/>
-        <!--activity
-            android:name=".notifications.ReqTicketActivity"
-            android:excludeFromRecents="true"
-            android:launchMode="singleTask"
-            android:taskAffinity="" /--> <!-- android:parentActivityName=".MainActivity"/ -->
         <service
             android:name=".notificaciones.MiServicioDeMensajeoFirebase"
             android:exported="false">

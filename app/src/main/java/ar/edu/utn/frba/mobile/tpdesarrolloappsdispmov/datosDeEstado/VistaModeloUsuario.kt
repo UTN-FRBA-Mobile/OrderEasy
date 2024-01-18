@@ -13,8 +13,6 @@ import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.pedidosApi.ServicioDePedidos
-import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.socket.SocketManager
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 class VistaModeloUsuario (private val usuarioServicio: ServicioDePedidos, private val dataStore: DataStore<Preferences>): ViewModel() {
@@ -30,7 +28,7 @@ class VistaModeloUsuario (private val usuarioServicio: ServicioDePedidos, privat
             )
         }
     }
-    fun limpiarInvitacionDividir(){
+    private fun limpiarInvitacionDividir(){
         viewModelScope.launch {
             estadoUsuario = estadoUsuario.copy(
                 gastoIndDivide = "",
@@ -49,7 +47,6 @@ class VistaModeloUsuario (private val usuarioServicio: ServicioDePedidos, privat
                     preferences[stringPreferencesKey("idDevice")] = estadoUsuario.idDispositivo
                     preferences[stringPreferencesKey("nombre")] = nomb
                 }
-                //SETEAR VIEWMODEL
                 setearUsuario(nomb, idCli.body()!!.idCliente)
             }else{
                 estadoUsuario = estadoUsuario.copy(errorRegistrandoUsuarioApi = true)
@@ -67,7 +64,7 @@ class VistaModeloUsuario (private val usuarioServicio: ServicioDePedidos, privat
             estadoUsuario = estadoUsuario.copy( errorPedidoApi = false)
         }
     }
-    fun setearUsuario(nomb:String, idCli:Int){
+    private fun setearUsuario(nomb:String, idCli:Int){
         viewModelScope.launch{
             estadoUsuario = estadoUsuario.copy(
                 nombre = nomb,
@@ -83,10 +80,6 @@ class VistaModeloUsuario (private val usuarioServicio: ServicioDePedidos, privat
     }
     fun tomarMesa(idMesa:Int, hash:String){
         viewModelScope.launch {
-            Log.i("TAKE-TABLE-->","OK")
-            Log.i("TAKE-TABLE-idCli->",estadoUsuario.idCliente.toString())
-            Log.i("TAKE-TABLE-idMesa->",idMesa.toString())
-            Log.i("TAKE-TABLE-hash->",hash)
             val rta= usuarioServicio.registrarseEnMesa(idMesa,estadoUsuario.idCliente,hash)
             if (rta.isSuccessful){
                 estadoUsuario = estadoUsuario.copy(idMesa=idMesa, jwt =rta.body()!!.token )
@@ -98,11 +91,8 @@ class VistaModeloUsuario (private val usuarioServicio: ServicioDePedidos, privat
         }
     }
     fun inicializar(){
-        Log.i("VistaModeloUsuario--->","INITIALIZATING")
         viewModelScope.launch {
-            //Log.i("VistaModeloUsuario--launch1-->","launching")
             val user = mapUser(dataStore.data.first().toPreferences())
-            //Log.i("VistaModeloUsuario--launch2-->",user.toString())
             estadoUsuario = estadoUsuario.copy(
                 idCliente = user.idCliente,
                 nombre=user.nombre,
@@ -136,7 +126,7 @@ class VistaModeloUsuario (private val usuarioServicio: ServicioDePedidos, privat
             dataStore.edit { preferences -> preferences[intPreferencesKey("idMesa")]=0 }
         }
     }
-    fun mapUser(preferences: Preferences):TipoDatoUsuarioAlmacenado {
+    private fun mapUser(preferences: Preferences):TipoDatoUsuarioAlmacenado {
         val idCli = preferences[intPreferencesKey("idCliente")]?:0
         val idMesa = preferences[intPreferencesKey("idMesa")]?:0
         val nomb=preferences[stringPreferencesKey("nombre")].orEmpty()
@@ -210,35 +200,6 @@ class VistaModeloUsuario (private val usuarioServicio: ServicioDePedidos, privat
             }
             estadoUsuario = estadoUsuario.copy( pidiendoDatos = false )
         }
-    }
-    fun selectRival(idCli:Int,monto:Float){
-        viewModelScope.launch {
-            val juego:ChallengeData = ChallengeData(idCli,estadoUsuario.game.nombOponente,estadoUsuario.game.ptsPropios, estadoUsuario.game.ptsRival, monto,estadoUsuario.game.estado,estadoUsuario.game.idPartida)
-            estadoUsuario = estadoUsuario.copy(
-                game = juego
-            )
-        }
-    }
-    fun setRival(idCli: Int,nombre:String,estado:String){
-        viewModelScope.launch {
-            val juego:ChallengeData = ChallengeData(idCli,nombre,estadoUsuario.game.ptsPropios, estadoUsuario.game.ptsRival, estadoUsuario.game.gastoRival,estado,estadoUsuario.game.idPartida)
-            estadoUsuario = estadoUsuario.copy(
-                game = juego
-            )
-        }
-    }
-    fun setGame(idpartida:Int,estado:String){
-        viewModelScope.launch {
-            val juego:ChallengeData = ChallengeData(estadoUsuario.game.idOponente,estadoUsuario.game.nombOponente,estadoUsuario.game.ptsPropios, estadoUsuario.game.ptsRival, estadoUsuario.game.gastoRival,estado,idpartida)
-            estadoUsuario = estadoUsuario.copy(
-                game = juego
-            )
-        }
-    }
-    fun socketear(){
-        SocketManager.connect()
-        SocketManager.sendMsj("hola soy order easy")
-        //SocketManager.disconnect()
     }
     fun llamarmozo(idMesa: Int){
         viewModelScope.launch {

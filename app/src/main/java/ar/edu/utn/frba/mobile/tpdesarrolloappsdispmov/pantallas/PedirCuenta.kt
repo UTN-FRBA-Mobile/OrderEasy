@@ -30,10 +30,6 @@ fun PedirCuenta(navCont: NavController, userViewModel: VistaModeloUsuario, table
     Scaffold (
         topBar = { BarraSuperior(userViewModel)},
         content = { innerPadding ->
-            when(userViewModel.estadoUsuario.game.estado){
-                "jugando" -> navCont.navigate("game")
-                "desafiado" -> navCont.navigate("desafio")
-                else ->{
                     if(userViewModel.estadoUsuario.gastoADividir==null||userViewModel.estadoUsuario.gastoADividir=="") {
                         LazyColumn(
                             modifier = Modifier
@@ -127,44 +123,11 @@ fun PedirCuenta(navCont: NavController, userViewModel: VistaModeloUsuario, table
                                     },
                                 )
                             }
-                            /*item {
-                                ExtendedFloatingActionButton(
-                                    modifier = Modifier
-                                        .fillMaxWidth()
-                                        .padding(8.dp),
-                                    onClick = {
-                                        tableViewModel.setRequestingDataOn()
-                                        tableViewModel.getConsumosState(
-                                            userViewModel.estadoUser.idMesa,
-                                            userViewModel.estadoUser.idCliente
-                                        )
-                                        navCont.navigate(route = "challengeTicket")
-                                    },
-                                    icon = {
-                                        Icon(
-                                            painter = painterResource(id = R.drawable.pago43_48dp),
-                                            contentDescription = "pagoInvitado",
-                                            modifier = Modifier
-                                                .size(100.dp)
-                                                .padding(vertical = 6.dp, horizontal = 10.dp)
-                                        )
-                                    },
-                                    text = {
-                                        Text(
-                                            text = "Desafía a un compañero de mesa a un juego de piedra-papel-tijera y quien pierda se hará cargo de ambas cuentas ",
-                                            textAlign = TextAlign.Justify,
-                                            style = MaterialTheme.typography.titleMedium
-                                        )
-                                    },
-                                )
-                            }*/
                             item { VolverBtn(navCont) }
                         }
                     }else{
                         navCont.navigate("notificacion")
                     }
-                }
-            }
         }
     )
 }

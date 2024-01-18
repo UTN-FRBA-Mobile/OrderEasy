@@ -19,7 +19,6 @@ import java.util.Locale
 @Composable
 fun Consumidor(ped:PedidoData){
     Row (
-        //horizontalArrangement = Arrangement.SpaceBetween,
         modifier = Modifier
             .fillMaxWidth()
             .padding(1.dp),
@@ -27,10 +26,10 @@ fun Consumidor(ped:PedidoData){
     ){
         Icon(painter = painterResource(id = R.drawable.baseline_restaurant_24),contentDescription = "resto",
             modifier = Modifier.weight(1f))
-        Text(text = ped.Plato.nombre+" ($"+"%,.1f".format(Locale.GERMAN,ped.Plato.precio)+" x"+ped.cantidad.toString()+")",
+        Text(text = ped.plato.nombre+" ($"+"%,.1f".format(Locale.GERMAN,ped.plato.precio)+" x"+ped.cantidad.toString()+")",
             modifier = Modifier.weight(5f),
             style = MaterialTheme.typography.displaySmall)
-        Text(text = "$"+"%,.1f".format(Locale.GERMAN,ped.cantidad * ped.Plato.precio),
+        Text(text = "$"+"%,.1f".format(Locale.GERMAN,ped.cantidad * ped.plato.precio),
             modifier = Modifier.weight(2f),
             textAlign = TextAlign.End,
             style = MaterialTheme.typography.labelSmall)
