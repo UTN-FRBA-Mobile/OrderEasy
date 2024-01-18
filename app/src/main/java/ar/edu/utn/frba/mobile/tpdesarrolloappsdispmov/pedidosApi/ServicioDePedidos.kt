@@ -8,6 +8,7 @@ import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.datosDeEstado.PedidoMenuDa
 import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.datosDeEstado.PedidoOrdenarData
 import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.datosDeEstado.TipoDatoPedidoEscanQr
 import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.datosDeEstado.PedidosMesaData
+import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.datosDeEstado.RespuestaApiDejarMesa
 import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.datosDeEstado.TipoDatoRespuestaApiEstandard
 import okhttp3.OkHttpClient
 import retrofit2.Response
@@ -50,7 +51,7 @@ interface ServicioDePedidos {
     @GET("/mesas/pagar/individual/{idCliente}")
     suspend fun pagarIndividual(@Path("idCliente") idCliente: Int): Response<TipoDatoRespuestaApiEstandard>
     @GET("/mesas/exit/{idCliente}")
-    suspend fun retirarse(@Path("idCliente") idCliente: Int):Response<TipoDatoRespuestaApiEstandard>
+    suspend fun retirarse(@Path("idCliente") idCliente: Int):Response<RespuestaApiDejarMesa>
     @GET("/mesas/llamarmozo/{idMesa}")
     suspend fun llamarmozo(@Path("idMesa") idMesa: Int):Response<TipoDatoRespuestaApiEstandard>
 }

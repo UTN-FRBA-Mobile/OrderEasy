@@ -1,6 +1,5 @@
 package ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.datosDeEstado
 
-//import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -75,14 +74,6 @@ class VistaModeloMesa (private val servicioApi: ServicioDePedidos): ViewModel() 
             invitadosAux[indice].seleccionado = !estadoMesa.invitados[indice].seleccionado
             estadoMesa = estadoMesa.copy( invitados = mutableListOf())// , requestingData = !bul)
             estadoMesa = estadoMesa.copy( invitados = invitadosAux)
-        }
-    }
-    fun diselectAll(){
-        viewModelScope.launch {
-            val invitadosAux: MutableList<UserInvitedData> = mutableListOf()
-            invitadosAux.addAll(estadoMesa.invitados)
-            invitadosAux.forEach{it.seleccionado=false}
-            estadoMesa = estadoMesa.copy(invitados = invitadosAux)
         }
     }
     fun pagarInvitado(idCliente: Int) {

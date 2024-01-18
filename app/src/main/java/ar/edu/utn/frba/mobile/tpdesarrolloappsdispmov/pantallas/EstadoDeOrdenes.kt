@@ -17,13 +17,18 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
+import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.rounded.Refresh
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -35,7 +40,6 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.R
 import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.componentes.BarraSuperior
-import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.componentes.VolverBtn
 import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.datosDeEstado.VistaModeloMesa
 import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.datosDeEstado.VistaModeloUsuario
 
@@ -58,6 +62,26 @@ fun EstadoDeOrdenes(navCont: NavController, viewmodelo: VistaModeloMesa, vistaMo
                     Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                         CircularProgressIndicator()
                     }
+                }else if (viewmodelo.estadoMesa.resultPedidoApi ==2){
+                    AlertDialog(
+                        containerColor = Color(251, 201, 143, 255),
+                        icon = { Icon(Icons.Default.Info, "call-mozo") },
+                        title = { Text(text = stringResource(id = R.string.topbar_app)) },
+                        text = { Text(text = stringResource(id = R.string.error_api)) },
+                        onDismissRequest = {},
+                        confirmButton = {
+                            TextButton(
+                                colors = ButtonDefaults.buttonColors (
+                                    containerColor = MaterialTheme.colorScheme.inverseSurface,
+                                ),
+                                onClick = {
+                                    navCont.navigate(route = "mainmenu")
+                                    viewmodelo.desactivarErrorPedidoApi()
+                                }
+                            ) {
+                                Text(text = stringResource(id = R.string.btn_ok))
+                            }
+                        })
                 }else {
                     Box {
                         LazyColumn(modifier = Modifier.fillMaxWidth()) {
@@ -118,17 +142,36 @@ fun EstadoDeOrdenes(navCont: NavController, viewmodelo: VistaModeloMesa, vistaMo
                                 }
                             }
                             item {
-                                VolverBtn(navCont)
+                                ExtendedFloatingActionButton(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .wrapContentSize()
+                                        .padding(vertical = 8.dp),
+                                    onClick = {
+                                        viewmodelo.desactivarErrorPedidoApi()
+                                        navCont.navigate(route = "mainmenu")
+                                    },
+                                    icon = {
+                                        Icon(
+                                            Icons.Filled.ArrowBack,
+                                            contentDescription = "volver"
+                                        )
+                                    },
+                                    text = {
+                                        Text(
+                                            text = stringResource(id = R.string.btn_volver),
+                                            style = MaterialTheme.typography.titleSmall
+                                        )
+                                    },
+                                )
                             }
                         }
                         ExtendedFloatingActionButton(
-                            modifier = Modifier.align(Alignment.TopEnd).padding(0.dp)
-                                .wrapContentSize(),
+                            modifier = Modifier.align(Alignment.TopEnd).padding(0.dp).wrapContentSize(),
                             onClick = { viewmodelo.obtenerEstadoPedidos(vistaModeloUsuario.estadoUsuario.idMesa) },
                             shape = CircleShape,
                             containerColor = MaterialTheme.colorScheme.secondaryContainer,
-                            contentColor = MaterialTheme.colorScheme.secondary
-                        ) {
+                            contentColor = MaterialTheme.colorScheme.secondary) {
                             Icon(imageVector = Icons.Rounded.Refresh, contentDescription = "")
                             Text(text = "Actualizar")
                         }

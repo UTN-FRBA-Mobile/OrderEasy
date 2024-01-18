@@ -10,6 +10,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.R
@@ -29,9 +30,20 @@ fun Consumidor(ped:PedidoData){
         Text(text = ped.plato.nombre+" ($"+"%,.1f".format(Locale.GERMAN,ped.plato.precio)+" x"+ped.cantidad.toString()+")",
             modifier = Modifier.weight(5f),
             style = MaterialTheme.typography.displaySmall)
-        Text(text = "$"+"%,.1f".format(Locale.GERMAN,ped.cantidad * ped.plato.precio),
-            modifier = Modifier.weight(2f),
-            textAlign = TextAlign.End,
-            style = MaterialTheme.typography.labelSmall)
+        if(ped.estado=="PREPARANDO"){
+            Text(
+                text = stringResource(id = R.string.orderstate_preparando),
+                modifier = Modifier.weight(2f),
+                textAlign = TextAlign.End,
+                style = MaterialTheme.typography.bodySmall
+            )
+        }else {
+            Text(
+                text = "$" + "%,.1f".format(Locale.GERMAN, ped.cantidad * ped.plato.precio),
+                modifier = Modifier.weight(2f),
+                textAlign = TextAlign.End,
+                style = MaterialTheme.typography.labelSmall
+            )
+        }
     }
 }

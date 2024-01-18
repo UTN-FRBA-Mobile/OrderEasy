@@ -23,6 +23,7 @@ import androidx.compose.material.icons.filled.Info
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -57,9 +58,6 @@ import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.R
 
 @Composable
 fun OrdenarPedido (navCont: NavController, menu: VistaModeloMenu, userViewModel: VistaModeloUsuario) {
-    var total:Float = remember { 0.0f }
-    total = menu.obtenerPrecioCarroTotal()
-
     Scaffold (
         topBar = { BarraSuperior(userViewModel)},
         bottomBar = { BottomAppBarMakeOrder(navCont, menu, userViewModel)},
@@ -73,9 +71,11 @@ fun OrdenarPedido (navCont: NavController, menu: VistaModeloMenu, userViewModel:
                     LazyColumn(modifier = Modifier.fillMaxWidth()) {
                         items(menu.estadoMenu.pedidos) { p ->
                             if (p.estado == stringResource(id = R.string.plato_selected)) {
-                                var e = menu.estadoMenu.platos.find { m -> m.idPlato == p.idPlato }
+                                val e = menu.estadoMenu.platos.find { m -> m.idPlato == p.idPlato }
                                 if (e != null) {
-                                    var quantity = menu.estadoMenu.pedidos.find { p -> (p.idPlato == e.idPlato && p.estado == stringResource(id = R.string.plato_selected)) }?.cantidad ?: 0
+                                    val quantity = menu.estadoMenu.pedidos.find { p -> (p.idPlato == e.idPlato && p.estado == stringResource(
+                                        id = R.string.plato_selected
+                                    )) }?.cantidad ?: 0
                                     FoodCardMakeOrder(food = e,
                                         quantity = quantity,
                                         modifier = Modifier.padding(16.dp),
@@ -119,7 +119,7 @@ fun FoodCardMakeOrder(food: Plato, quantity: Int, modifier: Modifier, onAddToCar
                 Text(text = food.nombre, style = MaterialTheme.typography.bodyMedium, modifier = Modifier.padding (bottom = 4.dp))
             }
             Column (modifier = Modifier.padding(bottom = 8.dp, start = 8.dp, end = 8.dp)) {
-                QuantitySelector(quantity, food.precio, onAddToCart, onRemoveToCart)
+                QuantitySelector(quantity, food.precio, onAddToCart, onRemoveToCart,true)
             }
         }
     }
@@ -143,47 +143,54 @@ fun BottomAppBarMakeOrder(navCont: NavController, menu: VistaModeloMenu, userVie
                 .fillMaxWidth()
                 .padding(8.dp)
         ) {
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(bottom = 2.dp, top = 2.dp),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically,
-            ) {
-                Text(
-                    text = "Total: ",
-                    style = MaterialTheme.typography.labelMedium,
-                    modifier = Modifier.padding(start = 8.dp, end = 8.dp)
-                )
-                Text(
-                    text = "$${menu.obtenerPrecioCarroTotal()}",
-                    style = MaterialTheme.typography.labelMedium,
-                    modifier = Modifier.padding(start = 8.dp, end = 8.dp)
-                )
-            }
+            if(menu.estadoMenu.pidiendoDatos){
+                Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                    CircularProgressIndicator()
+                }
+                if(!menu.estadoMenu.errorPedidoApi){
+                    navCont.navigate(route = "mainmenu")
+                }
+            }else {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(bottom = 2.dp, top = 2.dp),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    Text(
+                        text = stringResource(id = R.string.ticket_total),
+                        style = MaterialTheme.typography.labelMedium,
+                        modifier = Modifier.padding(start = 8.dp, end = 8.dp)
+                    )
+                    Text(
+                        text = "$${menu.obtenerPrecioCarroTotal()}",
+                        style = MaterialTheme.typography.labelMedium,
+                        modifier = Modifier.padding(start = 8.dp, end = 8.dp)
+                    )
+                }
 
-            Button(
-                onClick = {
-                    if(menu.estadoMenu.pedidos.size > 0){
-                        menu.ordenarItem(userViewModel.estadoUsuario.idMesa,userViewModel.estadoUsuario.idCliente)
-                        navCont.navigate(route="mainmenu")
-                    } else {
-                        showDialog = true
-                    }
-                },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(50.dp)
-                    .padding(top = 5.dp),
-                shape = RoundedCornerShape(3.dp),
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = MaterialTheme.colorScheme.primaryContainer,
-                )
-            ) {
-                Text(text = stringResource(id = R.string.order_confirm), color= Color.Black)
+                Button(
+                    onClick = {
+                        if(menu.estadoMenu.pedidos.size > 0){
+                            menu.ordenarItem(userViewModel.estadoUsuario.idMesa,userViewModel.estadoUsuario.idCliente)
+                        } else {
+                            showDialog = true
+                        }
+                    },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(50.dp)
+                        .padding(top = 5.dp),
+                    shape = RoundedCornerShape(3.dp),
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = MaterialTheme.colorScheme.primaryContainer,
+                    )
+                ) {
+                    Text(text = stringResource(id = R.string.order_confirm), color= Color.Black)
+                }
             }
         }
-
         if (showDialog) {
             AlertDialog(
                 containerColor = Color(251, 201, 143, 255),
@@ -198,7 +205,7 @@ fun BottomAppBarMakeOrder(navCont: NavController, menu: VistaModeloMenu, userVie
                         ),
                         onClick = { showDialog = false }
                     ) {
-                        Text(text =stringResource(id = R.string.btn_ok))
+                        Text(text = stringResource(id = R.string.btn_ok))
                     }
                 }
             )

@@ -39,7 +39,6 @@ import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.componentes.BarraSuperior
 import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.componentes.VolverBtn
 import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.datosDeEstado.VistaModeloUsuario
 import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.R
-
 @Composable
 fun CerrarMesa(navCont: NavController, vistaModeloUsuario: VistaModeloUsuario) {
     var mostrarDialog by remember { mutableStateOf(false) }
@@ -87,32 +86,32 @@ fun CerrarMesa(navCont: NavController, vistaModeloUsuario: VistaModeloUsuario) {
                             },
                         )
                         VolverBtn(navCont)
-                        if (mostrarDialog) {
-                            AlertDialog(
-                                containerColor = Color(251, 201, 143, 255),
-                                icon = { Icon(Icons.Default.Info, "call-mozo") },
-                                title = { Text(text = stringResource(id = R.string.closetab_dialog_title)) },
-                                text = { Text(text = stringResource(id = R.string.closetab_dialog_txt)) },
-                                onDismissRequest = {},
-                                confirmButton = {
-                                    TextButton(
-                                        colors = ButtonDefaults.buttonColors(
-                                            containerColor = MaterialTheme.colorScheme.inverseSurface,
-                                        ),
-                                        onClick = {
-                                            mostrarDialog = false
-                                            navCont.navigate(route = "mainmenu")
-                                        }
-                                    ) {
-                                        Text(text = "ok")
+                    }
+                    if (mostrarDialog) {
+                        AlertDialog(
+                            containerColor = Color(251, 201, 143, 255),
+                            icon = { Icon(Icons.Default.Info, "call-mozo") },
+                            title = { Text(text = stringResource(id = R.string.closetab_dialog_title)) },
+                            text = { Text(text = stringResource(id = R.string.closetab_dialog_txt)) },
+                            onDismissRequest = {},
+                            confirmButton = {
+                                TextButton(
+                                    colors = ButtonDefaults.buttonColors(
+                                        containerColor = MaterialTheme.colorScheme.inverseSurface,
+                                    ),
+                                    onClick = {
+                                        mostrarDialog = false
+                                        navCont.navigate(route = "mainmenu")
                                     }
-                                })
-                        }
-                        if (vistaModeloUsuario.estadoUsuario.errorPedidoApi){
-                            toast.setGravity(Gravity.TOP,0,0)
-                            toast.show()
-                            vistaModeloUsuario.cancelarErrorPedApi()
-                        }
+                                ) {
+                                    Text(text = stringResource(id = R.string.btn_ok))
+                                }
+                            })
+                    }
+                    if (vistaModeloUsuario.estadoUsuario.errorPedidoApi){
+                        toast.setGravity(Gravity.TOP,0,0)
+                        toast.show()
+                        vistaModeloUsuario.cancelarErrorPedApi()
                     }
                 }
             }

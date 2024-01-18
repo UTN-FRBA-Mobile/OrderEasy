@@ -66,14 +66,19 @@ fun Ingresar (usuarioViewModel:VistaModeloUsuario){
                         value = nombre,
                         onValueChange = { nombre = it },
                         label = { Text(text = stringResource(id = R.string.login_label)) })
-
                     ExtendedFloatingActionButton(
                         modifier = Modifier
                             .fillMaxWidth()
                             .wrapContentSize()
                             .padding(vertical = 8.dp),
                         onClick = { usuarioViewModel.ingresar(nombre) },
-                        icon = { Icon(Icons.Sharp.ArrowForward, contentDescription = "volver") },
+                        icon = {
+                            if(nombre.trim().isNotEmpty() && nombre.length>1 && nombre.length<11) {
+                                usuarioViewModel.ingresar(nombre)
+                            }else{
+                                mostrarDialog=true
+                            }
+                        },
                         text = {
                             Text(
                                 text = stringResource(id = R.string.login_btn),

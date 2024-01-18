@@ -1,5 +1,7 @@
 package ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.pantallas
 
+import android.view.Gravity
+import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -33,6 +35,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextAlign
@@ -48,6 +51,7 @@ import com.journeyapps.barcodescanner.ScanOptions
 @Composable
 fun MenuPrincipal(navCont: NavController, usuarioViewModel: VistaModeloUsuario, tabStateViewModel:VistaModeloMesa) {
     var mostrarDialog by remember { mutableStateOf(true) }
+    val toast = Toast.makeText(LocalContext.current, stringResource(id = R.string.error_api), Toast.LENGTH_SHORT)
     val scanLauncher = rememberLauncherForActivityResult(ScanContract()) { result ->
         if (result.contents != null) {
             val parts = result.contents.split("/")
@@ -141,8 +145,9 @@ fun MenuPrincipal(navCont: NavController, usuarioViewModel: VistaModeloUsuario, 
                                 modifier = Modifier
                                     .fillMaxWidth()
                                     .padding(horizontal = 40.dp, vertical = 8.dp),
-                                onClick = { navCont.navigate(route = "readmenu") },
-
+                                onClick = {
+                                    navCont.navigate(route = "readmenu")
+                                },
                                 ) {
                                 Row(
                                     modifier = Modifier.padding(
@@ -348,6 +353,11 @@ fun MenuPrincipal(navCont: NavController, usuarioViewModel: VistaModeloUsuario, 
                             }
                         }
                     }
+                }
+                if (usuarioViewModel.estadoUsuario.errorPedidoApi){ //.errorEscan){
+                    toast.setGravity(Gravity.TOP,0,0)
+                    toast.show()
+                    usuarioViewModel.cancelarErrorPedApi()
                 }
             }
         }

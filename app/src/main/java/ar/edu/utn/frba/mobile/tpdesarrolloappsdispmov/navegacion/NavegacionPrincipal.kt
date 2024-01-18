@@ -39,7 +39,6 @@ fun NavegacionPrincipal (vistaModeloEstadoMesa: VistaModeloMesa, vistaModeloMenu
         composable(route="notificacion",
         ){
             Notificacion(controladorNav,vistaModeloUsuario)
-
         }
     }
 }

@@ -6,7 +6,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.viewModelScope
-import com.google.gson.GsonBuilder
 import kotlinx.coroutines.launch
 
 class VistaModeloMenu (private val servicioApi: ServicioDePedidos): ViewModel() {
@@ -66,7 +65,6 @@ class VistaModeloMenu (private val servicioApi: ServicioDePedidos): ViewModel() 
                     param.add(plato)// += plato
                 }
             }
-            var gson = GsonBuilder().setPrettyPrinting().create()
             val reqOrd = servicioApi.ordenar(idMesa,idCliente,Ordenes(ordenes = param))
             if (reqOrd.isSuccessful){
                 var peds:MutableList<PlatoPedido> = mutableListOf()

@@ -1,6 +1,8 @@
 package ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.datosDeEstado
 
-data class itemPlato(
+import com.google.gson.annotations.SerializedName
+
+data class ItemPlato(
     val idPlato:Int,
     val nombre:String,
     val precio:Float
@@ -8,7 +10,8 @@ data class itemPlato(
 data class ItemConsumidoData(
     val idPedido:Int,
     val cantidad:Int,
-    val Plato:itemPlato
+    val estado:String,
+    @SerializedName("Plato")val plato:ItemPlato
 )
 data class PedidoConsumoData(
     val consumo:MutableList<ItemConsumidoData>

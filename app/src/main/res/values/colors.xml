@@ -11,4 +11,5 @@
     <color name="colorPrimaryDark">#02A540</color>
     <color name="colorAccent">#020560</color>
     <color name="fondoItem">#FFCDDDD4</color>
+    <color name="alerta">#A25C3C</color>
 </resources>

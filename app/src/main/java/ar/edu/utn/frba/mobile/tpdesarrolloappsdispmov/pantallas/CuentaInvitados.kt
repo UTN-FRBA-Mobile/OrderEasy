@@ -15,6 +15,10 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.Info
+import androidx.compose.material.icons.rounded.Warning
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.FilterChip
@@ -23,6 +27,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
@@ -55,17 +60,37 @@ fun CuentaInvitados(navCont: NavController, userViewModel: VistaModeloUsuario, v
                     textAlign = TextAlign.Center,
                     style = MaterialTheme.typography.titleLarge
                 )
-
-                if(vistaModeloMesa.estadoMesa.pidiendoDatos){
+                if(vistaModeloMesa.estadoMesa.pidiendoConsumos){
                     Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                         CircularProgressIndicator()
                     }
-                }else {
+                }else if(vistaModeloMesa.estadoMesa.resultPedidoConsumos == 2){
+                    AlertDialog(
+                        containerColor = Color(251, 201, 143, 255),
+                        icon = { Icon(Icons.Default.Info, "descrip") },
+                        title = { Text(text = stringResource(id =R.string.topbar_app)) },
+                        text = { Text(text = stringResource(id =R.string.error_api)) },
+                        onDismissRequest = {},
+                        confirmButton = {
+                            TextButton(
+                                colors = ButtonDefaults.buttonColors (
+                                    containerColor = MaterialTheme.colorScheme.inverseSurface,
+                                ),
+                                onClick = {
+                                    vistaModeloMesa.limpiarPedidoConsumos()
+                                    navCont.navigate(route = "requestticket")
+                                }
+                            ) {
+                                Text(text = stringResource(id = R.string.btn_ok))
+                            }
+                        })
+                } else {
                     LazyColumn(
                         modifier = Modifier.fillMaxWidth(),
                         verticalArrangement = Arrangement.SpaceBetween//.spacedBy(4.dp)
                     ){
-
+                        val indice:Int =vistaModeloMesa.estadoMesa.invitados.indexOfFirst{ e -> e.idCliente == userViewModel.estadoUsuario.idCliente}
+                        val yo = if(indice !=-1) vistaModeloMesa.estadoMesa.invitados[indice] else null
                         item {
                             FilterChip(
                                 colors = FilterChipDefaults.filterChipColors(selectedContainerColor = Color(206, 222, 213, 255)),
@@ -86,7 +111,7 @@ fun CuentaInvitados(navCont: NavController, userViewModel: VistaModeloUsuario, v
                                             Icon(painter = painterResource(id = R.drawable.baseline_sentiment_very_satisfied_24),
                                                 contentDescription = "userOut",
                                                 modifier = Modifier.size(28.dp))
-                                            Text(text ="Yo",
+                                            Text(text = stringResource(id = R.string.inviteticket_yo),
                                                 style = MaterialTheme.typography.displaySmall,
                                                 textAlign= TextAlign.Center)
                                         }
@@ -94,10 +119,14 @@ fun CuentaInvitados(navCont: NavController, userViewModel: VistaModeloUsuario, v
                                             modifier = Modifier.fillMaxWidth(),
                                             horizontalArrangement = Arrangement.End
                                         ) {
-                                            val indice:Int =vistaModeloMesa.estadoMesa.invitados.indexOfFirst{ e -> e.idCliente == userViewModel.estadoUsuario.idCliente}
-                                            val yo = if(indice !=-1) vistaModeloMesa.estadoMesa.invitados[indice] else null
-                                            if (yo != null) {
+                                            if (yo == null){
+                                                Text(text = stringResource(id = R.string.ticket_vacio),
+                                                    style=MaterialTheme.typography.labelSmall)
+                                            } else if (!yo!!.pedPendientes) {
                                                 Text(text = stringResource(id = R.string.inviteticket_consumido)+"%,.1f".format(Locale.GERMAN,yo.total),
+                                                    style=MaterialTheme.typography.labelSmall)
+                                            }else{
+                                                Text(text = stringResource(id = R.string.orderstate_aviso),
                                                     style=MaterialTheme.typography.labelSmall)
                                             }
                                         }
@@ -105,9 +134,17 @@ fun CuentaInvitados(navCont: NavController, userViewModel: VistaModeloUsuario, v
                                 },
                                 leadingIcon = {
                                     Column (horizontalAlignment = Alignment.CenterHorizontally){
-                                        Icon(painter = painterResource(id = R.drawable.baseline_check_box_24),
-                                            contentDescription = "userIn",
-                                            modifier = Modifier.size(16.dp) )
+                                        if(yo == null){
+                                            Icon(imageVector = Icons.Rounded.Warning, contentDescription = "")
+                                        }else if(yo!!.pedPendientes){
+                                            Icon(imageVector = Icons.Rounded.Warning, contentDescription = "")
+                                        }else {
+                                            Icon(
+                                                painter = painterResource(id = R.drawable.baseline_check_box_24),
+                                                contentDescription = "userIn",
+                                                modifier = Modifier.size(16.dp)
+                                            )
+                                        }
                                     }
                                 }
                             )
@@ -125,7 +162,11 @@ fun CuentaInvitados(navCont: NavController, userViewModel: VistaModeloUsuario, v
                                     modifier = Modifier
                                         .fillMaxWidth()
                                         .padding(5.dp),
-                                    onClick = {vistaModeloMesa.seleccionarInvitados(cons.idCliente)},
+                                    onClick = {
+                                        if(!cons.pedPendientes) {
+                                            vistaModeloMesa.seleccionarInvitados(cons.idCliente)
+                                        }
+                                    },
                                     label = {
                                         Row (
                                             modifier = Modifier
@@ -152,23 +193,33 @@ fun CuentaInvitados(navCont: NavController, userViewModel: VistaModeloUsuario, v
                                                 modifier = Modifier.fillMaxWidth(),
                                                 horizontalArrangement = Arrangement.End
                                             ) {
-                                                Text(text = stringResource(id = R.string.inviteticket_consumido)+"%,.1f".format(Locale.GERMAN,cons.total),
-                                                    style=MaterialTheme.typography.labelSmall)
+                                                if(cons.pedPendientes){
+                                                    Text(text = stringResource(id = R.string.orderstate_aviso),
+                                                        style=MaterialTheme.typography.labelSmall)
+                                                }else{
+                                                    Text(text = stringResource(id = R.string.inviteticket_consumido) + "%,.1f".format(Locale.GERMAN, cons.total),
+                                                        style = MaterialTheme.typography.labelSmall)
+                                                }
                                             }
                                         }
                                     },
                                     leadingIcon = {
-                                        if (cons.seleccionado) {
-                                            Icon(
-                                                painter = painterResource(id = R.drawable.baseline_check_box_24),
-                                                contentDescription = "userIn",
-                                                modifier = Modifier.size(16.dp)
-                                            )
+                                        if (!cons.pedPendientes) {
+                                            if (cons.seleccionado) {
+                                                Icon(
+                                                    painter = painterResource(id = R.drawable.baseline_check_box_24),
+                                                    contentDescription = "userIn",
+                                                    modifier = Modifier.size(16.dp)
+                                                )
+                                            } else {
+                                                Icon(
+                                                    painter = painterResource(id = R.drawable.baseline_check_box_outline_blank_24),
+                                                    contentDescription = "userIn",
+                                                    modifier = Modifier.size(16.dp)
+                                                )
+                                            }
                                         }else{
-                                            Icon(
-                                                painter = painterResource(id = R.drawable.baseline_check_box_outline_blank_24),
-                                                contentDescription = "userIn",
-                                                modifier = Modifier.size(16.dp))
+                                            Icon(imageVector = Icons.Rounded.Warning, contentDescription = "")
                                         }
                                     }
                                 )
@@ -180,30 +231,63 @@ fun CuentaInvitados(navCont: NavController, userViewModel: VistaModeloUsuario, v
                             style = MaterialTheme.typography.titleLarge
                         )}
                         item{
-                            ExtendedFloatingActionButton(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .padding(10.dp),
-                                onClick = {
-                                    vistaModeloMesa.pagarInvitado(userViewModel.estadoUsuario.idCliente)
-                                    navCont.navigate(route="mainmenu")},
-                                text = { Text(text = stringResource(id = R.string.singleticket_request),
-                                    style = MaterialTheme.typography.titleSmall) },
-                                icon = { Icon(painter = painterResource(id = R.drawable.baseline_monetization_on_24),
-                                    contentDescription ="volver",
-                                    modifier = Modifier.size(30.dp)) }
-                            )
+                            if(yo==null || !yo!!.pedPendientes) {
+                                ExtendedFloatingActionButton(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .padding(10.dp),
+                                    onClick = {
+                                        vistaModeloMesa.pagarInvitado(userViewModel.estadoUsuario.idCliente)
+                                        navCont.navigate(route="mainmenu")
+                                    },
+                                    text = {
+                                        Text(
+                                            text = stringResource(id = R.string.singleticket_request),
+                                            style = MaterialTheme.typography.titleSmall
+                                        )
+                                    },
+                                    icon = {
+                                        Icon(
+                                            painter = painterResource(id = R.drawable.baseline_monetization_on_24),
+                                            contentDescription = "volver",
+                                            modifier = Modifier.size(30.dp)
+                                        )
+                                    }
+                                )
+                            }
                             ExtendedFloatingActionButton(
                                 modifier = Modifier
                                     .fillMaxWidth()
                                     .padding(10.dp),
                                 onClick = { navCont.navigate(route="requestTicket")},
                                 icon = { Icon(Icons.Filled.ArrowBack,  contentDescription ="volver") },
-                                text = { Text(text = "Volver",
+                                text = { Text(text = stringResource(id = R.string.btn_back),
                                     style = MaterialTheme.typography.titleSmall) },
                             )
+
                         }
                     }
+                }
+                if (vistaModeloMesa.estadoMesa.resultPedidoApi == 1) {
+                    AlertDialog(
+                        containerColor = Color(251, 201, 143, 255),
+                        icon = { Icon(Icons.Default.Info, "call-mozo") },
+                        title = { Text(text = stringResource(id = R.string.ticket_dialog_title)) },
+                        text = { Text(text = stringResource(id = R.string.ticket_dialog_txt)) },
+                        onDismissRequest = { /*TODO*/ },
+                        confirmButton = {
+                            TextButton(
+                                colors = ButtonDefaults.buttonColors (
+                                    containerColor = MaterialTheme.colorScheme.inverseSurface,
+                                ),
+                                onClick = {
+                                    //showDialog = false
+                                    navCont.navigate(route="mainmenu")
+                                }
+                            ) {
+                                Text(text = stringResource(id = R.string.btn_ok))
+                            }
+                        })
                 }
                 if (vistaModeloMesa.estadoMesa.resultPedidoApi == 2){
                     toast.setGravity(Gravity.TOP,0,0)

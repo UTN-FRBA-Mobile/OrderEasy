@@ -1,7 +1,5 @@
 package ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.datosDeEstado
 
-//import android.util.Log
-import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -15,7 +13,7 @@ import androidx.lifecycle.viewModelScope
 import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.pedidosApi.ServicioDePedidos
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
-class VistaModeloUsuario (private val usuarioServicio: ServicioDePedidos, private val dataStore: DataStore<Preferences>): ViewModel() {
+class VistaModeloUsuario (private val usuarioServicio: ServicioDePedidos, private val almacenDatos: DataStore<Preferences>): ViewModel() {
     var estadoUsuario by mutableStateOf(TipoDatoUsuario())
         private set
     fun setearInvitacionDividir(tot:String, cant:String, indiv:String){
@@ -42,7 +40,7 @@ class VistaModeloUsuario (private val usuarioServicio: ServicioDePedidos, privat
             estadoUsuario = estadoUsuario.copy(registrandoUsuarioApi = true)
             val idCli = usuarioServicio.ingresar(nomb,estadoUsuario.idDispositivo)
             if (idCli.isSuccessful) {
-                dataStore.edit { preferences ->
+                almacenDatos.edit { preferences ->
                     preferences[intPreferencesKey("idCliente")] = idCli.body()!!.idCliente
                     preferences[stringPreferencesKey("idDevice")] = estadoUsuario.idDispositivo
                     preferences[stringPreferencesKey("nombre")] = nomb
@@ -80,10 +78,11 @@ class VistaModeloUsuario (private val usuarioServicio: ServicioDePedidos, privat
     }
     fun tomarMesa(idMesa:Int, hash:String){
         viewModelScope.launch {
+            estadoUsuario = estadoUsuario.copy(pidiendoDatos = true)
             val rta= usuarioServicio.registrarseEnMesa(idMesa,estadoUsuario.idCliente,hash)
             if (rta.isSuccessful){
                 estadoUsuario = estadoUsuario.copy(idMesa=idMesa, jwt =rta.body()!!.token )
-                dataStore.edit { preferences -> preferences[intPreferencesKey("idMesa")]=idMesa }
+                almacenDatos.edit { preferences -> preferences[intPreferencesKey("idMesa")]=idMesa }
             }else{
                 estadoUsuario = estadoUsuario.copy( errorPedidoApi = true)
             }
@@ -92,7 +91,7 @@ class VistaModeloUsuario (private val usuarioServicio: ServicioDePedidos, privat
     }
     fun inicializar(){
         viewModelScope.launch {
-            val user = mapUser(dataStore.data.first().toPreferences())
+            val user = mapUser(almacenDatos.data.first().toPreferences())
             estadoUsuario = estadoUsuario.copy(
                 idCliente = user.idCliente,
                 nombre=user.nombre,
@@ -101,29 +100,33 @@ class VistaModeloUsuario (private val usuarioServicio: ServicioDePedidos, privat
                 estaIngresado = user.idCliente != 0//if(user.idCliente==0)false else true)
             )
             }
-        Log.i("VistaModeloUsuario-->","POST-INITIALIZATING->${estadoUsuario.toString()}")
         }
-    fun clearSavedData(){
-        viewModelScope.launch {
-            estadoUsuario = estadoUsuario.copy(
-                idCliente = 0,
-                nombre = "",
-                idMesa = 0,
-                estaIngresado = false
-            )
-            dataStore.edit {  preferences -> preferences.clear() }
-        }
-    }
     fun retirarseDeMesa(){
         viewModelScope.launch {
-            usuarioServicio.retirarse(estadoUsuario.idCliente)
-            estadoUsuario = estadoUsuario.copy(
-                idMesa = 0,
-                gastoIndDivide = "",
-                gastoADividir = "",
-                cantDividida = ""
-            )
-            dataStore.edit { preferences -> preferences[intPreferencesKey("idMesa")]=0 }
+            estadoUsuario = estadoUsuario.copy(pidiendoDatos = true)
+            // chequeos pagos pendientes
+            val rta = usuarioServicio.retirarse(estadoUsuario.idCliente)
+            if (rta.isSuccessful){
+                if(rta.body()?.e == 0 && rta.body()?.p ==0 ){
+                    estadoUsuario = estadoUsuario.copy(
+                        idMesa = 0,
+                        gastoIndDivide = "",
+                        gastoADividir = "",
+                        cantDividida = "",
+                        msjDialog = "Gracias por tu visita"
+                    )
+                    almacenDatos.edit { preferences -> preferences[intPreferencesKey("idMesa")]=0 }
+                }
+                else{
+                    //hay platos pendientes
+                    estadoUsuario = estadoUsuario.copy(
+                        msjDialog = "Tienes platos pendientes de entrega y/o pago."
+                    )
+                }
+            }else{
+                estadoUsuario = estadoUsuario.copy(errorPedidoApi = true)
+            }
+            estadoUsuario = estadoUsuario.copy( pidiendoDatos = false )
         }
     }
     private fun mapUser(preferences: Preferences):TipoDatoUsuarioAlmacenado {

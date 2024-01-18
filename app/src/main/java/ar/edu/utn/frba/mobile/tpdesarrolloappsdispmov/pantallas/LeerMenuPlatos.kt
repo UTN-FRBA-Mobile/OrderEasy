@@ -25,8 +25,11 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Send
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.BottomAppBar
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.FilledTonalButton
 import androidx.compose.material3.FloatingActionButton
@@ -36,6 +39,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -45,6 +49,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
@@ -80,8 +85,32 @@ fun LeerMenuPlatos(navCont: NavController, menu: VistaModeloMenu, userViewModel:
                         Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center ){
                             CircularProgressIndicator()
                         }
+                        if (menu.estadoMenu.errorPedidoApi){
+                            AlertDialog(
+                                containerColor = Color(251, 201, 143, 255),
+                                icon = { Icon(Icons.Default.Info, "call-mozo") },
+                                title = { Text(text = stringResource(id = R.string.topbar_app)) },
+                                text = { Text(text = stringResource(id = R.string.error_api)) },
+                                onDismissRequest = {
+                                    navCont.navigate(route = "mainmenu")
+                                    menu.cancelErrorReqApi()
+                                },
+                                confirmButton = {
+                                    TextButton(
+                                        colors = ButtonDefaults.buttonColors (
+                                            containerColor = MaterialTheme.colorScheme.inverseSurface,
+                                        ),
+                                        onClick = {
+                                            navCont.navigate(route = "mainmenu")
+                                            menu.cancelErrorReqApi()
+                                        }
+                                    ) {
+                                        Text(text = stringResource(id = R.string.btn_ok))
+                                    }
+                                })
+                        }
                     }else{
-                        Menu(menu)
+                        Menu(menu, userViewModel.estadoUsuario.idMesa !=0)
                     }
                 }
             }
@@ -90,7 +119,7 @@ fun LeerMenuPlatos(navCont: NavController, menu: VistaModeloMenu, userViewModel:
 }
 
 @Composable
-fun Menu(menu: VistaModeloMenu) {
+fun Menu(menu: VistaModeloMenu, usuarioSentado:Boolean) {
     LazyColumn {
         items(menu.estadoMenu.platos) { food ->
             FoodCard(
@@ -102,14 +131,15 @@ fun Menu(menu: VistaModeloMenu) {
                 },
                 onRemoveToCart =  {
                     menu.restarItem(food.idPlato)
-                }
+                },
+                usuarioSentado
             )
         }
     }
 }
 
 @Composable
-fun FoodCard(menu: VistaModeloMenu, food: Plato, modifier: Modifier, onAddToCart: () -> Unit, onRemoveToCart: () -> Unit) {
+fun FoodCard(menu: VistaModeloMenu, food: Plato, modifier: Modifier, onAddToCart: () -> Unit, onRemoveToCart: () -> Unit, usuarioSentado: Boolean) {
     var quantity = menu.estadoMenu.pedidos.find{p -> (p.idPlato == food.idPlato && p.estado == "selected")}?.cantidad?:0
 
     Surface(
@@ -147,7 +177,9 @@ fun FoodCard(menu: VistaModeloMenu, food: Plato, modifier: Modifier, onAddToCart
                         )
 
                         Text(
-                            text = if (isExpanded) "Leer menos" else "Leer más",
+                            text = if (isExpanded) stringResource(id = R.string.carta_less) else stringResource(
+                                id = R.string.carta_more
+                            ),
                             textDecoration = TextDecoration.Underline,
                             style = MaterialTheme.typography.labelMedium,
                             modifier = Modifier.clickable { isExpanded = !isExpanded }
@@ -184,7 +216,7 @@ fun FoodCard(menu: VistaModeloMenu, food: Plato, modifier: Modifier, onAddToCart
 
                 }
             }
-            QuantitySelector(quantity, food.precio, onAddToCart, onRemoveToCart)
+            QuantitySelector(quantity, food.precio, onAddToCart, onRemoveToCart,usuarioSentado)
         }
     }
 }
@@ -194,7 +226,8 @@ fun QuantitySelector(
     quantity: Int,
     price: Float,
     onAddToCart: () -> Unit,
-    onRemoveToCart: () -> Unit
+    onRemoveToCart: () -> Unit,
+    usuarioSentado: Boolean
 ) {
     Row(
         horizontalArrangement = Arrangement.SpaceBetween,
@@ -226,8 +259,10 @@ fun QuantitySelector(
                 ) {
                     IconButton(
                         onClick = {
-                            if (quantity > 0) {
-                                onRemoveToCart()
+                            if (usuarioSentado) {
+                                if (quantity > 0) {
+                                    onRemoveToCart()
+                                }
                             }
                         },
                         modifier = Modifier
@@ -247,7 +282,9 @@ fun QuantitySelector(
 
                     IconButton(
                         onClick = {
-                            onAddToCart()
+                            if (usuarioSentado){
+                                onAddToCart()
+                            }
                         },
                         modifier = Modifier
                             .size(25.dp)
@@ -264,7 +301,9 @@ fun QuantitySelector(
             Column {
                 IconButton(
                     onClick = {
-                        onAddToCart()
+                        if (usuarioSentado) {
+                            onAddToCart()
+                        }
                     },
                     modifier = Modifier
                         .border(
