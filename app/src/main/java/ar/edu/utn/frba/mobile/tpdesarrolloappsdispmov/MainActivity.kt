@@ -26,12 +26,12 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
-import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.apiReqs.ReqsService
-import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.navigation.MainNavigation
-import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.screens.Login
-import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.stateData.MenuViewModel
-import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.stateData.TableViewModel
-import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.stateData.UserViewModel
+import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.pedidosApi.ServicioDePedidos
+import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.navegacion.NavegacionPrincipal
+import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.pantallas.Ingresar
+import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.datosDeEstado.VistaModeloMenu
+import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.datosDeEstado.VistaModeloMesa
+import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.datosDeEstado.VistaModeloUsuario
 import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.ui.theme.TpDesarrolloAppsDispMovTheme
 import com.google.firebase.Firebase
 import com.google.firebase.messaging.messaging
@@ -85,25 +85,25 @@ class MainActivity : ComponentActivity() {
         setContent {
             TpDesarrolloAppsDispMovTheme {
                 val navController= rememberNavController()
-                val retrofitInst:ReqsService = ReqsService.instance
-                val usuarioViewModel by viewModels <UserViewModel>(factoryProducer = {
+                val retrofitInst:ServicioDePedidos = ServicioDePedidos.instance
+                val usuarioViewModel by viewModels <VistaModeloUsuario>(factoryProducer = {
                     object : ViewModelProvider.Factory{
                         override fun <T:ViewModel> create (modelClass: Class<T>): T{
-                            return UserViewModel(retrofitInst,dataStore) as T
+                            return VistaModeloUsuario(retrofitInst,dataStore) as T
                         }
                     }
                 })
-                val tabStateViewModel by viewModels <TableViewModel>(factoryProducer = {
+                val tabStateViewModel by viewModels <VistaModeloMesa>(factoryProducer = {
                     object : ViewModelProvider.Factory{
                         override fun <T: ViewModel> create (modelClass: Class<T>): T{
-                            return TableViewModel(retrofitInst) as T
+                            return VistaModeloMesa(retrofitInst) as T
                         }
                     }
                 })
-                val menuStateViewModel by viewModels <MenuViewModel>(factoryProducer = {
+                val menuStateViewModel by viewModels <VistaModeloMenu>(factoryProducer = {
                     object : ViewModelProvider.Factory{
                         override fun <T: ViewModel> create (modelClass: Class<T>): T{
-                            return MenuViewModel(retrofitInst) as T
+                            return VistaModeloMenu(retrofitInst) as T
                         }
                     }
                 })
@@ -158,20 +158,20 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun Starting(tableViewModel: TableViewModel,usuarioViewModel: UserViewModel,menuStateViewModel: MenuViewModel,navController: NavHostController) {
+fun Starting(tableViewModel: VistaModeloMesa, usuarioViewModel: VistaModeloUsuario, menuStateViewModel: VistaModeloMenu, navController: NavHostController) {
     if(usuarioViewModel.estadoUser.initializatingApp || usuarioViewModel.estadoUser.requestingData){
         Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
             CircularProgressIndicator()
         }
     }else if(usuarioViewModel.estadoUser.isLogged){
         if(usuarioViewModel.estadoUser.idDevice!=""){
-            MainNavigation(tableViewModel,menuStateViewModel,usuarioViewModel, navController)
+            NavegacionPrincipal(tableViewModel,menuStateViewModel,usuarioViewModel, navController)
         }else{
             Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                 CircularProgressIndicator()
             }
         }
     }else{
-        Login(usuarioViewModel)
+        Ingresar(usuarioViewModel)
     }
 }
