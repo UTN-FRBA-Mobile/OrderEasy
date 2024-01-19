@@ -52,7 +52,6 @@ android {
 }
 
 dependencies {
-    implementation("io.socket:socket.io-client:2.0.0")
     implementation("androidx.datastore:datastore-preferences:1.0.0")
     implementation(platform("com.google.firebase:firebase-bom:32.4.0"))
     implementation("com.google.firebase:firebase-messaging-ktx")
