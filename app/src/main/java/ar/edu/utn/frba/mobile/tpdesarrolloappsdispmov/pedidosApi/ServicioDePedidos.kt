@@ -4,10 +4,10 @@ import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.datosDeEstado.Invitados
 import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.datosDeEstado.Ordenes
 import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.datosDeEstado.PedidoConsumoData
 import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.datosDeEstado.TipoDatoPedidoIngreso
-import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.datosDeEstado.PedidoMenuData
+import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.datosDeEstado.TipoDatoPedidoMenu
 import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.datosDeEstado.PedidoOrdenarData
 import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.datosDeEstado.TipoDatoPedidoEscanQr
-import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.datosDeEstado.PedidosMesaData
+import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.datosDeEstado.TipoDatoPedidosMesa
 import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.datosDeEstado.RespuestaApiDejarMesa
 import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.datosDeEstado.TipoDatoRespuestaApiEstandard
 import okhttp3.OkHttpClient
@@ -31,13 +31,13 @@ interface ServicioDePedidos {
     @GET("/clientes/updatetoken/{idCliente}/{token}")
     suspend fun actualizarToken(@Path("token") token:String): Response<TipoDatoRespuestaApiEstandard>
     @GET("mesas/compas/{idMesa}")
-    suspend fun obtenerConsumosDeLaMesa(@Path("idMesa") idMesa:Int): Response<PedidosMesaData>
+    suspend fun obtenerConsumosDeLaMesa(@Path("idMesa") idMesa:Int): Response<TipoDatoPedidosMesa>
     @GET("mesas/estado/{idMesa}")
-    suspend fun obtenerEstadoDeMesa(@Path("idMesa") idMesa:Int): Response<PedidosMesaData>
+    suspend fun obtenerEstadoDeMesa(@Path("idMesa") idMesa:Int): Response<TipoDatoPedidosMesa>
     @GET ("/clientes/{nomb}/{idDevice}")
     suspend fun ingresar(@Path("nomb") id:String, @Path("idDevice") idDevice:String):Response<TipoDatoPedidoIngreso>
     @GET("/platos")
-    suspend fun obtenerMenuPlatos():Response<PedidoMenuData>
+    suspend fun obtenerMenuPlatos():Response<TipoDatoPedidoMenu>
     @POST("/mesas/ordenar/{idMesa}/{idCliente}")
     suspend fun ordenar(@Path("idMesa") idMesa:Int, @Path("idCliente") idCliente:Int, @Body body:Ordenes): Response<PedidoOrdenarData>
     @POST("/mesas/pagar/invitados/{idCliente}")

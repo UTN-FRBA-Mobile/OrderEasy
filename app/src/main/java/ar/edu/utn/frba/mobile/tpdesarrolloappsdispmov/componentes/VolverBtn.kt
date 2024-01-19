@@ -23,7 +23,7 @@ fun VolverBtn(navCont: NavController){
             .fillMaxWidth()
             .wrapContentSize()
             .padding(vertical = 8.dp),
-        onClick = { navCont.navigate(route="mainmenu")},
+        onClick = { navCont.navigate(route="menuprincipal")},
         icon = { Icon(Icons.Filled.ArrowBack,  contentDescription ="volver") },
         text = { Text(
             text = stringResource(id = R.string.btn_back),

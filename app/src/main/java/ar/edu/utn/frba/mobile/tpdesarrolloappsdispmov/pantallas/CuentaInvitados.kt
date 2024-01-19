@@ -78,7 +78,7 @@ fun CuentaInvitados(navCont: NavController, userViewModel: VistaModeloUsuario, v
                                 ),
                                 onClick = {
                                     vistaModeloMesa.limpiarPedidoConsumos()
-                                    navCont.navigate(route = "requestticket")
+                                    navCont.navigate(route = "pedircuenta")
                                 }
                             ) {
                                 Text(text = stringResource(id = R.string.btn_ok))
@@ -238,7 +238,7 @@ fun CuentaInvitados(navCont: NavController, userViewModel: VistaModeloUsuario, v
                                         .padding(10.dp),
                                     onClick = {
                                         vistaModeloMesa.pagarInvitado(userViewModel.estadoUsuario.idCliente)
-                                        navCont.navigate(route="mainmenu")
+                                        navCont.navigate(route="menuprincipal")
                                     },
                                     text = {
                                         Text(
@@ -259,7 +259,7 @@ fun CuentaInvitados(navCont: NavController, userViewModel: VistaModeloUsuario, v
                                 modifier = Modifier
                                     .fillMaxWidth()
                                     .padding(10.dp),
-                                onClick = { navCont.navigate(route="requestTicket")},
+                                onClick = { navCont.navigate(route="pedircuenta")},
                                 icon = { Icon(Icons.Filled.ArrowBack,  contentDescription ="volver") },
                                 text = { Text(text = stringResource(id = R.string.btn_back),
                                     style = MaterialTheme.typography.titleSmall) },
@@ -282,7 +282,7 @@ fun CuentaInvitados(navCont: NavController, userViewModel: VistaModeloUsuario, v
                                 ),
                                 onClick = {
                                     //showDialog = false
-                                    navCont.navigate(route="mainmenu")
+                                    navCont.navigate(route="menuprincipal")
                                 }
                             ) {
                                 Text(text = stringResource(id = R.string.btn_ok))

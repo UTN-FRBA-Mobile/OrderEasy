@@ -96,7 +96,7 @@ class VistaModeloUsuario (private val usuarioServicio: ServicioDePedidos, privat
                 idCliente = user.idCliente,
                 nombre=user.nombre,
                 idMesa = user.idMesa,
-                initializatingApp = false,
+                inicializandoAplicacion = false,
                 estaIngresado = user.idCliente != 0//if(user.idCliente==0)false else true)
             )
             }

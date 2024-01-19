@@ -1,6 +1,5 @@
 package ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.pantallas
 
-import android.util.Log
 import android.view.Gravity
 import android.widget.Toast
 import androidx.compose.foundation.layout.Box
@@ -44,7 +43,7 @@ fun Ingresar (usuarioViewModel:VistaModeloUsuario){
     var mostrarDialog by remember { mutableStateOf(false) }
     val toast = Toast.makeText(LocalContext.current, stringResource(id = R.string.error_api),Toast.LENGTH_SHORT)
     Scaffold (
-        topBar = { BarraSuperior(userViewModel = usuarioViewModel)},
+        topBar = { BarraSuperior(vistaModeloUsuario = usuarioViewModel)},
         content = { innerPadding ->
             Column (modifier = Modifier
                 .fillMaxSize()

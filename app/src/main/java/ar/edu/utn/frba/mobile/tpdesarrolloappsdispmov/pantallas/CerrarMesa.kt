@@ -101,7 +101,7 @@ fun CerrarMesa(navCont: NavController, vistaModeloUsuario: VistaModeloUsuario) {
                                     ),
                                     onClick = {
                                         mostrarDialog = false
-                                        navCont.navigate(route="mainmenu")
+                                        navCont.navigate(route="menuprincipal")
                                     }
                                 ) {
                                     Text(text = stringResource(id = R.string.btn_ok))

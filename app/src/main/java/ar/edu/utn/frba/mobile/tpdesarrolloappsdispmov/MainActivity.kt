@@ -105,7 +105,7 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    if(vistaModeloUsuario.estadoUsuario.initializatingApp){
+                    if(vistaModeloUsuario.estadoUsuario.inicializandoAplicacion){
                         Firebase.messaging.token.addOnCompleteListener {
                             if(!it.isSuccessful){
                                 println("error en obtencion de token")
@@ -139,14 +139,14 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun Starting(tableViewModel: VistaModeloMesa, usuarioViewModel: VistaModeloUsuario, menuStateViewModel: VistaModeloMenu, navController: NavHostController) {
-    if(usuarioViewModel.estadoUsuario.initializatingApp || usuarioViewModel.estadoUsuario.pidiendoDatos){
+fun Starting(vistaModeloMesa: VistaModeloMesa, usuarioViewModel: VistaModeloUsuario, menuStateViewModel: VistaModeloMenu, navController: NavHostController) {
+    if(usuarioViewModel.estadoUsuario.inicializandoAplicacion || usuarioViewModel.estadoUsuario.registrandoUsuarioApi){
         Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
             CircularProgressIndicator()
         }
     }else if(usuarioViewModel.estadoUsuario.estaIngresado){
         if(usuarioViewModel.estadoUsuario.idDispositivo!=""){
-            NavegacionPrincipal(tableViewModel,menuStateViewModel,usuarioViewModel, navController)
+            NavegacionPrincipal(vistaModeloMesa,menuStateViewModel,usuarioViewModel, navController)
         }else{
             Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                 CircularProgressIndicator()

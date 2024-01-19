@@ -146,7 +146,7 @@ fun MenuPrincipal(navCont: NavController, usuarioViewModel: VistaModeloUsuario, 
                                     .fillMaxWidth()
                                     .padding(horizontal = 40.dp, vertical = 8.dp),
                                 onClick = {
-                                    navCont.navigate(route = "readmenu")
+                                    navCont.navigate(route = "leercartaplatos")
                                 },
                                 ) {
                                 Row(
@@ -181,7 +181,7 @@ fun MenuPrincipal(navCont: NavController, usuarioViewModel: VistaModeloUsuario, 
                                 modifier = Modifier
                                     .fillMaxWidth()
                                     .padding(horizontal = 40.dp, vertical = 8.dp),
-                                onClick = { navCont.navigate(route = "makeorder") },
+                                onClick = { navCont.navigate(route = "ordenarpedido") },
 
                                 ) {
                                 Row(
@@ -216,7 +216,7 @@ fun MenuPrincipal(navCont: NavController, usuarioViewModel: VistaModeloUsuario, 
                                 modifier = Modifier
                                     .fillMaxWidth()
                                     .padding(horizontal = 40.dp, vertical = 8.dp),
-                                onClick = { navCont.navigate(route = "requestticket") },
+                                onClick = { navCont.navigate(route = "pedircuenta") },
 
                                 ) {
                                 Row(
@@ -252,7 +252,7 @@ fun MenuPrincipal(navCont: NavController, usuarioViewModel: VistaModeloUsuario, 
                                     .fillMaxWidth()
                                     .padding(horizontal = 40.dp, vertical = 8.dp),
                                 onClick = {
-                                    navCont.navigate(route = "callmozo")
+                                    navCont.navigate(route = "llamarmozo")
                                 },
                             ) {
                                 Row(
@@ -289,7 +289,7 @@ fun MenuPrincipal(navCont: NavController, usuarioViewModel: VistaModeloUsuario, 
                                     .padding(horizontal = 40.dp, vertical = 8.dp),
                                 onClick = {
                                     tabStateViewModel.setearPedidoDatos()
-                                    navCont.navigate(route = "ordersstate")
+                                    navCont.navigate(route = "estadoordenes")
                                     tabStateViewModel.obtenerEstadoPedidos(usuarioViewModel.estadoUsuario.idMesa)
                                 },
                             ) {
@@ -326,7 +326,7 @@ fun MenuPrincipal(navCont: NavController, usuarioViewModel: VistaModeloUsuario, 
                                     .fillMaxWidth()
                                     .padding(horizontal = 40.dp, vertical = 8.dp),
                                 onClick = {
-                                    navCont.navigate(route = "closetable")
+                                    navCont.navigate(route = "cerrarmesa")
                                 },
                             ) {
                                 Row(

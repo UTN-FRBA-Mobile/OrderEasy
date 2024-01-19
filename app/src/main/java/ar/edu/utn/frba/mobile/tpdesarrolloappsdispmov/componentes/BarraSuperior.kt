@@ -24,7 +24,7 @@ import androidx.compose.ui.unit.dp
 import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.R
 
 @Composable
-fun BarraSuperior (userViewModel: VistaModeloUsuario){
+fun BarraSuperior (vistaModeloUsuario: VistaModeloUsuario){
    TopAppBar(
        modifier = Modifier.height(40.dp),
         colors = TopAppBarDefaults.largeTopAppBarColors(
@@ -43,7 +43,7 @@ fun BarraSuperior (userViewModel: VistaModeloUsuario){
                 Row (verticalAlignment = Alignment.CenterVertically){
                     Icon(Icons.Filled.AccountCircle, contentDescription = "usuario", modifier = Modifier.size(20.dp))
                     Text(
-                        text = userViewModel.estadoUsuario.nombre,
+                        text = vistaModeloUsuario.estadoUsuario.nombre,
                         style = MaterialTheme.typography.titleSmall
                     )
                 }

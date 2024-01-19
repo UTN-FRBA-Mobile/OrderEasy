@@ -9,7 +9,7 @@ data class TipoDatoUsuario(
     val registrandoUsuarioApi:Boolean = false,
     val errorRegistrandoUsuarioApi:Boolean = false,
     val pidiendoDatos:Boolean=true,
-    val initializatingApp:Boolean=true,
+    val inicializandoAplicacion:Boolean=true,
     val requiriendoIngreso:Boolean=true,
     val jwt:String="",
     val consumos: List <ItemConsumidoData> = emptyList(),

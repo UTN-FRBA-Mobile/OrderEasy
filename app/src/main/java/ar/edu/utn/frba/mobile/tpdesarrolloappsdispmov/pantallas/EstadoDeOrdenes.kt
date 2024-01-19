@@ -75,7 +75,7 @@ fun EstadoDeOrdenes(navCont: NavController, viewmodelo: VistaModeloMesa, vistaMo
                                     containerColor = MaterialTheme.colorScheme.inverseSurface,
                                 ),
                                 onClick = {
-                                    navCont.navigate(route = "mainmenu")
+                                    navCont.navigate(route = "menuprincipal")
                                     viewmodelo.desactivarErrorPedidoApi()
                                 }
                             ) {
@@ -149,7 +149,7 @@ fun EstadoDeOrdenes(navCont: NavController, viewmodelo: VistaModeloMesa, vistaMo
                                         .padding(vertical = 8.dp),
                                     onClick = {
                                         viewmodelo.desactivarErrorPedidoApi()
-                                        navCont.navigate(route = "mainmenu")
+                                        navCont.navigate(route = "menuprincipal")
                                     },
                                     icon = {
                                         Icon(

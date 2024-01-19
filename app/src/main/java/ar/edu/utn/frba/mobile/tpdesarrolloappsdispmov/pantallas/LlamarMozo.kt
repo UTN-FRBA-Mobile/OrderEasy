@@ -92,7 +92,7 @@ fun LlamarMozo(navCont: NavController, userViewModel: VistaModeloUsuario) {
                                 ),
                                 onClick = {
                                     userViewModel.desactivarErrorPedidoApi()
-                                    navCont.navigate(route="mainmenu")
+                                    navCont.navigate(route="menuprincipal")
                                 }
                             ) {
                                 Text(text = stringResource(id = R.string.btn_ok))

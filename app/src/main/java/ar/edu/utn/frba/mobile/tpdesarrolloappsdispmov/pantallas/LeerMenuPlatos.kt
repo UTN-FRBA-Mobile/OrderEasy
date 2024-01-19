@@ -92,7 +92,7 @@ fun LeerMenuPlatos(navCont: NavController, menu: VistaModeloMenu, userViewModel:
                                 title = { Text(text = stringResource(id = R.string.topbar_app)) },
                                 text = { Text(text = stringResource(id = R.string.error_api)) },
                                 onDismissRequest = {
-                                    navCont.navigate(route = "mainmenu")
+                                    navCont.navigate(route = "menuprincipal")
                                     menu.cancelErrorReqApi()
                                 },
                                 confirmButton = {
@@ -101,7 +101,7 @@ fun LeerMenuPlatos(navCont: NavController, menu: VistaModeloMenu, userViewModel:
                                             containerColor = MaterialTheme.colorScheme.inverseSurface,
                                         ),
                                         onClick = {
-                                            navCont.navigate(route = "mainmenu")
+                                            navCont.navigate(route = "menuprincipal")
                                             menu.cancelErrorReqApi()
                                         }
                                     ) {
@@ -330,14 +330,14 @@ fun QuantitySelector(
 fun BottomAppBarExample(navCont: NavController, menu: VistaModeloMenu) {
     BottomAppBar(
         actions = {
-            FilledTonalButton(onClick = { navCont.navigate(route="mainmenu") }) {
+            FilledTonalButton(onClick = { navCont.navigate(route="menuprincipal") }) {
                 Icon(Icons.Filled.ArrowBack, contentDescription = "")
                 Text(
                     text = stringResource(id = R.string.btn_back),
                     style = MaterialTheme.typography.bodyMedium
                 )
             }
-            FilledTonalButton(onClick = { navCont.navigate(route = "makeorder")},
+            FilledTonalButton(onClick = { navCont.navigate(route = "ordenarpedido")},
                 modifier = Modifier.padding(horizontal = 3.dp)) {
                 Text(
                     text = stringResource(id = R.string.order_ordenar),

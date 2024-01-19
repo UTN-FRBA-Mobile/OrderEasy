@@ -1,6 +1,5 @@
 package ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.navegacion
 
-//import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -24,21 +23,18 @@ import ar.edu.utn.frba.mobile.tpdesarrolloappsdispmov.datosDeEstado.VistaModeloU
 fun NavegacionPrincipal (vistaModeloEstadoMesa: VistaModeloMesa, vistaModeloMenu: VistaModeloMenu, vistaModeloUsuario:VistaModeloUsuario, controladorNav:NavHostController) {
     NavHost(
         navController = controladorNav,
-        startDestination = "mainmenu"
+        startDestination ="menuprincipal"
     ){
-        composable(route="mainmenu"){ MenuPrincipal(controladorNav,vistaModeloUsuario,vistaModeloEstadoMesa) }
-        composable(route="readmenu"){ LeerMenuPlatos(controladorNav,vistaModeloMenu,vistaModeloUsuario) }
-        composable(route="makeorder"){ OrdenarPedido(controladorNav,vistaModeloMenu,vistaModeloUsuario) }
-        composable(route="callmozo"){ LlamarMozo(controladorNav,vistaModeloUsuario) }
-        composable(route="closetable"){ CerrarMesa(controladorNav,vistaModeloUsuario) }
-        composable(route="ordersstate"){EstadoDeOrdenes(controladorNav,vistaModeloEstadoMesa,vistaModeloUsuario) }
-        composable(route="requestticket"){ PedirCuenta(controladorNav,vistaModeloUsuario,vistaModeloEstadoMesa) }
-        composable(route="individualTicket"){ CuentaIndividual(controladorNav,vistaModeloUsuario) }
-        composable(route="divideTicket"){ CuentaDividida(controladorNav,vistaModeloUsuario, vistaModeloEstadoMesa) }
-        composable(route="inviteTicket"){ CuentaInvitados(controladorNav,vistaModeloUsuario,vistaModeloEstadoMesa)}
-        composable(route="notificacion",
-        ){
-            Notificacion(controladorNav,vistaModeloUsuario)
-        }
+        composable(route="menuprincipal"){ MenuPrincipal(controladorNav,vistaModeloUsuario,vistaModeloEstadoMesa) }
+        composable(route="leercartaplatos"){ LeerMenuPlatos(controladorNav,vistaModeloMenu,vistaModeloUsuario) }
+        composable(route="ordenarpedido"){ OrdenarPedido(controladorNav,vistaModeloMenu,vistaModeloUsuario) }
+        composable(route="llamarmozo"){ LlamarMozo(controladorNav,vistaModeloUsuario) }
+        composable(route="cerrarmesa"){ CerrarMesa(controladorNav,vistaModeloUsuario) }
+        composable(route="estadoordenes"){EstadoDeOrdenes(controladorNav,vistaModeloEstadoMesa,vistaModeloUsuario) }
+        composable(route="pedircuenta"){ PedirCuenta(controladorNav,vistaModeloUsuario,vistaModeloEstadoMesa) }
+        composable(route="cuentaindividual"){ CuentaIndividual(controladorNav,vistaModeloUsuario) }
+        composable(route="cuentadividida"){ CuentaDividida(controladorNav,vistaModeloUsuario, vistaModeloEstadoMesa) }
+        composable(route="cuentainvitados"){ CuentaInvitados(controladorNav,vistaModeloUsuario,vistaModeloEstadoMesa)}
+        composable(route="notificacion"){Notificacion(controladorNav,vistaModeloUsuario)}
     }
 }

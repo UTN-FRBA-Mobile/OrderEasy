@@ -148,7 +148,7 @@ fun BottomAppBarMakeOrder(navCont: NavController, menu: VistaModeloMenu, userVie
                     CircularProgressIndicator()
                 }
                 if(!menu.estadoMenu.errorPedidoApi){
-                    navCont.navigate(route = "mainmenu")
+                    navCont.navigate(route = "menuprincipal")
                 }
             }else {
                 Row(
@@ -235,7 +235,7 @@ fun EmptyCartMessage(navCont: NavController) {
         ExtendedFloatingActionButton(
             modifier = Modifier
                 .padding(14.dp),
-            onClick = { navCont.navigate(route="readmenu")},
+            onClick = { navCont.navigate(route="menuprincipal")},
             icon = { Icon(imageVector = ImageVector.vectorResource(id = R.drawable.baseline_menu_book_24),
                     contentDescription ="carta",
                     modifier=Modifier.size(30.dp)

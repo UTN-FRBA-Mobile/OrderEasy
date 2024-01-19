@@ -43,7 +43,7 @@ fun PedirCuenta(navCont: NavController, userViewModel: VistaModeloUsuario, vista
                                 .padding(vertical = 8.dp, horizontal = 14.dp),
                             onClick = {
                                 userViewModel.obtenerConsumo()
-                                navCont.navigate(route = "IndividualTicket")
+                                navCont.navigate(route = "cuentaindividual")
                             },
                             icon = {
                                 Icon(
@@ -73,7 +73,7 @@ fun PedirCuenta(navCont: NavController, userViewModel: VistaModeloUsuario, vista
                                     userViewModel.estadoUsuario.idMesa,
                                     userViewModel.estadoUsuario.idCliente
                                 )
-                                navCont.navigate(route = "DivideTicket")
+                                navCont.navigate(route = "cuentadividida")
                             },
                             icon = {
                                 Icon(
@@ -101,7 +101,7 @@ fun PedirCuenta(navCont: NavController, userViewModel: VistaModeloUsuario, vista
                                     userViewModel.estadoUsuario.idMesa,
                                     userViewModel.estadoUsuario.idCliente
                                 )
-                                navCont.navigate(route = "InviteTicket")
+                                navCont.navigate(route = "cuentainvitados")
                             },
                             icon = {
                                 Icon(

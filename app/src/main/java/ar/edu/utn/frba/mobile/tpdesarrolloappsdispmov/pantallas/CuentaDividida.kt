@@ -86,7 +86,7 @@ fun CuentaDividida(navCont: NavController, userViewModel: VistaModeloUsuario, vi
                             ),
                             onClick = {
                                 vistaModeloMesa.limpiarPedidoConsumos()
-                                navCont.navigate(route ="requestticket")
+                                navCont.navigate(route ="pedircuenta")
                             }
                         ) {
                             Text(text = stringResource(id = R.string.btn_ok))
@@ -196,7 +196,7 @@ fun CuentaDividida(navCont: NavController, userViewModel: VistaModeloUsuario, vi
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .padding(14.dp),
-                            onClick = { navCont.navigate(route = "requestTicket") },
+                            onClick = { navCont.navigate(route = "pedircuenta") },
                             icon = { Icon(Icons.Filled.ArrowBack, contentDescription = "volver") },
                             text = { Text(text = stringResource(id = R.string.btn_back),style = MaterialTheme.typography.titleSmall) },
                         )
@@ -218,7 +218,7 @@ fun CuentaDividida(navCont: NavController, userViewModel: VistaModeloUsuario, vi
                             onClick = {
                                 mostrarDialog = false
                                 userViewModel.desactivarErrorPedidoApi()
-                                navCont.navigate(route="mainmenu")
+                                navCont.navigate(route="menuprincipal")
                             }
                         ) {
                             Text(text = stringResource(id = R.string.btn_ok))

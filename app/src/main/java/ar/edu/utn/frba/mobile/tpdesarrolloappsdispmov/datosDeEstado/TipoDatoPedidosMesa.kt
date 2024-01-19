@@ -29,4 +29,4 @@ data class UserInvitedData(
     var seleccionado:Boolean,
     val pedPendientes:Boolean
 )
-data class PedidosMesaData(val comensales:List<ComensalData>)
+data class TipoDatoPedidosMesa(val comensales:List<ComensalData>)

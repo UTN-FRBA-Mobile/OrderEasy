@@ -64,7 +64,7 @@ fun Notificacion(navController: NavController,userViewModel: VistaModeloUsuario)
                             CircularProgressIndicator()
                         }
                         if(!userViewModel.estadoUsuario.errorPedidoApi){
-                            navController.navigate(route="mainmenu")
+                            navController.navigate(route="menuprincipal")
                         }
                     }else {
                         ExtendedFloatingActionButton(

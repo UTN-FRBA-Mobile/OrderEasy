@@ -81,7 +81,7 @@ fun CuentaIndividual(navCont:NavController, vistaModeloUsuario: VistaModeloUsuar
                                     containerColor = MaterialTheme.colorScheme.inverseSurface,
                                 ),
                                 onClick = {
-                                    navCont.navigate(route = "requestticket")
+                                    navCont.navigate(route = "pedircuenta")
                                 }
                             ) {
                                 Text(text = stringResource(id = R.string.btn_ok))
@@ -194,7 +194,7 @@ fun CuentaIndividual(navCont:NavController, vistaModeloUsuario: VistaModeloUsuar
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(14.dp),
-                        onClick = { navCont.navigate(route="requestTicket")},
+                        onClick = { navCont.navigate(route="pedircuenta")},
                         icon = { Icon(Icons.Filled.ArrowBack,  contentDescription ="volver") },
                         text = { Text(text = stringResource(id = R.string.btn_back),style= MaterialTheme.typography.displayMedium) }
                     )
@@ -206,7 +206,7 @@ fun CuentaIndividual(navCont:NavController, vistaModeloUsuario: VistaModeloUsuar
                         title = { Text(text = stringResource(id =R.string.getticket_individual)) },
                         text = { Text(text = stringResource(id =R.string.getticket_confirm)) },
                         onDismissRequest = {
-                            navCont.navigate(route = "mainmenu")
+                            navCont.navigate(route = "menuprincipal")
                         },
                         confirmButton = {
                             TextButton(
@@ -215,7 +215,7 @@ fun CuentaIndividual(navCont:NavController, vistaModeloUsuario: VistaModeloUsuar
                                 ),
                                 onClick = {
                                     vistaModeloUsuario.desactivarErrorPedidoApi()
-                                    navCont.navigate(route = "mainmenu")
+                                    navCont.navigate(route = "menuprincipal")
                                 }
                             ) {
                                 Text(text = stringResource(id = R.string.btn_ok))
